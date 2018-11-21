@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">mageplaza_webhook_logs_listing.mageplaza_webhook_logs_listing_data_source</item>
+            <item name="deps" xsi:type="string">mageplaza_webhook_logs_listing.mageplaza_webhook_logs_listing_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">mageplaza_webhook_logs_columns</item>
+    </argument>
+    <dataSource name="mageplaza_webhook_logs_listing_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="name" xsi:type="string">mageplaza_webhook_logs_listing_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <listingToolbar name="listing_top">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <bookmark name="bookmarks" />
+        <columnsControls name="columns_controls" />
+        <exportButton name="export_button" />
+        <filters name="listing_filters" />
+        <paging name="listing_paging"/>
+    </listingToolbar>
+    <columns name="mageplaza_webhook_logs_columns">
+        <column name="id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="label" xsi:type="string" translate="true">ID</item>
+                </item>
+            </argument>
+        </column>
+        <column name="hook_name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Name</item>
+                </item>
+            </argument>
+        </column>
+        <column name="status">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Mageplaza\Webhook\Model\Config\Source\Status</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                    <item name="component" xsi:type="string">Mageplaza_Webhook/js/grid/columns/select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="hook_type">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Mageplaza\Webhook\Model\Config\Source\HookType</item>
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Entity</item>
+                    <!--<item name="editor" xsi:type="string">select</item>-->
+                    <item name="dataType" xsi:type="string">select</item>
+                </item>
+            </argument>
+        </column>
+        <column name="message">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Message</item>
+                </item>
+            </argument>
+        </column>
+        <!--<column name="allow_comment">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">select</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Allow Comment</item>-->
+                    <!--<item name="editor" xsi:type="string">select</item>-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>-->
+                    <!--<item name="dataType" xsi:type="string">select</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+        <!--<column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">dateRange</item>-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
+                    <!--<item name="dataType" xsi:type="string">date</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Created</item>-->
+                    <!--<item name="visible" xsi:type="boolean">false</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+        <!--<column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">dateRange</item>-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
+                    <!--<item name="dataType" xsi:type="string">date</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Modified</item>-->
+                    <!--<item name="visible" xsi:type="boolean">false</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+        <!--<column name="publish_date" class="Magento\Ui\Component\Listing\Columns\Date">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">dateRange</item>-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
+                    <!--<item name="dataType" xsi:type="string">date</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Published</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+        <actionsColumn name="actions" class="Mageplaza\Webhook\Ui\Component\Listing\Columns\Actions">
+            <argument name="data" xsi:type="array">
+                <item name="action_list" xsi:type="array">
+                    <item name="edit" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Edit</item>
+                        <item name="path" xsi:type="string">mpwebhook/logs/edit</item>
+                        <item name="params" xsi:type="array">
+                            <item name="id" xsi:type="string">id</item>
+                        </item>
+                    </item>
+                    <item name="replay" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Replay</item>
+                        <item name="path" xsi:type="string">mpwebhook/logs/replay</item>
+                        <item name="params" xsi:type="array">
+                            <item name="id" xsi:type="string">id</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </actionsColumn>
+    </columns>
+</listing>

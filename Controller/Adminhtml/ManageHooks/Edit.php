@@ -1,0 +1,93 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
+use Mageplaza\Webhook\Model\HookFactory;
+
+/**
+ * Class Edit
+ * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ */
+class Edit extends AbstractManageHooks
+{
+    /**
+     * Page factory
+     *
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    public $resultPageFactory;
+
+    /**
+     * Edit constructor.
+     * @param HookFactory $hookFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     */
+    public function __construct(
+        HookFactory $hookFactory,
+        Registry $coreRegistry,
+        Context $context,
+        PageFactory $resultPageFactory
+    )
+    {
+        parent::__construct($hookFactory, $coreRegistry, $context);
+
+        $this->resultPageFactory = $resultPageFactory;
+    }
+
+    /**
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     */
+    public function execute()
+    {
+        /** @var \Mageplaza\Webhook\Model\Hook $hook */
+        $hook = $this->initHook();
+        if (!$hook) {
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('mpwebhook/managehooks/index');
+
+            return $resultRedirect;
+        }
+
+        $data = $this->_session->getData('mageplaza_webhook_hook', true);
+        if (!empty($data)) {
+            $hook->setData($data);
+        }
+
+        $this->coreRegistry->register('mageplaza_webhook_hook', $hook);
+
+        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->setActiveMenu('Mageplaza_Webhook::webhook');
+        $resultPage->getConfig()->getTitle()->set(__('Hook'));
+
+        $title = ($hook->getId() && $hook->getId() !== 'copy') ? __('Edit %1 hook', $hook->getName()) : __('New Hook');
+        $resultPage->getConfig()->getTitle()->prepend($title);
+
+        return $resultPage;
+    }
+}

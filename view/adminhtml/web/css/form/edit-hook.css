@@ -1,0 +1,137 @@
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_ProductFeed
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+
+
+#insert-variable-popup .attr-code {
+    margin-left: 20px;
+}
+
+#insert-variable-popup .group-label {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.modifier {
+    margin-top: 3px;
+}
+
+label.liquid-variable {
+    float: right;
+    margin-right: 50px;
+    max-width: 60%;
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    border-radius: 4px;
+}
+
+#insert-variable-popup input.modifier-param {
+    width: 50px;
+}
+
+#insert-variable-popup .modifier-param {
+    margin: 0 5px;
+}
+
+#insert-variable-popup .modifier select, #insert-variable-popup .modifier .params {
+    margin-right: 20px;
+    float: left;
+    width: auto;
+}
+
+.remove-modifier {
+    float: right;
+    margin: 2px 60px 2px 2px;
+}
+
+.attr-code {
+    border: 1px solid #f1f1f1;
+    margin: 5px;
+    width: 80%;
+}
+
+.attr-code-label {
+    font-weight: 500;
+    padding-left: 1em;
+}
+
+#insert-variable-popup .row {
+    background: #f1f1f1;
+    line-height: 2;
+}
+
+#insert-variable-popup button.insert, button.add-modifier {
+    float: right;
+    margin-right: 5px;
+}
+
+.delete-option.remove-modifier::before{
+    font-family: 'MUI-Icons';
+    font-style: normal;
+    speak: none;
+    font-weight: normal;
+    font-size: 18px;
+    -webkit-font-smoothing: antialiased;
+    content: '\e07f';
+    color: #b7b3ad;
+}
+
+#insert-variable-popup .row-modifier {
+    margin-left: 2%;
+    width: 96%;
+    padding: 0;
+    display: none;
+}
+
+#insert-variable-popup .row-modifier.show {
+    display: block;
+}
+
+#hook_body {
+    display: none;
+}
+
+.CodeMirror.cm-s-default {
+    border: 1px solid #ddd;
+    height: 500px;
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+.cm-overlay.cm-liquid-variable {
+    color: brown;
+}
+
+.cm-overlay.cm-liquid-method {
+    color: #ffbb00;
+}
+
+a.btn {
+    background-color: #dbdbdb;
+    color: #514943;
+    border: 1px solid #adadad;
+    padding: 0.6rem 1em 0.6rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    line-height: 1.36;
+    cursor: pointer;
+}

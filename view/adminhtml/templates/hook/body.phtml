@@ -1,0 +1,145 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_OrderExport
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+?>
+<?php
+/* @var $block \Mageplaza\WebHook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Body */
+$element = $block->getElement();
+$note = $element->getNote() ? '<div class="note">' . $element->getNote() . '</div>' : '';
+$elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
+$addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
+$fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
+$fieldClass = "admin__field field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass .= ($elementBeforeLabel) ? ' choice' : '';
+$fieldClass .= ($addOn) ? ' with-addon' : '';
+$fieldClass .= ($element->getRequired()) ? ' _required' : '';
+$fieldClass .= ($note) ? ' with-note' : '';
+
+$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
+    . $block->getUiId('form-field', $element->getId());
+$modifiersData = $block->getModifier() ? \Mageplaza\OrderExport\Helper\Data::jsonEncode($block->getModifier()) : '{}';
+?>
+
+<?php if (!$element->getNoDisplay()): ?>
+    <?php if ($element->getType() == 'hidden'): ?>
+        <?= $element->getElementHtml() ?>
+    <?php else: ?>
+        <div<?= $fieldAttributes ?>>
+            <?php if ($elementBeforeLabel): ?>
+                <?= $element->getElementHtml() ?>
+                <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+                <?= $note ?>
+            <?php else: ?>
+                <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
+                <div class="admin__field-control control">
+                    <div id="grid_tab" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+                        <ul class="tabs-horiz ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
+                            <li class="ui-state-default ui-corner-top ui-tabs-active ui-state-active" role="tab" tabindex="0" aria-controls="grid_tab_body_content" aria-labelledby="grid_tab_body" aria-selected="true">
+                                <a href="#grid_tab_body_content" id="grid_tab_body" title="Body" class="ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
+                                    <span>Body</span>
+                                </a>
+                            </li>
+                            <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1" aria-controls="grid_tab_preview_content" aria-labelledby="grid_tab_preview" aria-selected="false">
+                                <a href="#grid_tab_preview_content" id="grid_tab_preview" title="Preview" class="ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
+                                    <span>Preview</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div id="grid_tab_content" class="dashboard-store-stats-content">
+                            <div id="grid_tab_body_content" style="border-top: 1px solid #adadad;" aria-labelledby="grid_tab_body" class="ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="true" aria-hidden="false">
+                                <a id="insert-variable" style="float: right;margin-top: -53px;margin-right: -20px;" class="btn"><?= __('Insert Variables') ?></a>
+                                <?= ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
+                                <?= $block->getHintHtml() ?>
+                                <?= $note ?>
+                            </div>
+                            <div id="grid_tab_preview_content" style="border-top: 1px solid #adadad;" aria-labelledby="grid_tab_body" class="ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="true" aria-hidden="false">
+                                <textarea style="width: 100%" name="hook[preview]" title="preview" id="hook_preview"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
+<script>
+    require([
+        'jquery',
+        'tabs'], function ($) {
+        $("#grid_tab").tabs();
+    });
+</script>
+<div id="insert-variable-popup" class="admin__scope-old">
+    <?php
+    $attrCollection = $block->getHookAttrCollection() ? : [];
+    ?>
+    <div class="section-config">
+        <div class="entry-edit-head admin__collapsible-block">
+            <span id="ox_variable_item-link" class="entry-edit-head-link"></span>
+            <a id="ox_variable_item-head" href="#ox_variable_item-link" onclick="Fieldset.toggleCollapse('ox_variable_item'); return false;"><?= __('Item Attribute') ?></a>
+        </div>
+        <input id="ox_provider_item-state" type="hidden">
+
+        <fieldset class="config admin__collapsible-block admin__scope-old" id="ox_variable_item">
+            <?php foreach ($attrCollection as $attr) : ?>
+                <?php /** @var \Magento\Eav\Model\Entity\Attribute $attr */ ?>
+                <div class="attr-code" id="<?= $attr->getName() ?>" code="<?= $attr->getName() ?>">
+                    <div class="row">
+                        <label class="attr-code-label"><?= $attr->getTitle() . " ({$attr->getName()})"; ?></label>
+                        <button class="insert"><?= __('Add') ?></button>
+                        <button class="add-modifier"><?= __('Add Filter') ?></button>
+                        <label class="liquid-variable">{{ <?= 'item.' . $attr->getName() ?> }}</label>
+                    </div>
+                    <div class="row-modifier data-table">
+                        <div class="modifier-group" code="<?= $attr->getName() ?>"></div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </fieldset>
+    </div>
+        <script type="text/javascript">//<![CDATA[
+            require(['prototype'], function () {
+                Fieldset.applyCollapse('ox_variable_item');
+            });
+            //]]>
+        </script>
+</div>
+<script type="text/x-magento-init">
+		{
+			"*": {
+				"Mageplaza_Webhook/js/hook/initActionsTab":{
+					"modifiersData": <?= $modifiersData ?>
+				}
+			}
+		}
+</script>
+<style>
+    #hook_payload_url {
+        max-width: 80%;
+    }
+    label[for="hook_payload_url"] {
+        float: right;
+        max-width: 20%;
+    }
+    a#insert-variable-upload {
+        float: right;
+    }
+</style>

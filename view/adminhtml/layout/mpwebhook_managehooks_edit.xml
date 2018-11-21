@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Blog
+ * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <!--<update handle="editor"/>-->
+    <head>
+        <css src="Mageplaza_Webhook::css/lib/codemirror.css"/>
+        <css src="Mageplaza_Core::css/font-awesome.min.css"/>
+        <css src="Mageplaza_Webhook::css/form/edit-hook.css"/>
+
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit" name="mageplaza_webhook_hook_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tabs" name="mageplaza_webhook_hook_tabs">
+                <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\General" name="mageplaza_webhook_hook_tab_general"/>
+                <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Actions" name="mageplaza_webhook_hook_tab_actions"/>
+                <!--<block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Conditions" name="mageplaza_webhook_hook_tab_product_filter">-->
+                    <!--<block class="Magento\Backend\Block\Template" name="product_filter_condition" template="Mageplaza_Webhook::testtab.phtml"/>-->
+                <!--</block>-->
+                <!--<block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Template" name="mageplaza_webhook_hook_tab_template"/>-->
+                <!--<block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Delivery" name="mageplaza_webhook_hook_tab_delivery"/>-->
+                <!--<block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\History" name="mageplaza_webhook_hook_tab_history"/>-->
+                <!--<block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\CategoryMapping" name="mageplaza_webhook_hook_tab_category_map">-->
+                    <!--<block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\CategoryMap" name="category_map"/>-->
+                <!--</block>-->
+
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">hook</argument>
+                    <argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_general</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">template</argument>
+                    <argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_actions</argument>
+                </action>
+                <!--<action method="addTab">-->
+                    <!--<argument name="name" xsi:type="string">google_analytics</argument>-->
+                    <!--<argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_ga</argument>-->
+                <!--</action>-->
+
+                <!--<action method="addTab">-->
+                    <!--<argument name="name" xsi:type="string">product_filter</argument>-->
+                    <!--<argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_product_filter</argument>-->
+                <!--</action>-->
+                <!--<action method="addTab">-->
+                    <!--<argument name="name" xsi:type="string">category_map</argument>-->
+                    <!--<argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_category_map</argument>-->
+                <!--</action>-->
+                <!--<action method="addTab">-->
+                    <!--<argument name="name" xsi:type="string">delivery</argument>-->
+                    <!--<argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_delivery</argument>-->
+                <!--</action>-->
+                <!--<action method="addTab">-->
+                    <!--<argument name="name" xsi:type="string">history</argument>-->
+                    <!--<argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_history</argument>-->
+                <!--</action>-->
+
+            </block>
+        </referenceContainer>
+    </body>
+</page>
