@@ -28,19 +28,22 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Model\ResourceModel\Order\Address as AddressResource;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
-use Magento\Sales\Model\ResourceModel\Order\Invoice\Item as InvoiceItem;
-use Magento\Sales\Model\ResourceModel\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\Sales\Model\ResourceModel\Order\Shipment\Item as ShipmentItem;
+use Magento\Sales\Model\ResourceModel\Order\Status as OrderStatusResource;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\WebHook\Model\Config\Source\HookType;
+use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\Hook;
 use Mageplaza\Webhook\Model\HookFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttr;
+use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Catalog\Model\CategoryFactory;
 
 /**
  * Class TemplateContent
@@ -58,25 +61,6 @@ class Body extends Element implements RendererInterface
      */
     protected $orderFactory;
 
-    /**
-     * @var OrderItem
-     */
-    protected $orderItemResource;
-
-    /**
-     * @var InvoiceItem
-     */
-    protected $invoiceItemResource;
-
-    /**
-     * @var ShipmentItem
-     */
-    protected $shipmentItemResource;
-
-    /**
-     * @var CreditmemoItem
-     */
-    protected $creditmemoItemResource;
 
     /**
      * @var LiquidFilters
@@ -113,6 +97,11 @@ class Body extends Element implements RendererInterface
      * @var HookFactory
      */
     protected $hookFactory;
+    protected $orderStatusResource;
+    protected $customerResource;
+    protected $catalogEavAttribute;
+    protected $categoryFactory;
+    protected $quoteResource;
 
     /**
      * TemplateContent constructor.
@@ -120,30 +109,26 @@ class Body extends Element implements RendererInterface
      * @param Context $context
      * @param AddressResource $addressResource
      * @param OrderFactory $orderFactory
-     * @param OrderItem $orderItemResource
-     * @param InvoiceItem $invoiceItemResource
-     * @param ShipmentItem $shipmentItemResource
-     * @param CreditmemoItem $creditmemoItemResource
      * @param InvoiceResource $invoiceResource
      * @param ShipmentResource $shipmentResource
      * @param CreditmemoResource $creditmemoResource
      * @param Registry $registry
      * @param LiquidFilters $liquidFilters
      * @param HookFactory $hookFactory
-     * @param DefaultTemplate $defaultTemplate
      * @param array $data
      */
     public function __construct(
         Context $context,
         AddressResource $addressResource,
         OrderFactory $orderFactory,
-        OrderItem $orderItemResource,
-        InvoiceItem $invoiceItemResource,
-        ShipmentItem $shipmentItemResource,
-        CreditmemoItem $creditmemoItemResource,
         InvoiceResource $invoiceResource,
         ShipmentResource $shipmentResource,
         CreditmemoResource $creditmemoResource,
+        OrderStatusResource $orderStatusResource,
+        CustomerResource $customerResource,
+        Quote $quoteResource,
+        CatalogEavAttr $catalogEavAttribute,
+        CategoryFactory $categoryFactory,
         Registry $registry,
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
@@ -154,15 +139,16 @@ class Body extends Element implements RendererInterface
         $this->registry = $registry;
         $this->liquidFilters = $liquidFilters;
         $this->orderFactory = $orderFactory;
-        $this->orderItemResource = $orderItemResource;
-        $this->invoiceItemResource = $invoiceItemResource;
-        $this->shipmentItemResource = $shipmentItemResource;
-        $this->creditmemoItemResource = $creditmemoItemResource;
         $this->invoiceResource = $invoiceResource;
         $this->shipmentResource = $shipmentResource;
         $this->creditmemoResource = $creditmemoResource;
         $this->addressResource = $addressResource;
         $this->hookFactory = $hookFactory;
+        $this->orderStatusResource = $orderStatusResource;
+        $this->customerResource = $customerResource;
+        $this->catalogEavAttribute = $catalogEavAttribute;
+        $this->categoryFactory = $categoryFactory;
+        $this->quoteResource = $quoteResource;
     }
 
     /**
@@ -206,6 +192,11 @@ class Body extends Element implements RendererInterface
         $hookType = $this->getHookType();
 
         switch ($hookType) {
+            case HookType::NEW_ORDER_COMMENT:
+                $collectionData = $this->orderStatusResource->getConnection()
+                    ->describeTable($this->orderStatusResource->getMainTable());
+                $attrCollection = $this->getAttrCollectionFromDb($collectionData);
+                break;
             case HookType::NEW_INVOICE:
                 $collectionData = $this->invoiceResource->getConnection()
                     ->describeTable($this->invoiceResource->getMainTable());
@@ -221,6 +212,32 @@ class Body extends Element implements RendererInterface
                     ->describeTable($this->creditmemoResource->getMainTable());
                 $attrCollection = $this->getAttrCollectionFromDb($collectionData);
                 break;
+            case HookType::NEW_CUSTOMER:
+            case HookType::UPDATE_CUSTOMER:
+            case HookType::DELETE_CUSTOMER:
+            case HookType::CUSTOMER_LOGIN:
+                $collectionData = $this->customerResource->loadAllAttributes()->getSortedAttributes();
+                $attrCollection = $this->getAttrCollectionFromEav($collectionData);
+                break;
+            case HookType::NEW_PRODUCT:
+            case HookType::UPDATE_PRODUCT:
+            case HookType::DELETE_PRODUCT:
+            case HookType::UPDATE_CART:
+                $collectionData = $this->catalogEavAttribute->getCollection()
+                    ->addFieldToFilter(AttributeSet::KEY_ENTITY_TYPE_ID, 4);
+                $attrCollection = $this->getAttrCollectionFromEav($collectionData);
+                break;
+            case HookType::NEW_CATEGORY:
+            case HookType::UPDATE_CATEGORY:
+            case HookType::DELETE_CATEGORY:
+                $collectionData = $this->categoryFactory->create()->getAttributes();
+                $attrCollection = $this->getAttrCollectionFromEav($collectionData);
+                break;
+            case HookType::ABANDONED_CART:
+                $collectionData = $this->quoteResource->getConnection()
+                    ->describeTable($this->quoteResource->getMainTable());
+                $attrCollection = $this->getAttrCollectionFromDb($collectionData);
+                break;
             default:
                 $collectionData = $this->orderFactory->create()->getResource()->getConnection()
                     ->describeTable($this->orderFactory->create()->getResource()->getMainTable());
@@ -231,16 +248,30 @@ class Body extends Element implements RendererInterface
         return $attrCollection;
     }
 
-    protected function getAttrCollectionFromDb($collection){
+    protected function getAttrCollectionFromDb($collection)
+    {
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name'=>$item['COLUMN_NAME'],
-                'title'=>ucwords(str_replace('_',' ',$item['COLUMN_NAME']))
+                'name' => $item['COLUMN_NAME'],
+                'title' => ucwords(str_replace('_', ' ', $item['COLUMN_NAME']))
             ]);
         }
         return $attrCollection;
     }
+
+    protected function getAttrCollectionFromEav($collection)
+    {
+        $attrCollection = [];
+        foreach ($collection as $item) {
+            $attrCollection[] = new DataObject([
+                'name' => $item->getAttributeCode(),
+                'title' => $item->getDefaultFrontendLabel()
+            ]);
+        }
+        return $attrCollection;
+    }
+
     /**
      * @return array
      */

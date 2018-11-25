@@ -21,7 +21,52 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_save_before">
+        <observer name="mp_wh_save_order_before" instance="Mageplaza\Webhook\Observer\BeforeSave"/>
+    </event>
     <event name="sales_order_save_after">
-        <observer name="mp_wh_new_order" instance="Mageplaza\Webhook\Observer\NewOrder"/>
+        <observer name="mp_wh_new_order" instance="Mageplaza\Webhook\Observer\AfterOrder"/>
+    </event>
+    <event name="sales_order_status_history_save_after">
+        <observer name="mp_wh_before_order" instance="Mageplaza\Webhook\Observer\AfterOrderComment"/>
+    </event>
+    <event name="sales_order_invoice_save_after">
+        <observer name="mp_wh_new_invoice" instance="Mageplaza\Webhook\Observer\AfterInvoice"/>
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="mp_wh_new_shipment" instance="Mageplaza\Webhook\Observer\AfterShipment"/>
+    </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="mp_wh_new_creditmemo" instance="Mageplaza\Webhook\Observer\AfterCreditmemo"/>
+    </event>
+    <event name="customer_save_after">
+        <observer name="mp_wh_new_customer" instance="Mageplaza\Webhook\Observer\AfterCustomer"/>
+    </event>
+    <event name="customer_delete_before">
+        <observer name="mp_wh_delete_customer" instance="Mageplaza\Webhook\Observer\BeforeDeleteCustomer"/>
+    </event>
+    <event name="catalog_product_save_before">
+        <observer name="mp_wh_product_save_before" instance="Mageplaza\Webhook\Observer\BeforeSave"/>
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="mp_wh_new_product" instance="Mageplaza\Webhook\Observer\AfterProduct"/>
+    </event>
+    <event name="catalog_product_delete_before">
+        <observer name="mp_wh_delete_product" instance="Mageplaza\Webhook\Observer\BeforeDeleteProduct"/>
+    </event>
+    <event name="catalog_category_save_before">
+        <observer name="mp_wh_category_save_before" instance="Mageplaza\Webhook\Observer\BeforeSave"/>
+    </event>
+    <event name="catalog_category_save_after">
+        <observer name="mp_wh_category_save_after" instance="Mageplaza\Webhook\Observer\AfterCategory"/>
+    </event>
+    <event name="catalog_category_delete_before">
+        <observer name="mp_wh_delete_product" instance="Mageplaza\Webhook\Observer\BeforeDeleteCategory"/>
+    </event>
+    <event name="customer_login">
+        <observer name="mp_wh_customer_login" instance="Mageplaza\Webhook\Observer\CustomerLogin"/>
+    </event>
+    <event name="checkout_cart_product_update_after">
+        <observer name="mp_wh_update_cart" instance="Mageplaza\Webhook\Observer\UpdateCart"/>
     </event>
 </config>

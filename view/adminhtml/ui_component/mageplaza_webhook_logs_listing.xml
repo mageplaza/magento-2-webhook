@@ -159,7 +159,7 @@
             <argument name="data" xsi:type="array">
                 <item name="action_list" xsi:type="array">
                     <item name="edit" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Edit</item>
+                        <item name="label" xsi:type="string" translate="true">View</item>
                         <item name="path" xsi:type="string">mpwebhook/logs/edit</item>
                         <item name="params" xsi:type="array">
                             <item name="id" xsi:type="string">id</item>

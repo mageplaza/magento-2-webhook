@@ -30,6 +30,11 @@ use Liquid\Template;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
+use Mageplaza\Webhook\Model\HookFactory;
+use Mageplaza\Webhook\Model\HistoryFactory;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\App\Area;
+use Magento\Backend\Model\UrlInterface;
 
 /**
  * Class Data
@@ -41,31 +46,43 @@ class Data extends CoreHelper
 
     protected $liquidFilters;
     protected $curlFactory;
+    protected $hookFactory;
+    protected $historyFactory;
+    protected $transportBuilder;
+    protected $backendUrl;
 
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
         StoreManagerInterface $storeManager,
+        UrlInterface $backendUrl,
+        TransportBuilder $transportBuilder,
         CurlFactory $curlFactory,
-        LiquidFilters $liquidFilters
+        LiquidFilters $liquidFilters,
+        HookFactory $hookFactory,
+        HistoryFactory $historyFactory
     )
     {
         parent::__construct($context, $objectManager, $storeManager);
 
         $this->liquidFilters = $liquidFilters;
         $this->curlFactory = $curlFactory;
+        $this->curlFactory = $hookFactory;
+        $this->curlFactory = $historyFactory;
+        $this->transportBuilder = $transportBuilder;
+        $this->backendUrl = $backendUrl;
     }
 
-    public function sendHttpRequestFromHook($hook, $item)
+    public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
-        $url = $this->generateLiquidTemplate($item,$hook->getPayloadUrl());
+        $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
         $authentication = $hook->getAuthentication();
         $method = $hook->getMethod();
         $username = $hook->getUsername();
         $password = $hook->getPassword();
-        if($authentication === Authentication::BASIC){
-            $authentication = $this->getBasicAuthHeader($username,$password);
-        }elseif ($authentication === Authentication::DIGEST){
+        if ($authentication === Authentication::BASIC) {
+            $authentication = $this->getBasicAuthHeader($username, $password);
+        } elseif ($authentication === Authentication::DIGEST) {
             $authentication = $this->getDigestAuthHeader(
                 $url,
                 $method,
@@ -79,10 +96,10 @@ class Data extends CoreHelper
                 $hook->getClientNonce(),
                 $hook->getOpaque());
         }
-        $body = $this->generateLiquidTemplate($item,$hook->getBody());
+        $body = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
         $headers = $hook->getHeaders();
         $contentType = $hook->getContentType();
-        return $this->sendHttpRequest($headers,$authentication,$contentType,$url,$body,$method);
+        return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
 
     }
 
@@ -114,7 +131,7 @@ class Data extends CoreHelper
         foreach ($headers as $header) {
             $key = $header['name'];
             $value = $header['value'];
-            $headersConfig[] = trim($key) .': ' . trim($value);
+            $headersConfig[] = trim($key) . ': ' . trim($value);
         }
 
         if ($authentication) {
@@ -122,12 +139,8 @@ class Data extends CoreHelper
         }
 
         if ($contentType) {
-            $headersConfig[] = 'Content-Type: '. $contentType;
+            $headersConfig[] = 'Content-Type: ' . $contentType;
         }
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info('abc');
 
         $curl = $this->curlFactory->create();
         $curl->write($method, $url, '1.1', $headersConfig, $body);
@@ -136,7 +149,6 @@ class Data extends CoreHelper
 
         try {
             $resultCurl = $curl->read();
-            $logger->info($resultCurl);
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
                 $result['status'] = \Zend_Http_Response::extractCode($resultCurl);
@@ -151,8 +163,7 @@ class Data extends CoreHelper
         } catch (\Exception $e) {
             $result['message'] = $e->getMessage();
         }
-
-//        $curl->close();
+        $curl->close();
 
         return $result;
     }
@@ -168,8 +179,100 @@ class Data extends CoreHelper
         return $digestHeader;
     }
 
-    public function getBasicAuthHeader($username,$password)
+    public function getBasicAuthHeader($username, $password)
     {
-        return 'Basic '. base64_encode("{$username}:{$password}");
+        return 'Basic ' . base64_encode("{$username}:{$password}");
+    }
+
+    public function sendObserver($item, $hookType)
+    {
+        if (!$this->isEnabled()) {
+            return;
+        }
+        try {
+            $hookCollection = $this->hookFactory->create()->getCollection()
+                ->addFieldToFilter('hook_type', $hookType)
+                ->addFieldToFilter('status', 1)
+                ->setOrder('priority', 'ASC');
+
+            foreach ($hookCollection as $hook) {
+                $history = $this->historyFactory->create();
+                $data = [
+                    'hook_id' => $hook->getId(),
+                    'hook_name' => $hook->getName(),
+                    'store_ids' => $hook->getStoreIds(),
+                    'hook_type' => $hook->getHookType(),
+                    'priority' => $hook->getPriority(),
+                    'payload_url' => $this->generateLiquidTemplate($item, $hook->getPayloadUrl()),
+                    'body' => $this->generateLiquidTemplate($item, $hook->getBody())
+                ];
+                $history->addData($data);
+                try {
+                    $result = $this->sendHttpRequestFromHook($hook, $item);
+                    $history->setResponse(isset($result['response']) ? $result['response'] : '');
+                } catch (\Exception $e) {
+                    $result = [
+                        'success' => false,
+                        'message' => $e->getMessage()
+                    ];
+                }
+                if ($result['success'] == true) {
+                    $history->setStatus(1);
+                } else {
+                    $history->setStatus(0)->setMessage($result['message']);
+                    if ($this->getConfigGeneral('alert_enabled')) {
+                        $this->sendMail($this->getConfigGeneral('send_to'),
+                            '',
+                            $this->getConfigGeneral('email_template'),
+                            $this->storeManager->getStore()->getId()
+                        );
+                    }
+                }
+                $history->save();
+            }
+        } catch (\Exception $e) {
+            if ($this->getConfigGeneral('alert_enabled')) {
+                $this->sendMail($this->getConfigGeneral('send_to'),
+                    '',
+                    $this->getConfigGeneral('email_template'),
+                    $this->storeManager->getStore()->getId());
+            }
+        }
+
+    }
+
+    /**
+     * @param $sendFrom
+     * @param $sendTo
+     * @param $mes
+     * @param $emailTemplate
+     * @param $storeId
+     *
+     * @return bool
+     */
+    public function sendMail($sendTo, $mes, $emailTemplate, $storeId)
+    {
+        try {
+            $this->transportBuilder
+                ->setTemplateIdentifier($emailTemplate)
+                ->setTemplateOptions([
+                    'area' => Area::AREA_FRONTEND,
+                    'store' => $storeId,
+                ])
+                ->setTemplateVars([
+                    'viewLogUrl' => $this->backendUrl->getUrl('mpwebhook/logs/'),
+                    'mes' => $mes
+                ])
+                ->setFrom('general')
+                ->addTo($sendTo);
+            $transport = $this->transportBuilder->getTransport();
+            $transport->sendMessage();
+
+            return true;
+        } catch (\Magento\Framework\Exception\MailException $e) {
+            $this->_logger->critical($e->getLogMessage());
+        }
+
+        return false;
     }
 }

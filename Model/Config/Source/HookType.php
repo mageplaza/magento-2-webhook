@@ -14,12 +14,12 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_WebHook
+ * @package     Mageplaza_Webhook
  * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\WebHook\Model\Config\Source;
+namespace Mageplaza\Webhook\Model\Config\Source;
 
 use Magento\Framework\Option\ArrayInterface;
 

@@ -13,15 +13,15 @@
  * @copyright Copyright (c) 2016
  * @license   https://www.mageplaza.com/LICENSE.txt
  */
-namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
+namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
-use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
+use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
 
 /**
  * Class Delete
  * @package Mageplaza\Affiliate\Controller\Adminhtml\Campaign
  */
-class Delete extends AbstractManageHooks
+class Delete extends AbstractManageLogs
 {
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
@@ -29,13 +29,13 @@ class Delete extends AbstractManageHooks
 	public function execute()
 	{
         $resultRedirect = $this->resultRedirectFactory->create();
-		$hook = $this->initHook();
-		if ($hook->getId()) {
+		$log = $this->initLog();
+		if ($log->getId()) {
 			try {
 				/** @var \Mageplaza\Affiliate\Model\Campaign $campaign */
-                $hook->delete();
+                $log->delete();
 
-				$this->messageManager->addSuccess(__('The Hook has been deleted.'));
+				$this->messageManager->addSuccess(__('The log has been deleted.'));
 				$resultRedirect->setPath('mpwebhook/*/');
 
 				return $resultRedirect;
@@ -43,13 +43,13 @@ class Delete extends AbstractManageHooks
 				$this->messageManager->addError($e->getMessage());
 
 				// go back to edit form
-				$resultRedirect->setPath('mpwebhook/*/edit', ['hook_id' => $hook->getId()]);
+				$resultRedirect->setPath('mpwebhook/*/edit', ['id' => $log->getId()]);
 
 				return $resultRedirect;
 			}
 		}
 		// display error message
-		$this->messageManager->addError(__('The Hook to delete was not found.'));
+		$this->messageManager->addError(__('The log to delete was not found.'));
 
 		$resultRedirect->setPath('mpwebhook/*/');
 

@@ -32,12 +32,14 @@ use Mageplaza\Webhook\Model\Config\Source\HookType;
  * Class AddNoticeNoRules
  * @package Mageplaza\BetterCoupon\Observer
  */
-class NewOrder implements ObserverInterface
+abstract class AfterSave implements ObserverInterface
 {
 
     protected $hookFactory;
     protected $historyFactory;
     protected $helper;
+    protected $hookType = '';
+    protected $hookTypeUpdate = '';
 
     public function __construct(
         HookFactory $hookFactory,
@@ -57,10 +59,26 @@ class NewOrder implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $hookCollection = $this->hookFactory->create()->getCollection()
-            ->addFieldToFilter('hook_type', HookType::NEW_ORDER)
-            ->setOrder('priority', 'ASC');
         $item = $observer->getDataObject();
+        $this->send($item,$this->hookType);
+    }
+
+    protected function updateObserver($observer)
+    {
+        $item = $observer->getDataObject();
+        $this->send($item, $this->hookTypeUpdate);
+    }
+
+    protected function send($item, $hookType)
+    {
+        if(!$this->helper->isEnabled()){
+            return;
+        }
+        $hookCollection = $this->hookFactory->create()->getCollection()
+            ->addFieldToFilter('hook_type', $hookType)
+            ->addFieldToFilter('status', 1)
+            ->setOrder('priority', 'ASC');
+
         foreach ($hookCollection as $hook) {
             $history = $this->historyFactory->create();
             $data = [
@@ -75,7 +93,7 @@ class NewOrder implements ObserverInterface
             $history->addData($data);
             try {
                 $result = $this->helper->sendHttpRequestFromHook($hook, $item);
-                $hook->setResponse($result['response']);
+                $history->setResponse(isset($result['response']) ? $result['response'] : '');
             } catch (\Exception $e) {
                 $result = [
                     'success' => false,

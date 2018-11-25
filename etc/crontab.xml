@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Security
+ * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="index">
+        <job name="mageplaza_webhook_abandoned_cart" instance="Mageplaza\Webhook\Cron\AbandonedCart" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+        <job name="mageplaza_webhook_clear_logs" instance="Mageplaza\Webhook\Cron\ClearLogs" method="execute">
+            <schedule>* * * * *</schedule>
+        </job>
+    </group>
+</config>

@@ -77,7 +77,7 @@ class Actions extends Column
                     }
                     $parameters = [];
                     if(isset($action['params']['id']) && isset($item[$action['params']['id']])){
-                        $parameters['hook_id'] = $item[$action['params']['id']];
+                        $parameters['id'] = $item[$action['params']['id']];
                     }
                     if(isset($action['params']['hook_id']) && isset($item[$action['params']['hook_id']])){
                         $parameters['hook_id'] = $item[$action['params']['hook_id']];

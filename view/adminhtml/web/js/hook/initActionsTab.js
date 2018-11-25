@@ -58,15 +58,19 @@ define([
                 var headers = $('#hook_headers :input').serializeArray();
                 _.each(headers, function (object, key) {
                     if (key % 2 === 0) {
-                        preview += ' -H "' + object.value + ': ';
+                        preview += " -H '" + object.value + ': ';
                     } else {
-                        preview += object.value + '"';
+                        preview += object.value + "'";
                     }
                 });
 
                 var body = $('#hook_body').val();
                 if (body && (contentType === 'application/json' || contentType === 'application/json; charset=UTF-8')) {
-                    body = JSON.stringify(eval(body));
+                    try{
+                        body = JSON.stringify(eval(body));
+                    }catch (e) {
+                       console.log($t('Please correct your json data'))
+                    }
                 }
 
                 preview += " -d '" + body + "'";
@@ -75,7 +79,7 @@ define([
                 if(!method){
                     method = 'GET';
                 }
-                preview += ' -X ' + method + ' "' + url + '"';
+                preview += " -X " + method + " '" + url + "'";
 
                 $('#hook_preview').val(preview);
 

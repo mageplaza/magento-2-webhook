@@ -1,0 +1,107 @@
+<?php
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+
+namespace Mageplaza\Webhook\Block\Adminhtml\Logs\Edit;
+
+use Magento\Backend\Block\Widget\Form\Generic;
+use Mageplaza\Webhook\Model\Config\Source\HookType;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Data\FormFactory;
+
+/**
+ * Class Form
+ * @package Mageplaza\Webhook\Block\Adminhtml\Hook\Edit
+ */
+class Form extends Generic
+{
+    protected $hookType;
+
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        HookType $hookType,
+        array $data = [])
+    {
+        parent::__construct($context, $registry, $formFactory, $data);
+        $this->hookType = $hookType;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareForm()
+    {
+        /** @var \Magento\Framework\Data\Form $form */
+        $form = $this->_formFactory->create(
+            [
+                'data' => [
+                    'id' => 'edit_form',
+                    'action' => $this->getData('action'),
+                    'method' => 'post',
+                    'enctype' => 'multipart/form-data'
+                ]
+            ]
+        );
+        $form->setUseContainer(true);
+        /** @var \Mageplaza\Webhook\Model\History $log */
+        $log = $this->_coreRegistry->registry('mageplaza_webhook_log');
+
+        $form->setHtmlIdPrefix('log_');
+        $form->setFieldNameSuffix('log');
+
+        $fieldset = $form->addFieldset('base_fieldset', [
+            'legend' => __('General Information'),
+            'class' => 'fieldset-wide'
+        ]);
+
+        $fieldset->addField('id', 'label', [
+            'name' => 'id',
+            'label' => __('Log ID'),
+            'title' => __('Log ID'),
+        ]);
+        $fieldset->addField('hook_type', 'label', [
+            'name' => 'hook_type',
+            'label' => __('Entity'),
+            'title' => __('Entity'),
+            'values' => $this->hookType->toOptionArray()
+        ]);
+        $fieldset->addField('status', 'label', [
+            'name' => 'status',
+            'label' => __('Status'),
+            'title' => __('Status'),
+        ]);
+
+        $fieldset->addField('response', 'textarea', [
+            'name' => 'response',
+            'label' => __('Response'),
+            'title' => __('Response'),
+            'readonly' => true
+        ]);
+
+
+        $form->addValues($log->getData());
+        $this->setForm($form);
+
+        return parent::_prepareForm();
+    }
+}

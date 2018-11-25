@@ -35,6 +35,7 @@
         </referenceBlock>
         <referenceContainer name="content">
             <uiComponent name="mageplaza_webhook_managehooks_listing"/>
+            <block class="Mageplaza\Webhook\Block\Adminhtml\ManageHooks" name="hooks_list"/>
         </referenceContainer>
     </body>
 </page>

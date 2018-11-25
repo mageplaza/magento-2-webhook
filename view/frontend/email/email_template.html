@@ -1,0 +1,54 @@
+<!--
+/**
+ * Mageplaza
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_ProductFeed
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
+ */
+-->
+
+<!--@subject {{trans "%store_name sent you a feed generate notify" store_name=$store.getName()}} @-->
+<!--@vars {
+"var store.getFrontendName()":"Store Name",
+"var store.getBaseUrl()":"Store URL",
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table class="main" align="center">
+    <tr>
+        <td class="main-content">
+            <div><h3 style="float: left">{{trans "Store Name: %store_name" store_name=$store.getName() }}</h3></div>
+            <div><h3 style="float: right">{{trans "Store Code: %store_code" store_code=$store.getCode() }}</h3></div>
+            <h1 style="text-align: center; clear: both">{{trans "Data Feed Activities"}}</h1>
+            <p>{{trans "This is an automated email send from Mageplaza Product Feed and notice you that activities during generating product feeds"}}</p>
+            <p>{{trans "%mes" mes=$mes | raw}}</p>
+            <br>
+            <br>
+            <table align="center" class="button">
+                <tbody>
+                <tr>
+                    <td style="background-color: #2aa9ff; padding: 5px;">
+                        <a style="color: white" href={{var viewLogUrl|raw}}>{{trans "View Logs"}}</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}
