@@ -44,7 +44,8 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                             <?php endforeach;?>
                             <th class="col-actions" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>">Action</th>
                         </tr>
-                        </thead
+                        </thead>
+                        <tbody id="addRow<?php /* @escapeNotVerified */ echo $_htmlId; ?>"></tbody>
                         <tfoot>
                         <tr>
                             <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
@@ -54,7 +55,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                             </td>
                         </tr>
                         </tfoot>
-                        <tbody id="addRow<?php /* @escapeNotVerified */ echo $_htmlId; ?>"></tbody>
+
                     </table>
                 </div>
                 <input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName(); ?>[__empty]" value="" />

@@ -149,3 +149,7 @@ label[for="hook_payload_url"].addafter {
 a#insert-variable-upload {
     float: right;
 }
+
+#hook_actions_fieldset > label[for="hook_headers"] {
+    display: none;
+}
