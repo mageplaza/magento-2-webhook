@@ -34,7 +34,7 @@ $fieldClass .= ($note) ? ' with-note' : '';
 
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     . $block->getUiId('form-field', $element->getId());
-$modifiersData = $block->getModifier() ? \Mageplaza\OrderExport\Helper\Data::jsonEncode($block->getModifier()) : '{}';
+$modifiersData = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonEncode($block->getModifier()) : '{}';
 ?>
 
 <?php if (!$element->getNoDisplay()): ?>
