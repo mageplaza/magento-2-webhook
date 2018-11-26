@@ -135,3 +135,17 @@ a.btn {
     line-height: 1.36;
     cursor: pointer;
 }
+
+#hook_payload_url {
+    max-width: 80%;
+}
+
+label[for="hook_payload_url"].addafter {
+    position: absolute;
+    top: 0;
+    right: 20%;
+}
+
+a#insert-variable-upload {
+    float: right;
+}

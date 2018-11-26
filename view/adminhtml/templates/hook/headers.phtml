@@ -44,12 +44,12 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                             <?php endforeach;?>
                             <th class="col-actions" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>">Action</th>
                         </tr>
-                        </thead>
+                        </thead
                         <tfoot>
                         <tr>
                             <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
                                 <button id="addToEndBtn<?php /* @escapeNotVerified */ echo $_htmlId; ?>" class="action-add" title="<?php /* @escapeNotVerified */ echo __('Add'); ?>" type="button">
-                                    <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?><?php /* @escapeNotVerified */ echo __('Add'); ?></span>
+                                    <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?></span>
                                 </button>
                             </td>
                         </tr>
