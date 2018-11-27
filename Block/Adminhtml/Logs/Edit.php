@@ -27,7 +27,7 @@ use Magento\Framework\Registry;
 
 /**
  * Class Edit
- * @package Mageplaza\Webhook\Block\Adminhtml\Hook
+ * @package Mageplaza\Webhook\Block\Adminhtml\Logs
  */
 class Edit extends Container
 {
@@ -56,8 +56,9 @@ class Edit extends Container
         array $data = []
     )
     {
-        $this->coreRegistry = $coreRegistry;
         parent::__construct($context, $data);
+
+        $this->coreRegistry = $coreRegistry;
     }
 
     /**
@@ -71,18 +72,5 @@ class Edit extends Container
         $this->_controller = 'adminhtml_logs';
 
         parent::_construct();
-
-//        $this->buttonList->add('save-and-continue', [
-//            'label'          => __('Save and Continue Edit'),
-//            'class'          => 'save',
-//            'data_attribute' => [
-//                'mage-init' => [
-//                    'button' => [
-//                        'event'  => 'saveAndContinueEdit',
-//                        'target' => '#edit_form'
-//                    ]
-//                ]
-//            ]
-//        ], -100);
     }
 }

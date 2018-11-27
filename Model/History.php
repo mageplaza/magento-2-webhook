@@ -14,19 +14,14 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Webhook\Model;
 
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Registry;
-
 
 class History extends AbstractModel
 {
@@ -50,20 +45,6 @@ class History extends AbstractModel
 	 * @var string
 	 */
 	protected $_eventPrefix = 'mageplaza_webhook_history';
-
-
-	public function __construct(
-		Context $context,
-		Registry $registry,
-		AbstractResource $resource = null,
-		AbstractDb $resourceCollection = null,
-		array $data = []
-	)
-	{
-
-
-		parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-	}
 
 	/**
 	 * Initialize resource model

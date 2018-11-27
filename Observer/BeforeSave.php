@@ -14,39 +14,38 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_BetterCoupon
- * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Webhook\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Message\ManagerInterface;
-use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\Webhook\Model\Config\Source\HookType;
 
 /**
- * Class AddNoticeNoRules
- * @package Mageplaza\BetterCoupon\Observer
+ * Class BeforeSave
+ * @package Mageplaza\Webhook\Observer
  */
 class BeforeSave implements ObserverInterface
 {
-
-    protected $hookFactory;
-    protected $historyFactory;
+    /**
+     * @var Data
+     */
     protected $helper;
 
+    /**
+     * BeforeSave constructor.
+     * @param HistoryFactory $historyFactory
+     * @param Data $helper
+     */
     public function __construct(
-        HookFactory $hookFactory,
         HistoryFactory $historyFactory,
         Data $helper
     )
     {
-        $this->hookFactory = $hookFactory;
-        $this->historyFactory = $historyFactory;
         $this->helper = $helper;
     }
 

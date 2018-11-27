@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Webhook
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -24,8 +24,8 @@ namespace Mageplaza\Webhook\Model\Config\Source;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
- * Class SideBarLR
- * @package Mageplaza\Blog\Model\Config\Source
+ * Class HookType
+ * @package Mageplaza\Webhook\Model\Config\Source
  */
 class HookType implements ArrayInterface
 {

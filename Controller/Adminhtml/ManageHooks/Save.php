@@ -21,9 +21,7 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
-use function DeepCopy\deep_copy;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Helper\Js;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
@@ -32,67 +30,43 @@ use Mageplaza\Webhook\Helper\Data;
 
 /**
  * Class Save
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Webhook\Controller\Adminhtml\ManageHooks
  */
 class Save extends AbstractManageHooks
 {
     /**
-     * JS helper
-     *
-     * @var \Magento\Backend\Helper\Js
-     */
-    public $jsHelper;
-
-    /**
-     * @var \Mageplaza\Blog\Helper\Image
+     * @var Data
      */
     protected $helperData;
 
     /**
      * Save constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
-     * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Mageplaza\Blog\Helper\Image $imageHelper
-     * //     */
-//    public function __construct(
-//        Context $context,
-//        Registry $registry,
-//        HookFactory $postFactory,
-//        Js $jsHelper,
-//        Image $imageHelper
-//    )
-//    {
-//        $this->jsHelper = $jsHelper;
-//        $this->imageHelper = $imageHelper;
-//
-//        parent::__construct($postFactory, $registry, $context);
-//    }
+     * @param HookFactory $hookFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
+     * @param Data $helperData
+     */
     public function __construct(
-        \Mageplaza\Webhook\Model\HookFactory $hookFactory,
+        HookFactory $hookFactory,
         Registry $coreRegistry,
         Context $context,
         Data $helperData
     )
     {
         parent::__construct($hookFactory, $coreRegistry, $context);
+
         $this->helperData = $helperData;
     }
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
 
-
-
         $data = $this->getRequest()->getPost('hook');
         $hook = $this->initHook();
-
 
         if (is_array($data['headers'])) {
             unset($data['headers']['__empty']);
@@ -105,7 +79,6 @@ class Save extends AbstractManageHooks
 
         $hook->addData($data);
 
-//        \Zend_Debug::dump($hook->getData());die;
         try {
             $hook->save();
 
@@ -133,5 +106,4 @@ class Save extends AbstractManageHooks
 
         return $resultRedirect;
     }
-
 }

@@ -65,6 +65,10 @@ abstract class AbstractManageHooks extends Action
         parent::__construct($context);
     }
 
+    /**
+     * @param bool $register
+     * @return bool|\Mageplaza\Webhook\Model\Hook
+     */
     protected function initHook($register = false)
     {
         $hookId = $this->getRequest()->getParam('hook_id');

@@ -1,17 +1,22 @@
 <?php
 /**
- * Mageplaza_Affiliate extension
- *                     NOTICE OF LICENSE
+ * Mageplaza
  *
- *                     This source file is subject to the Mageplaza License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     https://www.mageplaza.com/LICENSE.txt
+ * NOTICE OF LICENSE
  *
- * @category  Mageplaza
- * @package   Mageplaza_Affiliate
- * @copyright Copyright (c) 2016
- * @license   https://www.mageplaza.com/LICENSE.txt
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
@@ -19,7 +24,7 @@ use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
 
 /**
  * Class Delete
- * @package Mageplaza\Affiliate\Controller\Adminhtml\Campaign
+ * @package Mageplaza\Webhook\Controller\Adminhtml\Logs
  */
 class Delete extends AbstractManageLogs
 {
@@ -32,7 +37,7 @@ class Delete extends AbstractManageLogs
 		$log = $this->initLog();
 		if ($log->getId()) {
 			try {
-				/** @var \Mageplaza\Affiliate\Model\Campaign $campaign */
+				/** @var \Mageplaza\Webhook\Model\History $log */
                 $log->delete();
 
 				$this->messageManager->addSuccess(__('The log has been deleted.'));

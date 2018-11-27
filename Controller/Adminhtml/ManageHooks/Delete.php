@@ -1,25 +1,31 @@
 <?php
 /**
- * Mageplaza_Affiliate extension
- *                     NOTICE OF LICENSE
+ * Mageplaza
  *
- *                     This source file is subject to the Mageplaza License
- *                     that is bundled with this package in the file LICENSE.txt.
- *                     It is also available through the world-wide-web at this URL:
- *                     https://www.mageplaza.com/LICENSE.txt
+ * NOTICE OF LICENSE
  *
- * @category  Mageplaza
- * @package   Mageplaza_Affiliate
- * @copyright Copyright (c) 2016
- * @license   https://www.mageplaza.com/LICENSE.txt
+ * This source file is subject to the Mageplaza.com license that is
+ * available through the world-wide-web at this URL:
+ * https://www.mageplaza.com/LICENSE.txt
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    Mageplaza
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
+ * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
 
 /**
  * Class Delete
- * @package Mageplaza\Affiliate\Controller\Adminhtml\Campaign
+ * @package Mageplaza\Webhook\Controller\Adminhtml\ManageHooks
  */
 class Delete extends AbstractManageHooks
 {
@@ -32,7 +38,7 @@ class Delete extends AbstractManageHooks
 		$hook = $this->initHook();
 		if ($hook->getId()) {
 			try {
-				/** @var \Mageplaza\Affiliate\Model\Campaign $campaign */
+				/** @var \Mageplaza\Webhook\Model\Hook $hook */
                 $hook->delete();
 
 				$this->messageManager->addSuccess(__('The Hook has been deleted.'));

@@ -56,8 +56,9 @@ class Edit extends Container
         array $data = []
     )
     {
-        $this->coreRegistry = $coreRegistry;
         parent::__construct($context, $data);
+
+        $this->coreRegistry = $coreRegistry;
     }
 
     /**

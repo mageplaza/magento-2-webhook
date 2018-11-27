@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_BetterCoupon
- * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -24,10 +24,13 @@ namespace Mageplaza\Webhook\Observer;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 
 /**
- * Class AddNoticeNoRules
- * @package Mageplaza\BetterCoupon\Observer
+ * Class AfterShipment
+ * @package Mageplaza\Webhook\Observer
  */
 class AfterShipment extends AfterSave
 {
+    /**
+     * @var string
+     */
     protected $hookType = HookType::NEW_SHIPMENT;
 }

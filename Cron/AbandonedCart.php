@@ -4,7 +4,7 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the mageplaza.com license that is
+ * This source file is subject to the Mageplaza.com license that is
  * available through the world-wide-web at this URL:
  * https://www.mageplaza.com/LICENSE.txt
  *
@@ -15,7 +15,7 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Webhook
- * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -24,11 +24,9 @@ namespace Mageplaza\Webhook\Cron;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\HookFactory;
-use Mageplaza\Webhook\Model\HistoryFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class AbandonedCart
@@ -36,37 +34,47 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
  */
 class AbandonedCart
 {
+    /**
+     * @var LoggerInterface
+     */
     protected $logger;
-    protected $quoteFactory;
-    protected $hookFactory;
-    protected $historyFactory;
-    protected $helper;
-    protected $date;
-    protected $timezone;
 
+    /**
+     * @var QuoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
+     * @var Data
+     */
+    protected $helper;
+
+    /**
+     * @var DateTime
+     */
+    protected $date;
+
+    /**
+     * AbandonedCart constructor.
+     * @param LoggerInterface $logger
+     * @param DateTime $date
+     * @param QuoteFactory $quoteFactory
+     * @param Data $helper
+     */
     public function __construct(
         LoggerInterface $logger,
         DateTime $date,
-        TimezoneInterface $timezone,
         QuoteFactory $quoteFactory,
-        HookFactory $hookFactory,
-        HistoryFactory $historyFactory,
         Data $helper
     )
     {
         $this->logger = $logger;
         $this->quoteFactory = $quoteFactory;
-        $this->hookFactory = $hookFactory;
-        $this->historyFactory = $historyFactory;
         $this->helper = $helper;
         $this->date = $date;
-        $this->timezone = $timezone;
     }
 
     /**
-     * Send Mail
-     *
-     * @return void
      * @throws \Exception
      */
     public function execute()
@@ -75,8 +83,9 @@ class AbandonedCart
         if (!$this->helper->isEnabled()) {
             return;
         }
-        $updateFrom = (new \DateTime())->sub(new \DateInterval('PT2H'));
-        $updateTo = (new \DateTime())->sub(new \DateInterval('PT1H'));
+        $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time') + 1;
+        $updateFrom = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
+        $updateTo = $updateFrom->add(new \DateInterval("PT1H"));
         $quoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 0)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
@@ -88,10 +97,10 @@ class AbandonedCart
             ->addFieldToFilter('updated_at', ['eq' => '0000-00-00 00:00:00']);
         try {
             foreach ($quoteCollection as $quote) {
-                $this->helper->sendObserver($quote,HookType::ABANDONED_CART);
+                $this->helper->sendObserver($quote, HookType::ABANDONED_CART);
             }
             foreach ($noneUpdateQuoteCollection as $quote) {
-                $this->helper->sendObserver($quote,HookType::ABANDONED_CART);
+                $this->helper->sendObserver($quote, HookType::ABANDONED_CART);
             }
         } catch (\Exception $e) {
             $this->logger->critical($e->getLogMessage());

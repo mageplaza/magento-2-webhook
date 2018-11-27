@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -30,7 +30,7 @@ use Mageplaza\Webhook\Model\ResourceModel\Hook\CollectionFactory;
 
 /**
  * Class MassStatus
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Webhook\Controller\Adminhtml\ManageHooks
  */
 class MassStatus extends Action
 {
@@ -49,11 +49,10 @@ class MassStatus extends Action
     public $collectionFactory;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * MassStatus constructor.
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,
@@ -61,10 +60,10 @@ class MassStatus extends Action
         CollectionFactory $collectionFactory
     )
     {
+        parent::__construct($context);
+
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
-
-        parent::__construct($context);
     }
 
     /**
@@ -73,7 +72,6 @@ class MassStatus extends Action
      */
     public function execute()
     {
-//    	\Zend_Debug::dump($this->getRequest()->getParams());die;
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $status = (int)$this->getRequest()->getParam('status');
         $hookUpdated = 0;

@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -26,10 +26,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Webhook\Model\HookFactory;
+use Mageplaza\Webhook\Model\Hook;
 
 /**
  * Class InlineEdit
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Webhook\Controller\Adminhtml\ManageHooks
  */
 class InlineEdit extends Action
 {
@@ -49,9 +50,9 @@ class InlineEdit extends Action
 
     /**
      * InlineEdit constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Mageplaza\Blog\Model\PostFactory $postFactory
+     * @param Context $context
+     * @param JsonFactory $jsonFactory
+     * @param HookFactory $hookFactory
      */
     public function __construct(
         Context $context,
@@ -84,7 +85,7 @@ class InlineEdit extends Action
 
         $key = array_keys($hookItems);
         $hookId = !empty($key) ? (int)$key[0] : '';
-        /** @var \Mageplaza\Webhook\Model\Hook $post */
+        /** @var \Mageplaza\Webhook\Model\Hook $hook */
         $hook = $this->hookFactory->create()->load($hookId);
         try {
             $hookData = $hookItems[$hookId];
@@ -111,13 +112,13 @@ class InlineEdit extends Action
     }
 
     /**
-     * Add Post id to error message
+     * Add Hook id to error message
      *
-     * @param \Mageplaza\Blog\Model\Post $post
+     * @param \Mageplaza\Webhook\Model\Hook $hook
      * @param string $errorText
      * @return string
      */
-    public function getErrorWithHookId(\Mageplaza\Webhook\Model\Hook $hook, $errorText)
+    public function getErrorWithHookId(Hook $hook, $errorText)
     {
         return '[Hook ID: ' . $hook->getId() . '] ' . $errorText;
     }

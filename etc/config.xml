@@ -20,10 +20,13 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <body>
-        <referenceContainer name="content">
-            <block class="Mageplaza\Webhook\Block\Adminhtml\Logs\Edit" name="mageplaza_webhook_log_edit"/>
-        </referenceContainer>
-    </body>
-</page>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mp_webhook>
+            <general>
+                <enabled>1</enabled>
+                <abandoned_time>10</abandoned_time>
+            </general>
+        </mp_webhook>
+    </default>
+</config>

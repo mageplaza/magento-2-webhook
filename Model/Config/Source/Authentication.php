@@ -24,7 +24,7 @@ namespace Mageplaza\Webhook\Model\Config\Source;
 use Mageplaza\Webhook\Model\Config\AbstractSource;
 
 /**
- * Class FileType
+ * Class Authentication
  * @package Mageplaza\Webhook\Model\Config\Source
  */
 class Authentication extends AbstractSource

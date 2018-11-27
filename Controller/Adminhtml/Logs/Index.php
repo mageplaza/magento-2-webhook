@@ -27,7 +27,7 @@ use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Class Index
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Webhook\Controller\Adminhtml\Logs
  */
 class Index extends Action
 {
@@ -48,10 +48,10 @@ class Index extends Action
 		PageFactory $resultPageFactory
 	)
 	{
-		$this->resultPageFactory = $resultPageFactory;
-
 		parent::__construct($context);
-	}
+
+        $this->resultPageFactory = $resultPageFactory;
+    }
 
 	/**
 	 * execute the action

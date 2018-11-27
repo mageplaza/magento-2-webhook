@@ -51,9 +51,23 @@ class Actions extends Generic implements TabInterface
      * @var FieldFactory
      */
     protected $fieldFactory;
+
+    /**
+     * @var Authentication
+     */
     protected $authentication;
 
-
+    /**
+     * Actions constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param FieldFactory $fieldFactory
+     * @param Method $method
+     * @param ContentType $contentType
+     * @param Authentication $authentication
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         Registry $registry,

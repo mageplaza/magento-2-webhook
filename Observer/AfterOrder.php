@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_BetterCoupon
- * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -24,13 +24,21 @@ namespace Mageplaza\Webhook\Observer;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 
 /**
- * Class AddNoticeNoRules
- * @package Mageplaza\BetterCoupon\Observer
+ * Class AfterOrder
+ * @package Mageplaza\Webhook\Observer
  */
 class AfterOrder extends AfterSave
 {
+    /**
+     * @var string
+     */
     protected $hookType = HookType::NEW_ORDER;
 
+    /**
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return AfterSave
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getDataObject();

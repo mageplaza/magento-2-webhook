@@ -29,7 +29,7 @@ use Mageplaza\Webhook\Model\Config\Source\HookType;
  * Class ManageHooks
  * @package Mageplaza\Webhook\Block\Adminhtml
  */
-class ManageHooks extends \Magento\Backend\Block\Widget\Container
+class ManageHooks extends Container
 {
     protected $hookType;
 
@@ -42,21 +42,6 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
 
         $this->hookType = $hookType;
     }
-
-    /**
-     * constructor
-     *
-     * @return void
-     */
-//    protected function _construct()
-//    {
-//        $this->_controller = 'adminhtml_hook';
-//        $this->_blockGroup = 'Mageplaza_Webhook';
-//        $this->_headerText = __('Manage Hooks');
-////        $this->_addButtonLabel = __('Add New Hook');
-//
-//        parent::_construct();
-//    }
 
     /**
      * Prepare button and grid
@@ -80,30 +65,14 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
-     * Retrieve options for 'Add Profile' split button
+     * Retrieve options for 'New Trigger' split button
      *
      * @return array
      */
     protected function _getAddProductButtonOptions()
     {
         $splitButtonOptions = [];
-//        $splitButtonOptions['new_order'] = [
-//            'label' => __('New Order'),
-//            'onclick' => "setLocation('" . $this->getUrl('mpwebhook/webhook/new', ['type' => 'new_order']) . "')",
-//            'default' => true,
-//        ];
-//        $splitButtonOptions['new_invoice'] = [
-//            'label' => __('New Invoice'),
-//            'onclick' => "setLocation('" . $this->getUrl('mpwebhook/webhook/new', ['type' => 'new_invoice']) . "')",
-//        ];
-//        $splitButtonOptions['new_creditmemo'] = [
-//            'label' => __('New Creditmemo'),
-//            'onclick' => "setLocation('" . $this->getUrl('mpwebhook/manageprofiles/new', ['type' => 'new_creditmemo']) . "')",
-//        ];
-//        $splitButtonOptions['new_shipment'] = [
-//            'label' => __('New Shipment'),
-//            'onclick' => "setLocation('" . $this->getUrl('mpwebhook/manageprofiles/new', ['type' => 'new_shipment']) . "')",
-//        ];
+
         foreach ($this->hookType->toOptionArray() as $hookType){
             $splitButtonOptions[$hookType['value']] = [
                 'label' => $hookType['label'],

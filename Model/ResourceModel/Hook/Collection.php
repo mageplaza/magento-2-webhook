@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -25,7 +25,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
  * Class Collection
- * @package Mageplaza\Blog\Model\ResourceModel\Post
+ * @package Mageplaza\Webhook\Model\ResourceModel\Hook
  */
 class Collection extends AbstractCollection
 {
@@ -59,5 +59,4 @@ class Collection extends AbstractCollection
     {
         $this->_init('Mageplaza\Webhook\Model\Hook', 'Mageplaza\Webhook\Model\ResourceModel\Hook');
     }
-
 }

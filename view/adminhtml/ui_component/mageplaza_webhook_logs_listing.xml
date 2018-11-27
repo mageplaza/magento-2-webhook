@@ -111,50 +111,6 @@
                 </item>
             </argument>
         </column>
-        <!--<column name="allow_comment">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="filter" xsi:type="string">select</item>-->
-                    <!--<item name="label" xsi:type="string" translate="true">Allow Comment</item>-->
-                    <!--<item name="editor" xsi:type="string">select</item>-->
-                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>-->
-                    <!--<item name="dataType" xsi:type="string">select</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</column>-->
-        <!--<column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="filter" xsi:type="string">dateRange</item>-->
-                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
-                    <!--<item name="dataType" xsi:type="string">date</item>-->
-                    <!--<item name="label" xsi:type="string" translate="true">Created</item>-->
-                    <!--<item name="visible" xsi:type="boolean">false</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</column>-->
-        <!--<column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="filter" xsi:type="string">dateRange</item>-->
-                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
-                    <!--<item name="dataType" xsi:type="string">date</item>-->
-                    <!--<item name="label" xsi:type="string" translate="true">Modified</item>-->
-                    <!--<item name="visible" xsi:type="boolean">false</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</column>-->
-        <!--<column name="publish_date" class="Magento\Ui\Component\Listing\Columns\Date">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="filter" xsi:type="string">dateRange</item>-->
-                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
-                    <!--<item name="dataType" xsi:type="string">date</item>-->
-                    <!--<item name="label" xsi:type="string" translate="true">Published</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</column>-->
         <actionsColumn name="actions" class="Mageplaza\Webhook\Ui\Component\Listing\Columns\Actions">
             <argument name="data" xsi:type="array">
                 <item name="action_list" xsi:type="array">

@@ -5,7 +5,7 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the mageplaza.com license that is
+ * This source file is subject to the Mageplaza.com license that is
  * available through the world-wide-web at this URL:
  * https://www.mageplaza.com/LICENSE.txt
  *
@@ -15,8 +15,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Security
- * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->

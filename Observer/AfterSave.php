@@ -14,33 +14,55 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_BetterCoupon
- * @copyright   Copyright (c) 2018 Mageplaza (https://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Webhook\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Message\ManagerInterface;
 use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\Webhook\Model\Config\Source\HookType;
 
 /**
- * Class AddNoticeNoRules
- * @package Mageplaza\BetterCoupon\Observer
+ * Class AfterSave
+ * @package Mageplaza\Webhook\Observer
  */
 abstract class AfterSave implements ObserverInterface
 {
-
+    /**
+     * @var HookFactory
+     */
     protected $hookFactory;
+
+    /**
+     * @var HistoryFactory
+     */
     protected $historyFactory;
+
+    /**
+     * @var Data
+     */
     protected $helper;
+
+    /**
+     * @var string
+     */
     protected $hookType = '';
+
+    /**
+     * @var string
+     */
     protected $hookTypeUpdate = '';
 
+    /**
+     * AfterSave constructor.
+     * @param HookFactory $hookFactory
+     * @param HistoryFactory $historyFactory
+     * @param Data $helper
+     */
     public function __construct(
         HookFactory $hookFactory,
         HistoryFactory $historyFactory,
@@ -54,8 +76,7 @@ abstract class AfterSave implements ObserverInterface
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -63,12 +84,21 @@ abstract class AfterSave implements ObserverInterface
         $this->send($item,$this->hookType);
     }
 
+    /**
+     * @param $observer
+     * @throws \Exception
+     */
     protected function updateObserver($observer)
     {
         $item = $observer->getDataObject();
         $this->send($item, $this->hookTypeUpdate);
     }
 
+    /**
+     * @param $item
+     * @param $hookType
+     * @throws \Exception
+     */
     protected function send($item, $hookType)
     {
         if(!$this->helper->isEnabled()){

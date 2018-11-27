@@ -14,21 +14,19 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Webhook\Model\ResourceModel;
 
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
- * Class Post
- * @package Mageplaza\Blog\Model\ResourceModel
+ * Class History
+ * @package Mageplaza\Webhook\Model\ResourceModel
  */
 class History extends AbstractDb
 {

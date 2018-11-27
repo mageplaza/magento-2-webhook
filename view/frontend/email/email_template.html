@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_ProductFeed
+ * @package     Mageplaza_Webhook
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
@@ -23,7 +23,7 @@
 <!--@subject {{trans "%store_name sent you a feed generate notify" store_name=$store.getName()}} @-->
 <!--@vars {
 "var store.getFrontendName()":"Store Name",
-"var store.getBaseUrl()":"Store URL",
+"var store.getBaseUrl()":"Store URL"
 } @-->
 
 {{template config_path="design/email/header_template"}}
@@ -33,9 +33,9 @@
         <td class="main-content">
             <div><h3 style="float: left">{{trans "Store Name: %store_name" store_name=$store.getName() }}</h3></div>
             <div><h3 style="float: right">{{trans "Store Code: %store_code" store_code=$store.getCode() }}</h3></div>
-            <h1 style="text-align: center; clear: both">{{trans "Data Feed Activities"}}</h1>
-            <p>{{trans "This is an automated email send from Mageplaza Product Feed and notice you that activities during generating product feeds"}}</p>
-            <p>{{trans "%mes" mes=$mes | raw}}</p>
+            <h1 style="text-align: center; clear: both">{{trans "Webhook Alert"}}</h1>
+            <p>{{trans "This is an automated email send from Mageplaza Webhook and alert you that error during sending hook"}}</p>
+            <p style="color:red">{{trans "%mes" mes=$mes | raw}}</p>
             <br>
             <br>
             <table align="center" class="button">

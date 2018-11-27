@@ -15,12 +15,11 @@
  *
  * @category    Mageplaza
  * @package     Mageplaza_Webhook
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
 namespace Mageplaza\Webhook\Helper;
-
 
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
@@ -38,19 +37,53 @@ use Magento\Backend\Model\UrlInterface;
 
 /**
  * Class Data
- * @package Mageplaza\Blog\Helper
+ * @package Mageplaza\Webhook\Helper
  */
 class Data extends CoreHelper
 {
     const CONFIG_MODULE_PATH = 'mp_webhook';
 
+    /**
+     * @var LiquidFilters
+     */
     protected $liquidFilters;
+
+    /**
+     * @var CurlFactory
+     */
     protected $curlFactory;
+
+    /**
+     * @var HookFactory
+     */
     protected $hookFactory;
+
+    /**
+     * @var HistoryFactory
+     */
     protected $historyFactory;
+    /**
+     * @var TransportBuilder
+     */
     protected $transportBuilder;
+
+    /**
+     * @var UrlInterface
+     */
     protected $backendUrl;
 
+    /**
+     * Data constructor.
+     * @param Context $context
+     * @param ObjectManagerInterface $objectManager
+     * @param StoreManagerInterface $storeManager
+     * @param UrlInterface $backendUrl
+     * @param TransportBuilder $transportBuilder
+     * @param CurlFactory $curlFactory
+     * @param LiquidFilters $liquidFilters
+     * @param HookFactory $hookFactory
+     * @param HistoryFactory $historyFactory
+     */
     public function __construct(
         Context $context,
         ObjectManagerInterface $objectManager,
@@ -67,12 +100,18 @@ class Data extends CoreHelper
 
         $this->liquidFilters = $liquidFilters;
         $this->curlFactory = $curlFactory;
-        $this->curlFactory = $hookFactory;
-        $this->curlFactory = $historyFactory;
+        $this->hookFactory = $hookFactory;
+        $this->historyFactory = $historyFactory;
         $this->transportBuilder = $transportBuilder;
         $this->backendUrl = $backendUrl;
     }
 
+    /**
+     * @param $hook
+     * @param bool $item
+     * @param bool $log
+     * @return array
+     */
     public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
         $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
@@ -103,6 +142,11 @@ class Data extends CoreHelper
 
     }
 
+    /**
+     * @param $item
+     * @param $templateHtml
+     * @return string
+     */
     public function generateLiquidTemplate($item, $templateHtml)
     {
         $template = new Template;
@@ -118,6 +162,15 @@ class Data extends CoreHelper
         return $content;
     }
 
+    /**
+     * @param $headers
+     * @param $authentication
+     * @param $contentType
+     * @param $url
+     * @param $body
+     * @param $method
+     * @return array
+     */
     public function sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method)
     {
         if (!$method) {
@@ -168,6 +221,20 @@ class Data extends CoreHelper
         return $result;
     }
 
+    /**
+     * @param $url
+     * @param $method
+     * @param $username
+     * @param $realm
+     * @param $password
+     * @param $nonce
+     * @param $algorithm
+     * @param $qop
+     * @param $nonceCount
+     * @param $clientNonce
+     * @param $opaque
+     * @return string
+     */
     public function getDigestAuthHeader($url, $method, $username, $realm, $password, $nonce, $algorithm, $qop, $nonceCount, $clientNonce, $opaque)
     {
         $uri = parse_url($url)[2];
@@ -179,23 +246,32 @@ class Data extends CoreHelper
         return $digestHeader;
     }
 
+    /**
+     * @param $username
+     * @param $password
+     * @return string
+     */
     public function getBasicAuthHeader($username, $password)
     {
         return 'Basic ' . base64_encode("{$username}:{$password}");
     }
 
+    /**
+     * @param $item
+     * @param $hookType
+     */
     public function sendObserver($item, $hookType)
     {
         if (!$this->isEnabled()) {
             return;
         }
-        try {
-            $hookCollection = $this->hookFactory->create()->getCollection()
-                ->addFieldToFilter('hook_type', $hookType)
-                ->addFieldToFilter('status', 1)
-                ->setOrder('priority', 'ASC');
+        $hookCollection = $this->hookFactory->create()->getCollection()
+            ->addFieldToFilter('hook_type', $hookType)
+            ->addFieldToFilter('status', 1)
+            ->setOrder('priority', 'ASC');
 
-            foreach ($hookCollection as $hook) {
+        foreach ($hookCollection as $hook) {
+            try {
                 $history = $this->historyFactory->create();
                 $data = [
                     'hook_id' => $hook->getId(),
@@ -229,20 +305,19 @@ class Data extends CoreHelper
                     }
                 }
                 $history->save();
-            }
-        } catch (\Exception $e) {
-            if ($this->getConfigGeneral('alert_enabled')) {
-                $this->sendMail($this->getConfigGeneral('send_to'),
-                    '',
-                    $this->getConfigGeneral('email_template'),
-                    $this->storeManager->getStore()->getId());
+            } catch (\Exception $e) {
+                if ($this->getConfigGeneral('alert_enabled')) {
+                    $this->sendMail($this->getConfigGeneral('send_to'),
+                        __('Something went wrong while sending %1 hook', $hook->getName()),
+                        $this->getConfigGeneral('email_template'),
+                        $this->storeManager->getStore()->getId());
+                }
             }
         }
 
     }
 
     /**
-     * @param $sendFrom
      * @param $sendTo
      * @param $mes
      * @param $emailTemplate

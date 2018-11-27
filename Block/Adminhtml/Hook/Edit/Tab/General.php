@@ -25,13 +25,10 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Config\Model\Config\Source\Enabledisable;
-use Magento\Cron\Model\Config\Source\Frequency;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
-use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
-
 
 /**
  * Class General
@@ -50,18 +47,12 @@ class General extends Generic implements TabInterface
     protected $systemStore;
 
     /**
-     * @var Data
-     */
-    protected $helperData;
-
-    /**
      * General constructor.
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
      * @param Enabledisable $enableDisable
      * @param Store $systemStore
-     * @param Data $helperData
      * @param array $data
      */
     public function __construct(
@@ -70,7 +61,6 @@ class General extends Generic implements TabInterface
         FormFactory $formFactory,
         Enabledisable $enableDisable,
         Store $systemStore,
-        Data $helperData,
         array $data = []
     )
     {
@@ -78,7 +68,6 @@ class General extends Generic implements TabInterface
 
         $this->enabledisable     = $enableDisable;
         $this->systemStore       = $systemStore;
-        $this->helperData        = $helperData;
     }
 
     /**

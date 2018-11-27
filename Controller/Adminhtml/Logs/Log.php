@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -27,7 +27,6 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
 use Mageplaza\Webhook\Model\HookFactory;
 
-
 /**
  * Class Products
  * @package Mageplaza\Blog\Controller\Adminhtml\Post
@@ -38,10 +37,14 @@ class Log extends AbstractManageHooks
 	 * @var \Magento\Framework\View\Result\LayoutFactory
 	 */
 	protected $resultLayoutFactory;
-	public $jsonHelper;
-	protected $pageFactory;
 
-
+    /**
+     * Log constructor.
+     * @param HookFactory $hookFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
+     * @param LayoutFactory $resultLayoutFactory
+     */
 	public function __construct(
 		HookFactory $hookFactory,
 		Registry $coreRegistry,
@@ -55,11 +58,9 @@ class Log extends AbstractManageHooks
 		$this->resultLayoutFactory = $resultLayoutFactory;
 	}
 
-	/**
-	 * Save action
-	 *
-	 * @return \Magento\Framework\Controller\ResultInterface
-	 */
+    /**
+     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Layout
+     */
 	public function execute()
 	{
 		$this->initHook(true);

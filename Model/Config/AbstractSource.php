@@ -25,7 +25,7 @@ use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Class AbstractSource
- * @package Mageplaza\Core\Model\Config\Source
+ * @package Mageplaza\Webhook\Model\Config
  */
 abstract class AbstractSource implements ArrayInterface
 {

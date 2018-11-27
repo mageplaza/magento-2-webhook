@@ -49,9 +49,9 @@ class NewAction extends Action
         ForwardFactory $resultForwardFactory
     )
     {
-        $this->resultForwardFactory = $resultForwardFactory;
-
         parent::__construct($context);
+
+        $this->resultForwardFactory = $resultForwardFactory;
     }
 
     /**

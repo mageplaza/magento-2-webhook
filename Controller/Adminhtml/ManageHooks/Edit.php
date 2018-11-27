@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -29,7 +29,7 @@ use Mageplaza\Webhook\Model\HookFactory;
 
 /**
  * Class Edit
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Webhook\Controller\Adminhtml\ManageHooks
  */
 class Edit extends AbstractManageHooks
 {
@@ -85,7 +85,7 @@ class Edit extends AbstractManageHooks
         $resultPage->setActiveMenu('Mageplaza_Webhook::webhook');
         $resultPage->getConfig()->getTitle()->set(__('Hook'));
 
-        $title = ($hook->getId() && $hook->getId() !== 'copy') ? __('Edit %1 hook', $hook->getName()) : __('New Hook');
+        $title = $hook->getId() ? __('Edit %1 hook', $hook->getName()) : __('New Hook');
         $resultPage->getConfig()->getTitle()->prepend($title);
 
         return $resultPage;

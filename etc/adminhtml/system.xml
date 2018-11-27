@@ -15,7 +15,7 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_ProductFeed
+ * @package     Mageplaza_Webhook
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
@@ -33,19 +33,24 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="keep_log" translate="label" type="text" sortOrder="10" showInDefault="1">
-                    <label>Keep logs</label>
-                    <comment>Automatically clean log if it is reach this number. It will clean daily.</comment>
+                <field id="abandoned_time" translate="label comment" type="select" sortOrder="2" showInDefault="1">
+                    <label>Abandoned Cart After (hours)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Recommend period time: 1, 6, 10, 12, 24</comment>
                 </field>
                 <field id="alert_enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1">
                     <label>Alert on Error</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[
-                    To avoid sent to spambox, you should install <a href="https://www.mageplaza.com/magento-2-smtp/" target="_blank">SMTP</a>]]></comment>
+                    To avoid going to spambox, you should install <a href="https://www.mageplaza.com/magento-2-smtp/" target="_blank">SMTP</a>]]></comment>
+                </field>
+                <field id="keep_log" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Keep logs</label>
+                    <comment>Automatically clean log if it reachs this number. It will be done daily.</comment>
                 </field>
                 <field id="send_to" translate="label" type="text" sortOrder="10" showInDefault="1">
                     <label>Send To</label>
-                    <comment>separate by comma (,)</comment>
+                    <comment>Separated by comma (,)</comment>
                 </field>
                 <field id="email_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Email Template</label>

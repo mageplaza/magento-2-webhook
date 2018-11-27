@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -41,18 +41,15 @@ class MassDelete extends Action
     public $filter;
 
     /**
-     * Collection Factory
-     *
-     * @var \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory
+     * @var CollectionFactory
      */
     public $collectionFactory;
 
     /**
-     * constructor
-     *
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Mageplaza\Blog\Model\ResourceModel\Post\CollectionFactory $collectionFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     * MassDelete constructor.
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         Context $context,

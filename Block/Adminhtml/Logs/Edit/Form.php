@@ -29,12 +29,23 @@ use Magento\Framework\Data\FormFactory;
 
 /**
  * Class Form
- * @package Mageplaza\Webhook\Block\Adminhtml\Hook\Edit
+ * @package Mageplaza\Webhook\Block\Adminhtml\Logs\Edit
  */
 class Form extends Generic
 {
+    /**
+     * @var HookType
+     */
     protected $hookType;
 
+    /**
+     * Form constructor.
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param HookType $hookType
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         Registry $registry,
@@ -43,6 +54,7 @@ class Form extends Generic
         array $data = [])
     {
         parent::__construct($context, $registry, $formFactory, $data);
+
         $this->hookType = $hookType;
     }
 

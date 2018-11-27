@@ -38,7 +38,11 @@ class Hook extends AbstractDb
      */
     public $date;
 
-
+    /**
+     * Hook constructor.
+     * @param Context $context
+     * @param DateTime $date
+     */
     public function __construct(
         Context $context,
         DateTime $date

@@ -14,7 +14,7 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_ProductFeed
+ * @package     Mageplaza_Webhook
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
@@ -28,7 +28,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Class InstallSchema
- * @package Mageplaza\ProductFeed\Setup
+ * @package Mageplaza\Webhook\Setup
  */
 class InstallSchema implements InstallSchemaInterface
 {

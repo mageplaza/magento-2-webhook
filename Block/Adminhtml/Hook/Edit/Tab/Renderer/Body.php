@@ -25,24 +25,18 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\Registry;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Quote\Model\ResourceModel\Quote;
-use Magento\Sales\Model\ResourceModel\Order\Address as AddressResource;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\ResourceModel\Order\Status as OrderStatusResource;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
-use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
-use Mageplaza\Webhook\Model\Hook;
 use Mageplaza\Webhook\Model\HookFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttr;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Catalog\Model\CategoryFactory;
 
 /**
@@ -68,13 +62,7 @@ class Body extends Element implements RendererInterface
     protected $liquidFilters;
 
     /**
-     * @var Registry
-     */
-    protected $registry;
-
-
-    /**
-     * @var JsonHelper
+     * @var InvoiceResource
      */
     protected $invoiceResource;
 
@@ -89,37 +77,53 @@ class Body extends Element implements RendererInterface
     protected $creditmemoResource;
 
     /**
-     * @var AddressResource
-     */
-    protected $addressResource;
-
-    /**
      * @var HookFactory
      */
     protected $hookFactory;
+
+    /**
+     * @var OrderStatusResource
+     */
     protected $orderStatusResource;
+
+    /**
+     * @var CustomerResource
+     */
     protected $customerResource;
+
+    /**
+     * @var CatalogEavAttr
+     */
     protected $catalogEavAttribute;
+
+    /**
+     * @var CategoryFactory
+     */
     protected $categoryFactory;
+
+    /**
+     * @var Quote
+     */
     protected $quoteResource;
 
     /**
-     * TemplateContent constructor.
-     *
+     * Body constructor.
      * @param Context $context
-     * @param AddressResource $addressResource
      * @param OrderFactory $orderFactory
      * @param InvoiceResource $invoiceResource
      * @param ShipmentResource $shipmentResource
      * @param CreditmemoResource $creditmemoResource
-     * @param Registry $registry
+     * @param OrderStatusResource $orderStatusResource
+     * @param CustomerResource $customerResource
+     * @param Quote $quoteResource
+     * @param CatalogEavAttr $catalogEavAttribute
+     * @param CategoryFactory $categoryFactory
      * @param LiquidFilters $liquidFilters
      * @param HookFactory $hookFactory
      * @param array $data
      */
     public function __construct(
         Context $context,
-        AddressResource $addressResource,
         OrderFactory $orderFactory,
         InvoiceResource $invoiceResource,
         ShipmentResource $shipmentResource,
@@ -129,20 +133,17 @@ class Body extends Element implements RendererInterface
         Quote $quoteResource,
         CatalogEavAttr $catalogEavAttribute,
         CategoryFactory $categoryFactory,
-        Registry $registry,
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
         array $data = [])
     {
         parent::__construct($context, $data);
 
-        $this->registry = $registry;
         $this->liquidFilters = $liquidFilters;
         $this->orderFactory = $orderFactory;
         $this->invoiceResource = $invoiceResource;
         $this->shipmentResource = $shipmentResource;
         $this->creditmemoResource = $creditmemoResource;
-        $this->addressResource = $addressResource;
         $this->hookFactory = $hookFactory;
         $this->orderStatusResource = $orderStatusResource;
         $this->customerResource = $customerResource;
@@ -248,6 +249,10 @@ class Body extends Element implements RendererInterface
         return $attrCollection;
     }
 
+    /**
+     * @param $collection
+     * @return array
+     */
     protected function getAttrCollectionFromDb($collection)
     {
         $attrCollection = [];
@@ -260,6 +265,10 @@ class Body extends Element implements RendererInterface
         return $attrCollection;
     }
 
+    /**
+     * @param $collection
+     * @return array
+     */
     protected function getAttrCollectionFromEav($collection)
     {
         $attrCollection = [];
@@ -278,10 +287,5 @@ class Body extends Element implements RendererInterface
     public function getModifier()
     {
         return $this->liquidFilters->getFilters();
-    }
-
-    public function getElement()
-    {
-        return parent::getElement(); // TODO: Change the autogenerated stub
     }
 }

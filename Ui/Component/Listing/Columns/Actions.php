@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_GiftCard
- * @copyright   Copyright (c) 2017 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -54,9 +54,9 @@ class Actions extends Column
         array $data = []
     )
     {
-        $this->urlBuilder = $urlBuilder;
-
         parent::__construct($context, $uiComponentFactory, $components, $data);
+
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**

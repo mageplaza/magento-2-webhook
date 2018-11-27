@@ -59,7 +59,7 @@ class Log extends AbstractManageHooks
     }
 
     /**
-     * Hook generate log
+     * Hook send request log
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */

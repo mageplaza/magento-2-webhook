@@ -27,7 +27,7 @@ use Magento\Framework\Registry;
 use Mageplaza\Webhook\Model\HistoryFactory;
 
 /**
- * Class AbstractManageHooks
+ * Class AbstractManageLogs
  * @package Mageplaza\Webhook\Controller\Adminhtml
  */
 abstract class AbstractManageLogs extends Action
@@ -65,6 +65,9 @@ abstract class AbstractManageLogs extends Action
         parent::__construct($context);
     }
 
+    /**
+     * @return bool|\Mageplaza\Webhook\Model\History
+     */
     protected function initLog()
     {
         $logId = $this->getRequest()->getParam('id');

@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -25,12 +25,11 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
-use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\HistoryFactory;
 
 /**
  * Class Edit
- * @package Mageplaza\Blog\Controller\Adminhtml\Post
+ * @package Mageplaza\Webhook\Controller\Adminhtml\Logs
  */
 class Edit extends AbstractManageLogs
 {
@@ -40,9 +39,14 @@ class Edit extends AbstractManageLogs
      * @var \Magento\Framework\View\Result\PageFactory
      */
     public $resultPageFactory;
-    protected $hookFactory;
 
-
+    /**
+     * Edit constructor.
+     * @param HistoryFactory $historyFactory
+     * @param Registry $coreRegistry
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     */
     public function __construct(
         HistoryFactory $historyFactory,
         Registry $coreRegistry,
@@ -54,7 +58,6 @@ class Edit extends AbstractManageLogs
 
         $this->resultPageFactory = $resultPageFactory;
     }
-
 
     /**
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
