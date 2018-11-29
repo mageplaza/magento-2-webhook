@@ -21,7 +21,6 @@
 
 namespace Mageplaza\Webhook\Block\Adminhtml;
 
-use Magento\Backend\Block\Widget\Grid\Container;
 use Magento\Backend\Block\Widget\Context;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 
@@ -29,7 +28,7 @@ use Mageplaza\Webhook\Model\Config\Source\HookType;
  * Class ManageHooks
  * @package Mageplaza\Webhook\Block\Adminhtml
  */
-class ManageHooks extends Container
+class ManageHooks extends \Magento\Backend\Block\Widget\Container
 {
     protected $hookType;
 
@@ -44,9 +43,7 @@ class ManageHooks extends Container
     }
 
     /**
-     * Prepare button and grid
-     *
-     * @return \Mageplaza\Webhook\Block\Adminhtml\ManageHooks
+     * @return \Magento\Backend\Block\Widget\Container
      */
 
     protected function _prepareLayout()
@@ -65,7 +62,7 @@ class ManageHooks extends Container
     }
 
     /**
-     * Retrieve options for 'New Trigger' split button
+     * Retrieve options for 'Add New Trigger' split button
      *
      * @return array
      */
