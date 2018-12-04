@@ -84,7 +84,7 @@ class AbandonedCart
             return;
         }
         $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time') + 1;
-        $updateFrom = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
+        $updateFrom = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}M"));
         $updateTo = $updateFrom->add(new \DateInterval("PT1H"));
         $quoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 0)

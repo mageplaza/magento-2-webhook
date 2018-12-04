@@ -33,9 +33,8 @@
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="abandoned_time" translate="label comment" type="select" sortOrder="2" showInDefault="1">
-                    <label>Abandoned Cart After (hours)</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <field id="abandoned_time" translate="label comment" type="text" sortOrder="2" showInDefault="1">
+                    <label>Abandoned Cart After (minutes)</label>
                     <comment>Recommend period time: 1, 6, 10, 12, 24</comment>
                 </field>
                 <field id="alert_enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1">
