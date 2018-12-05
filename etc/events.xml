@@ -40,7 +40,7 @@
         <observer name="mp_wh_new_creditmemo" instance="Mageplaza\Webhook\Observer\AfterCreditmemo"/>
     </event>
     <event name="customer_save_before">
-        <observer name="mp_wh_save_order_before" instance="Mageplaza\Webhook\Observer\BeforeSave"/>
+        <observer name="mp_wh_save_customer_before" instance="Mageplaza\Webhook\Observer\BeforeSave"/>
     </event>
     <event name="customer_save_after">
         <observer name="mp_wh_new_customer" instance="Mageplaza\Webhook\Observer\AfterCustomer"/>
