@@ -89,7 +89,7 @@ class ClearLogs
                     ->addFieldToFilter('hook_id', $hook->getId());
                 if ($historyCollection->getSize() > $limit) {
                     $count = $historyCollection->getSize() - $limit;
-                    $historyCollection->getConnection()->query("DELETE FROM {$historyCollection->getMainTable()} LIMIT {$count}");
+                    $historyCollection->getConnection()->query("DELETE FROM {$historyCollection->getMainTable()} WHERE `hook_id`='{$hook->getId()}' LIMIT {$count}");
                 }
             }
         } catch (\Exception $e) {
