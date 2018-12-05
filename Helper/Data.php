@@ -149,17 +149,21 @@ class Data extends CoreHelper
      */
     public function generateLiquidTemplate($item, $templateHtml)
     {
-        $template = new Template;
-        $filtersMethods = $this->liquidFilters->getFiltersMethods();
+        try{
+            $template = new Template;
+            $filtersMethods = $this->liquidFilters->getFiltersMethods();
 
-        $template->registerFilter($this->liquidFilters);
+            $template->registerFilter($this->liquidFilters);
 
-        $template->parse($templateHtml, $filtersMethods);
-        $content = $template->render([
-            'item' => $item->getData(),
-        ]);
-
-        return $content;
+            $template->parse($templateHtml, $filtersMethods);
+            $content = $template->render([
+                'item' => $item,
+            ]);
+            return $content;
+        }catch (\Exception $e){
+            $this->_logger->critical($e->getMessage());
+        }
+        return '';
     }
 
     /**
