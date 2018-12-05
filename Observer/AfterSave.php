@@ -136,9 +136,9 @@ abstract class AfterSave implements ObserverInterface
             } else {
                 $history->setStatus(0)->setMessage($result['message']);
                 if ($isSendMail) {
-                    $this->sendMail($sendTo,
+                    $this->helper->sendMail($sendTo,
                         '',
-                        $this->getConfigGeneral('email_template'),
+                        $this->helper->getConfigGeneral('email_template'),
                         $this->helper->getStoreId()
                     );
                 }
