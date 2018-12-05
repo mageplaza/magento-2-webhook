@@ -30,7 +30,7 @@ use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
-use Magento\Sales\Model\ResourceModel\Order\Status as OrderStatusResource;
+use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusResource;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
@@ -173,7 +173,7 @@ class Body extends Element implements RendererInterface
     {
         $type = $this->_request->getParam('type');
         if (!$type) {
-            $hookId = $this->getRequest()->getParam('id');
+            $hookId = $this->getRequest()->getParam('hook_id');
             $hook = $this->hookFactory->create()->load($hookId);
             $type = $hook->getHookType();
         }
