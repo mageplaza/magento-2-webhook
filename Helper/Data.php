@@ -270,6 +270,9 @@ class Data extends CoreHelper
             ->addFieldToFilter('status', 1)
             ->setOrder('priority', 'ASC');
 
+        $isSendMail = $this->getConfigGeneral('alert_enabled');
+        $sendTo = explode(',',$this->getConfigGeneral('send_to'));
+
         foreach ($hookCollection as $hook) {
             try {
                 $history = $this->historyFactory->create();
@@ -296,8 +299,8 @@ class Data extends CoreHelper
                     $history->setStatus(1);
                 } else {
                     $history->setStatus(0)->setMessage($result['message']);
-                    if ($this->getConfigGeneral('alert_enabled')) {
-                        $this->sendMail($this->getConfigGeneral('send_to'),
+                    if ($isSendMail) {
+                        $this->sendMail($sendTo,
                             '',
                             $this->getConfigGeneral('email_template'),
                             $this->storeManager->getStore()->getId()
@@ -306,8 +309,8 @@ class Data extends CoreHelper
                 }
                 $history->save();
             } catch (\Exception $e) {
-                if ($this->getConfigGeneral('alert_enabled')) {
-                    $this->sendMail($this->getConfigGeneral('send_to'),
+                if ($isSendMail) {
+                    $this->sendMail($sendTo,
                         __('Something went wrong while sending %1 hook', $hook->getName()),
                         $this->getConfigGeneral('email_template'),
                         $this->storeManager->getStore()->getId());
@@ -349,5 +352,10 @@ class Data extends CoreHelper
         }
 
         return false;
+    }
+
+    public function getStoreId()
+    {
+        return $this->storeManager->getStore()->getId();
     }
 }

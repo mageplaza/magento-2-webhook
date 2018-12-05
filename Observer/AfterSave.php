@@ -108,7 +108,8 @@ abstract class AfterSave implements ObserverInterface
             ->addFieldToFilter('hook_type', $hookType)
             ->addFieldToFilter('status', 1)
             ->setOrder('priority', 'ASC');
-
+        $isSendMail = $this->helper->getConfigGeneral('alert_enabled');
+        $sendTo = explode(',',$this->helper->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             $history = $this->historyFactory->create();
             $data = [
@@ -134,7 +135,15 @@ abstract class AfterSave implements ObserverInterface
                 $history->setStatus(1);
             } else {
                 $history->setStatus(0)->setMessage($result['message']);
+                if ($isSendMail) {
+                    $this->sendMail($sendTo,
+                        '',
+                        $this->getConfigGeneral('email_template'),
+                        $this->helper->getStoreId()
+                    );
+                }
             }
+
             $history->save();
         }
     }
