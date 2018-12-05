@@ -301,7 +301,7 @@ class Data extends CoreHelper
                     $history->setStatus(0)->setMessage($result['message']);
                     if ($isSendMail) {
                         $this->sendMail($sendTo,
-                            '',
+                            __('Something went wrong while sending %1 hook', $hook->getName()),
                             $this->getConfigGeneral('email_template'),
                             $this->storeManager->getStore()->getId()
                         );
