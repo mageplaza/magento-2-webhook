@@ -39,8 +39,15 @@ class UpdateCart extends AfterSave
      * @throws \Exception
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
-    {
-        $item = $observer->getQuoteItem();
-        $this->send($item,$this->hookType);
+    {$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($writer);
+        $logger->info('nghia');
+        $cart = $observer->getCart();
+        $info = $observer->getInfo();
+
+        $logger->info($info);
+
+//        $this->send($item,$this->hookType);
     }
 }
