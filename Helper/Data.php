@@ -156,7 +156,7 @@ class Data extends CoreHelper
 
         $template->parse($templateHtml, $filtersMethods);
         $content = $template->render([
-            'item' => $item,
+            'item' => $item->getData(),
         ]);
 
         return $content;

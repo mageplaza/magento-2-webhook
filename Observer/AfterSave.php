@@ -137,7 +137,7 @@ abstract class AfterSave implements ObserverInterface
                 $history->setStatus(0)->setMessage($result['message']);
                 if ($isSendMail) {
                     $this->helper->sendMail($sendTo,
-                        __('Something went wrong when sending %1 hook',$hook->getName()),
+                        __('Something went wrong while sending %1 hook',$hook->getName()),
                         $this->helper->getConfigGeneral('email_template'),
                         $this->helper->getStoreId()
                     );
