@@ -58,6 +58,8 @@ class BeforeSave implements ObserverInterface
             return;
         }
         $item = $observer->getDataObject();
-        $item->setMpNew(1);
+        if($item->isObjectNew()){
+            $item->setMpNew(1);
+        }
     }
 }
