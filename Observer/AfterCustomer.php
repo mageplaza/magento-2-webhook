@@ -32,7 +32,7 @@ class AfterCustomer extends AfterSave
     /**
      * @var string
      */
-    protected $hookType = HookType::NEW_ORDER;
+    protected $hookType = HookType::NEW_CUSTOMER;
 
     /**
      * @var string
