@@ -50,7 +50,7 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
     {
         $addButtonProps = [
             'id' => 'add_new_hook',
-            'label' => __('New Order'),
+            'label' => __('Add New'),
             'class' => 'add',
             'button_class' => '',
             'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
