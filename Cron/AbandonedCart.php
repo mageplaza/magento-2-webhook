@@ -93,7 +93,7 @@ class AbandonedCart
         }
 
         $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
-        $update        = (new \DateTime('', new \DateTimeZone('UTC')))->sub(new \DateInterval("PT{$abandonedTime}M"));
+        $update        = (new \DateTime('',new \DateTimeZone('UTC')))->sub(new \DateInterval("PT{$abandonedTime}M"));
         $updateFrom    = clone $update;
         $updateFrom    = $this->convertToLocaleTime($updateFrom);
         $updateTo      = $update->add(new \DateInterval("PT1H"));
@@ -121,14 +121,13 @@ class AbandonedCart
         }
     }
 
-    /**
-     * @param $time
-     * @return mixed
-     */
     public function convertToLocaleTime($time)
     {
-        $time->setTimezone(new \DateTimeZone($this->timezone->getConfigTimezone()));
+        $localTime = new \DateTime($time, new \DateTimeZone('UTC'));
+        $localTime->setTimezone(new \DateTimeZone($this->timezone->getConfigTimezone()));
 
-        return $time;
+//        $localTime = $localTime->format('Y-m-d H:i:s');
+
+        return $localTime;
     }
 }
