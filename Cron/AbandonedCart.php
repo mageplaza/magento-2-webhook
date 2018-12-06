@@ -27,6 +27,7 @@ use Mageplaza\Webhook\Model\HookFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class AbandonedCart
@@ -53,25 +54,32 @@ class AbandonedCart
      * @var DateTime
      */
     protected $date;
+    /**
+     * @var TimezoneInterface
+     */
+    protected $timezone;
 
     /**
      * AbandonedCart constructor.
      * @param LoggerInterface $logger
      * @param DateTime $date
      * @param QuoteFactory $quoteFactory
+     * @param TimezoneInterface $timezone
      * @param Data $helper
      */
     public function __construct(
         LoggerInterface $logger,
         DateTime $date,
         QuoteFactory $quoteFactory,
+        TimezoneInterface $timezone,
         Data $helper
     )
     {
-        $this->logger = $logger;
+        $this->logger       = $logger;
         $this->quoteFactory = $quoteFactory;
-        $this->helper = $helper;
-        $this->date = $date;
+        $this->helper       = $helper;
+        $this->date         = $date;
+        $this->timezone     = $timezone;
     }
 
     /**
@@ -85,11 +93,13 @@ class AbandonedCart
         }
 
         $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
-        $update = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}M"));
-        $updateFrom = clone $update;
-        $updateTo = $update->add(new \DateInterval("PT1H"));
+        $update        = (new \DateTime('', new \DateTimeZone('UTC')))->sub(new \DateInterval("PT{$abandonedTime}M"));
+        $updateFrom    = clone $update;
+        $updateFrom    = $this->convertToLocaleTime($updateFrom);
+        $updateTo      = $update->add(new \DateInterval("PT1H"));
+        $updateTo      = $this->convertToLocaleTime($updateTo);
 
-        $quoteCollection = $this->quoteFactory->create()->getCollection()
+        $quoteCollection           = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 0)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
             ->addFieldToFilter('updated_at', ['to' => $updateTo]);
@@ -109,5 +119,16 @@ class AbandonedCart
         } catch (\Exception $e) {
             $this->logger->critical($e->getLogMessage());
         }
+    }
+
+    /**
+     * @param $time
+     * @return mixed
+     */
+    public function convertToLocaleTime($time)
+    {
+        $time->setTimezone(new \DateTimeZone($this->timezone->getConfigTimezone()));
+
+        return $time;
     }
 }
