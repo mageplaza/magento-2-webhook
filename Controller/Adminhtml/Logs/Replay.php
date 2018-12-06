@@ -40,22 +40,30 @@ class Replay extends AbstractManageLogs
     protected $hookFactory;
 
     /**
+     * @var Data
+     */
+    protected $helperData;
+
+    /**
      * Replay constructor.
      * @param HistoryFactory $historyFactory
      * @param Registry $coreRegistry
      * @param Context $context
      * @param HookFactory $hookFactory
+     * @param Data $helperData
      */
     public function __construct(
         HistoryFactory $historyFactory,
         Registry $coreRegistry,
         Context $context,
-        HookFactory $hookFactory
+        HookFactory $hookFactory,
+        Data $helperData
     )
     {
         parent::__construct($historyFactory, $coreRegistry, $context);
 
         $this->hookFactory = $hookFactory;
+        $this->helperData = $helperData;
     }
 
     /**
@@ -85,7 +93,7 @@ class Replay extends AbstractManageLogs
                 ];
             }
             if ($result['success'] == true) {
-                $log->setStatus(1);
+                $log->setStatus(1)->setMessage('');
                 $this->messageManager->addSuccess(__('The log has been replay successful.'));
 
             } else {

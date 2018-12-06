@@ -83,9 +83,12 @@ class AbandonedCart
         if (!$this->helper->isEnabled()) {
             return;
         }
-        $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time') + 1;
-        $updateFrom = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}M"));
-        $updateTo = $updateFrom->add(new \DateInterval("PT1H"));
+
+        $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
+        $update = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}M"));
+        $updateFrom = clone $update;
+        $updateTo = $update->add(new \DateInterval("PT1H"));
+
         $quoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 0)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
@@ -95,6 +98,7 @@ class AbandonedCart
             ->addFieldToFilter('created_at', ['from' => $updateFrom])
             ->addFieldToFilter('created_at', ['to' => $updateTo])
             ->addFieldToFilter('updated_at', ['eq' => '0000-00-00 00:00:00']);
+
         try {
             foreach ($quoteCollection as $quote) {
                 $this->helper->sendObserver($quote, HookType::ABANDONED_CART);
