@@ -223,7 +223,7 @@ class Body extends Element implements RendererInterface
             case HookType::NEW_PRODUCT:
             case HookType::UPDATE_PRODUCT:
             case HookType::DELETE_PRODUCT:
-            case HookType::UPDATE_CART:
+//            case HookType::UPDATE_CART:
                 $collectionData = $this->catalogEavAttribute->getCollection()
                     ->addFieldToFilter(AttributeSet::KEY_ENTITY_TYPE_ID, 4);
                 $attrCollection = $this->getAttrCollectionFromEav($collectionData);

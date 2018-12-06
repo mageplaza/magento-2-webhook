@@ -32,7 +32,7 @@ class UpdateCart extends AfterSave
     /**
      * @var string
      */
-    protected $hookType = HookType::UPDATE_CART;
+//    protected $hookType = HookType::UPDATE_CART;
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
