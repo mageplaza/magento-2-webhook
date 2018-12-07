@@ -26,7 +26,7 @@
             <schedule>0 * * * *</schedule>
         </job>
         <job name="mageplaza_webhook_clear_logs" instance="Mageplaza\Webhook\Cron\ClearLogs" method="execute">
-            <schedule>0 0 * * *</schedule>
+            <schedule>0 1 * * *</schedule>
         </job>
     </group>
 </config>

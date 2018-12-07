@@ -66,8 +66,8 @@ class General extends Generic implements TabInterface
     {
         parent::__construct($context, $registry, $formFactory, $data);
 
-        $this->enabledisable     = $enableDisable;
-        $this->systemStore       = $systemStore;
+        $this->enabledisable = $enableDisable;
+        $this->systemStore   = $systemStore;
     }
 
     /**
@@ -125,10 +125,10 @@ class General extends Generic implements TabInterface
         }
 
         $fieldset->addField('priority', 'text', [
-            'name'   => 'priority',
-            'label'  => __('Priority'),
-            'title'  => __('Priority'),
-            'note'   => __('0 is highest')
+            'name'  => 'priority',
+            'label' => __('Priority'),
+            'title' => __('Priority'),
+            'note'  => __('0 is highest')
         ]);
 
         $form->addValues($hook->getData());

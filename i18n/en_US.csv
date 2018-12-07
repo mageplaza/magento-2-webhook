@@ -1,0 +1,152 @@
+"Save and Continue Edit","Save and Continue Edit"
+Actions,Actions
+"Payload URL","Payload URL"
+"You can insert a variable","You can insert a variable"
+"Insert Variable","Insert Variable"
+Method,Method
+Authentication,Authentication
+Username,Username
+Realm,Realm
+Password,Password
+Nonce,Nonce
+Algorithm,Algorithm
+qop,qop
+"Nonce Count","Nonce Count"
+"Client Nonce","Client Nonce"
+Opaque,Opaque
+Header,Header
+Content-type,Content-type
+Body,Body
+"Supports <a href=""https://shopify.github.io/liquid/"" target=""_blank"">Liquid template</a>","Supports <a href=""https://shopify.github.io/liquid/"" target=""_blank"">Liquid template</a>"
+"General Information","General Information"
+Name,Name
+Status,Status
+"Store Views","Store Views"
+Priority,Priority
+"0 is highest","0 is highest"
+General,General
+Value,Value
+Add,Add
+"HOOK INFORMATION","HOOK INFORMATION"
+Abs,Abs
+Append,Append
+"At Least","At Least"
+"At Most","At Most"
+Capitalize,Capitalize
+Ceil,Ceil
+Date,Date
+"Date Format","Date Format"
+Default,Default
+"Divided By","Divided By"
+"Lower Case","Lower Case"
+Escape,Escape
+"Escape once","Escape once"
+Floor,Floor
+Join,Join
+"Join By","Join By"
+"Left Trim","Left Trim"
+Minus,Minus
+Modulo,Modulo
+"Replace new line to <br","Replace new line to <br"
+Plus,Plus
+Prepend,Prepend
+Remove,Remove
+"Remove First","Remove First"
+Replace,Replace
+Search,Search
+"Replace First","Replace First"
+"Reverse Array","Reverse Array"
+Round,Round
+Count,Count
+"Right Trim","Right Trim"
+"Array Size","Array Size"
+Slice,Slice
+From,From
+To,To
+"Array Sort","Array Sort"
+"Trim Text","Trim Text"
+"Strip Html Tags","Strip Html Tags"
+"Strip New Line","Strip New Line"
+Times,Times
+Truncate,Truncate
+"Append Last","Append Last"
+"Truncate Words","Truncate Words"
+Words,Words
+"Uppercase first character of each word ","Uppercase first character of each word "
+"Unique Id Of Array","Unique Id Of Array"
+"Upper Case","Upper Case"
+"Decode Url","Decode Url"
+"Encode Url","Encode Url"
+Price,Price
+"If Empty","If Empty"
+"Log ID","Log ID"
+Entity,Entity
+Response,Response
+"Add New","Add New"
+"This hook no longer exists.","This hook no longer exists."
+"This log no longer exists.","This log no longer exists."
+"The log has been deleted.","The log has been deleted."
+"The log to delete was not found.","The log to delete was not found."
+Log,Log
+"View log %1","View log %1"
+"Hook Logs","Hook Logs"
+"The log has been replay successful.","The log has been replay successful."
+"The Log to replay was not found.","The Log to replay was not found."
+"The Hook has been deleted.","The Hook has been deleted."
+"The Hook to delete was not found.","The Hook to delete was not found."
+Hook,Hook
+"Edit %1 hook","Edit %1 hook"
+"New Hook","New Hook"
+"Manage Hooks","Manage Hooks"
+"Please correct the data sent.","Please correct the data sent."
+"Something went wrong while saving the Post.","Something went wrong while saving the Post."
+"Posts has been deleted.","Posts has been deleted."
+"Something wrong when delete Posts.","Something wrong when delete Posts."
+"Something went wrong while updating status for %1.","Something went wrong while updating status for %1."
+"A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
+"The hook has been saved.","The hook has been saved."
+"Cannot connect to server. Please try again later.","Cannot connect to server. Please try again later."
+"Something went wrong while sending %1 hook","Something went wrong while sending %1 hook"
+"--Please Select--","--Please Select--"
+Basic,Basic
+Digest,Digest
+"All Store Views","All Store Views"
+Preview,Preview
+"Insert Variables","Insert Variables"
+"Item Attribute","Item Attribute"
+"Add Filter","Add Filter"
+"Add after","Add after"
+Delete,Delete
+"%store_name sent you a feed generate notify","%store_name sent you a feed generate notify"
+"Store Name: %store_name","Store Name: %store_name"
+"Store Code: %store_code","Store Code: %store_code"
+"Webhook Alert","Webhook Alert"
+"This is an automated email send from Mageplaza Webhook and alert you that error during sending hook","This is an automated email send from Mageplaza Webhook and alert you that error during sending hook"
+%mes,%mes
+"View Logs","View Logs"
+"Please correct your json data","Please correct your json data"
+"Click to each attribute to add filter & insert it to template","Click to each attribute to add filter & insert it to template"
+Webhook,Webhook
+Logs,Logs
+Enable,Enable
+"Abandoned Cart After (minutes)","Abandoned Cart After (minutes)"
+"Recommend period time: 1, 6, 10, 12, 24","Recommend period time: 1, 6, 10, 12, 24"
+"Alert on Error","Alert on Error"
+"To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>","To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>"
+"Keep logs","Keep logs"
+"Automatically clean log if it reachs this number. It will be done daily.","Automatically clean log if it reachs this number. It will be done daily."
+"Send To","Send To"
+"Separated by comma (,)","Separated by comma (,)"
+"Email Template","Email Template"
+ID,ID
+Message,Message
+View,View
+Replay,Replay
+"Delete Hooks","Delete Hooks"
+"Are you sure you wan't to delete selected Hooks?","Are you sure you wan't to delete selected Hooks?"
+"Change status","Change status"
+Disable,Disable
+"Store View","Store View"
+"Created Date","Created Date"
+"Updated Date","Updated Date"
+Edit,Edit

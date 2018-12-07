@@ -21,10 +21,10 @@
 
 namespace Mageplaza\Webhook\Cron;
 
+use Magento\Quote\Model\QuoteFactory;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Psr\Log\LoggerInterface;
-use Magento\Quote\Model\QuoteFactory;
 
 /**
  * Class AbandonedCart
@@ -69,7 +69,6 @@ class AbandonedCart
      */
     public function execute()
     {
-
         if (!$this->helper->isEnabled()) {
             return;
         }

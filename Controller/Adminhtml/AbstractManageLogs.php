@@ -60,7 +60,7 @@ abstract class AbstractManageLogs extends Action
     )
     {
         $this->historyFactory = $historyFactory;
-        $this->coreRegistry = $coreRegistry;
+        $this->coreRegistry   = $coreRegistry;
 
         parent::__construct($context);
     }
@@ -76,7 +76,6 @@ abstract class AbstractManageLogs extends Action
         $log = $this->historyFactory->create();
 
         if ($logId) {
-
             $log = $log->load($logId);
             if (!$log->getId()) {
                 $this->messageManager->addErrorMessage(__('This log no longer exists.'));

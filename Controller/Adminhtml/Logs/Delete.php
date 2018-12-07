@@ -18,6 +18,7 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
+
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
@@ -31,33 +32,33 @@ class Delete extends AbstractManageLogs
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
      */
-	public function execute()
-	{
+    public function execute()
+    {
         $resultRedirect = $this->resultRedirectFactory->create();
-		$log = $this->initLog();
-		if ($log->getId()) {
-			try {
-				/** @var \Mageplaza\Webhook\Model\History $log */
+        $log            = $this->initLog();
+        if ($log->getId()) {
+            try {
+                /** @var \Mageplaza\Webhook\Model\History $log */
                 $log->delete();
 
-				$this->messageManager->addSuccess(__('The log has been deleted.'));
-				$resultRedirect->setPath('mpwebhook/*/');
+                $this->messageManager->addSuccess(__('The log has been deleted.'));
+                $resultRedirect->setPath('mpwebhook/*/');
 
-				return $resultRedirect;
-			} catch (\Exception $e) {
-				$this->messageManager->addError($e->getMessage());
+                return $resultRedirect;
+            } catch (\Exception $e) {
+                $this->messageManager->addError($e->getMessage());
 
-				// go back to edit form
-				$resultRedirect->setPath('mpwebhook/*/edit', ['id' => $log->getId()]);
+                // go back to edit form
+                $resultRedirect->setPath('mpwebhook/*/edit', ['id' => $log->getId()]);
 
-				return $resultRedirect;
-			}
-		}
-		// display error message
-		$this->messageManager->addError(__('The log to delete was not found.'));
+                return $resultRedirect;
+            }
+        }
+        // display error message
+        $this->messageManager->addError(__('The log to delete was not found.'));
 
-		$resultRedirect->setPath('mpwebhook/*/');
+        $resultRedirect->setPath('mpwebhook/*/');
 
-		return $resultRedirect;
-	}
+        return $resultRedirect;
+    }
 }

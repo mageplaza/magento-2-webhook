@@ -82,7 +82,7 @@ label.liquid-variable {
     margin-right: 5px;
 }
 
-.delete-option.remove-modifier::before{
+.delete-option.remove-modifier::before {
     font-family: 'MUI-Icons';
     font-style: normal;
     speak: none;

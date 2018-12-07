@@ -67,17 +67,17 @@ define([
 
                 var body = $('#hook_body').val();
                 if (body && (contentType === 'application/json' || contentType === 'application/json; charset=UTF-8')) {
-                    try{
+                    try {
                         body = JSON.stringify(eval(body));
-                    }catch (e) {
-                       console.log($t('Please correct your json data'))
+                    } catch (e) {
+                        console.log($t('Please correct your json data'))
                     }
                 }
 
                 preview += " -d '" + body + "'";
                 var url = $('#hook_payload_url').val();
                 var method = $('#hook_method').val();
-                if(!method){
+                if (!method) {
                     method = 'GET';
                 }
                 preview += " -X " + method + " '" + url + "'";

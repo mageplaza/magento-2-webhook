@@ -30,8 +30,17 @@ use Mageplaza\Webhook\Model\Config\Source\HookType;
  */
 class ManageHooks extends \Magento\Backend\Block\Widget\Container
 {
+    /**
+     * @var HookType
+     */
     protected $hookType;
 
+    /**
+     * ManageHooks constructor.
+     * @param Context $context
+     * @param HookType $hookType
+     * @param array $data
+     */
     public function __construct(
         Context $context,
         HookType $hookType,
@@ -49,12 +58,12 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
     protected function _prepareLayout()
     {
         $addButtonProps = [
-            'id' => 'add_new_hook',
-            'label' => __('Add New'),
-            'class' => 'add',
+            'id'           => 'add_new_hook',
+            'label'        => __('Add New'),
+            'class'        => 'add',
             'button_class' => '',
-            'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
-            'options' => $this->_getAddProductButtonOptions(),
+            'class_name'   => 'Magento\Backend\Block\Widget\Button\SplitButton',
+            'options'      => $this->_getAddProductButtonOptions(),
         ];
         $this->buttonList->add('add_new', $addButtonProps);
 
@@ -70,9 +79,9 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
     {
         $splitButtonOptions = [];
 
-        foreach ($this->hookType->toOptionArray() as $hookType){
+        foreach ($this->hookType->toOptionArray() as $hookType) {
             $splitButtonOptions[$hookType['value']] = [
-                'label' => $hookType['label'],
+                'label'   => $hookType['label'],
                 'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', ['type' => $hookType['value']]) . "')",
                 'default' => $hookType['value'] === 'new_order' ? true : false,
             ];

@@ -24,9 +24,9 @@ namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
+use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
-use Mageplaza\Webhook\Helper\Data;
 
 /**
  * Class Replay
@@ -63,7 +63,7 @@ class Replay extends AbstractManageLogs
         parent::__construct($historyFactory, $coreRegistry, $context);
 
         $this->hookFactory = $hookFactory;
-        $this->helperData = $helperData;
+        $this->helperData  = $helperData;
     }
 
     /**
@@ -73,14 +73,15 @@ class Replay extends AbstractManageLogs
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $log = $this->initLog();
+        $log            = $this->initLog();
         $resultRedirect->setPath('mpwebhook/logs');
         if ($log->getId()) {
             try {
                 $hookId = $log->getHookId();
-                $hook = $this->hookFactory->create()->load($hookId);
+                $hook   = $this->hookFactory->create()->load($hookId);
                 if (!$hook->getId()) {
                     $this->messageManager->addError('The Hook no longer exits');
+
                     return $resultRedirect;
                 }
                 /** @var \Mageplaza\Webhook\Model\History $log */
@@ -95,12 +96,12 @@ class Replay extends AbstractManageLogs
             if ($result['success'] == true) {
                 $log->setStatus(1)->setMessage('');
                 $this->messageManager->addSuccess(__('The log has been replay successful.'));
-
             } else {
                 $this->messageManager->addError($result['message']);
                 $log->setStatus(0)->setMessage($result['message']);
             }
             $log->save();
+
             return $resultRedirect;
         }
         // display error message

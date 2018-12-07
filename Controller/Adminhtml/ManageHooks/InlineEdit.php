@@ -25,8 +25,8 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\Hook;
+use Mageplaza\Webhook\Model\HookFactory;
 
 /**
  * Class InlineEdit
@@ -57,7 +57,7 @@ class InlineEdit extends Action
     public function __construct(
         Context $context,
         JsonFactory $jsonFactory,
-		HookFactory $hookFactory
+        HookFactory $hookFactory
     )
     {
         $this->jsonFactory = $jsonFactory;
@@ -73,41 +73,41 @@ class InlineEdit extends Action
     {
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error = false;
-        $messages = [];
-        $hookItems = $this->getRequest()->getParam('items', []);
+        $error      = false;
+        $messages   = [];
+        $hookItems  = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && !empty($hookItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error' => true,
+                'error'    => true,
             ]);
         }
 
-        $key = array_keys($hookItems);
+        $key    = array_keys($hookItems);
         $hookId = !empty($key) ? (int)$key[0] : '';
         /** @var \Mageplaza\Webhook\Model\Hook $hook */
         $hook = $this->hookFactory->create()->load($hookId);
         try {
             $hookData = $hookItems[$hookId];
-			$hook->addData($hookData);
-			$hook->save();
+            $hook->addData($hookData);
+            $hook->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithHookId($hook, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\RuntimeException $e) {
             $messages[] = $this->getErrorWithHookId($hook, $e->getMessage());
-            $error = true;
+            $error      = true;
         } catch (\Exception $e) {
             $messages[] = $this->getErrorWithHookId(
-				$hook,
+                $hook,
                 __('Something went wrong while saving the Post.')
             );
-            $error = true;
+            $error      = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error' => $error
+            'error'    => $error
         ]);
     }
 

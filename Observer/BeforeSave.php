@@ -22,7 +22,6 @@
 namespace Mageplaza\Webhook\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Helper\Data;
 
 /**
@@ -38,13 +37,9 @@ class BeforeSave implements ObserverInterface
 
     /**
      * BeforeSave constructor.
-     * @param HistoryFactory $historyFactory
      * @param Data $helper
      */
-    public function __construct(
-        HistoryFactory $historyFactory,
-        Data $helper
-    )
+    public function __construct(Data $helper)
     {
         $this->helper = $helper;
     }
@@ -54,11 +49,11 @@ class BeforeSave implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if(!$this->helper->isEnabled()){
+        if (!$this->helper->isEnabled()) {
             return;
         }
         $item = $observer->getDataObject();
-        if($item->isObjectNew()){
+        if ($item->isObjectNew()) {
             $item->setMpNew(1);
         }
     }

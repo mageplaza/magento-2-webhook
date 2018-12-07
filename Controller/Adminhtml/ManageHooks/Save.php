@@ -14,8 +14,8 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Blog
- * @copyright   Copyright (c) 2018 Mageplaza (http://www.mageplaza.com/)
+ * @package     Mageplaza_Webhook
+ * @copyright   Copyright (c) Mageplaza (http://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
@@ -25,8 +25,8 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
-use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Helper\Data;
+use Mageplaza\Webhook\Model\HookFactory;
 
 /**
  * Class Save
@@ -73,8 +73,8 @@ class Save extends AbstractManageHooks
             $data['headers'] = Data::jsonEncode($data['headers']);
         }
 
-        if(isset($data['store_ids']) && $data['store_ids']){
-            $data['store_ids'] = implode(',',$data['store_ids']);
+        if (isset($data['store_ids']) && $data['store_ids']) {
+            $data['store_ids'] = implode(',', $data['store_ids']);
         }
 
         $hook->addData($data);
