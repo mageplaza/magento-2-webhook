@@ -33,10 +33,10 @@ use Mageplaza\Webhook\Model\HookFactory;
  */
 class Log extends AbstractManageHooks
 {
-	/**
-	 * @var \Magento\Framework\View\Result\LayoutFactory
-	 */
-	protected $resultLayoutFactory;
+    /**
+     * @var \Magento\Framework\View\Result\LayoutFactory
+     */
+    protected $resultLayoutFactory;
 
     /**
      * Log constructor.
@@ -45,27 +45,27 @@ class Log extends AbstractManageHooks
      * @param Context $context
      * @param LayoutFactory $resultLayoutFactory
      */
-	public function __construct(
-		HookFactory $hookFactory,
-		Registry $coreRegistry,
-		Context $context,
-		LayoutFactory $resultLayoutFactory
+    public function __construct(
+        HookFactory $hookFactory,
+        Registry $coreRegistry,
+        Context $context,
+        LayoutFactory $resultLayoutFactory
 
-	)
-	{
-		parent::__construct($hookFactory, $coreRegistry, $context);
+    )
+    {
+        parent::__construct($hookFactory, $coreRegistry, $context);
 
-		$this->resultLayoutFactory = $resultLayoutFactory;
-	}
+        $this->resultLayoutFactory = $resultLayoutFactory;
+    }
 
     /**
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Layout
      */
-	public function execute()
-	{
-		$this->initHook(true);
+    public function execute()
+    {
+        $this->initHook(true);
 
-		return $this->resultLayoutFactory->create();
-	}
+        return $this->resultLayoutFactory->create();
+    }
 }
 

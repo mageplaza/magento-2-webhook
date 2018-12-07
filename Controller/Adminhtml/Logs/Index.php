@@ -31,38 +31,38 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Index extends Action
 {
-	/**
-	 * Page result factory
-	 *
-	 * @var \Magento\Framework\View\Result\PageFactory
-	 */
-	public $resultPageFactory;
+    /**
+     * Page result factory
+     *
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    public $resultPageFactory;
 
-	/**
-	 * Index constructor.
-	 * @param \Magento\Backend\App\Action\Context $context
-	 * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-	 */
-	public function __construct(
-		Context $context,
-		PageFactory $resultPageFactory
-	)
-	{
-		parent::__construct($context);
+    /**
+     * Index constructor.
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     */
+    public function __construct(
+        Context $context,
+        PageFactory $resultPageFactory
+    )
+    {
+        parent::__construct($context);
 
         $this->resultPageFactory = $resultPageFactory;
     }
 
-	/**
-	 * execute the action
-	 *
-	 * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page
-	 */
-	public function execute()
-	{
-		$resultPage = $this->resultPageFactory->create();
-		$resultPage->getConfig()->getTitle()->prepend(__('Hook Logs'));
+    /**
+     * execute the action
+     *
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page
+     */
+    public function execute()
+    {
+        $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__('Hook Logs'));
 
-		return $resultPage;
-	}
+        return $resultPage;
+    }
 }

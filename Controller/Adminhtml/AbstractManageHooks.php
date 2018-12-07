@@ -59,7 +59,7 @@ abstract class AbstractManageHooks extends Action
         Context $context
     )
     {
-        $this->hookFactory = $hookFactory;
+        $this->hookFactory  = $hookFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -77,7 +77,6 @@ abstract class AbstractManageHooks extends Action
         $hook = $this->hookFactory->create();
 
         if ($hookId) {
-
             $hook = $hook->load($hookId);
             if (!$hook->getId()) {
                 $this->messageManager->addErrorMessage(__('This hook no longer exists.'));

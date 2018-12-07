@@ -76,14 +76,14 @@ class Actions extends Column
                         $params[$field] = $item[$param];
                     }
                     $parameters = [];
-                    if(isset($action['params']['id']) && isset($item[$action['params']['id']])){
+                    if (isset($action['params']['id']) && isset($item[$action['params']['id']])) {
                         $parameters['id'] = $item[$action['params']['id']];
                     }
-                    if(isset($action['params']['hook_id']) && isset($item[$action['params']['hook_id']])){
+                    if (isset($action['params']['hook_id']) && isset($item[$action['params']['hook_id']])) {
                         $parameters['hook_id'] = $item[$action['params']['hook_id']];
                     }
                     $item[$this->getData('name')][$key] = [
-                        'href'   => $this->urlBuilder->getUrl($action['path'],$parameters),
+                        'href'   => $this->urlBuilder->getUrl($action['path'], $parameters),
                         'label'  => $action['label'],
                         'hidden' => false,
                     ];

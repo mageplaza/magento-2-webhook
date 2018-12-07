@@ -49,6 +49,7 @@ class Hook extends AbstractDb
     )
     {
         $this->date = $date;
+
         parent::__construct($context);
     }
 

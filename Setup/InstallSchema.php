@@ -69,7 +69,6 @@ class InstallSchema implements InstallSchemaInterface
                 ->addColumn('body', Table::TYPE_TEXT, '2M', [], 'Header')
                 ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, ['default' => Table::TIMESTAMP_INIT], 'Created At')
                 ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, ['default' => Table::TIMESTAMP_INIT], 'Update At')
-
                 ->setComment('Hook Table');
 
             $connection->createTable($table);
@@ -79,7 +78,7 @@ class InstallSchema implements InstallSchemaInterface
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_webhook_history'))
                 ->addColumn('id', Table::TYPE_INTEGER, null, ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true], 'Log Id')
-                ->addColumn('hook_id', Table::TYPE_INTEGER, null, ['nullable' => false,'unsigned' => true], 'Hook Id')
+                ->addColumn('hook_id', Table::TYPE_INTEGER, null, ['nullable' => false, 'unsigned' => true], 'Hook Id')
                 ->addIndex($installer->getIdxName('mageplaza_webhook_history', ['hook_id']), ['hook_id'])
                 ->addForeignKey(
                     $installer->getFkName('mageplaza_webhook_history', 'hook_id', 'mageplaza_webhook_hook', 'hook_id'),
@@ -88,8 +87,8 @@ class InstallSchema implements InstallSchemaInterface
                     'hook_id',
                     Table::ACTION_CASCADE
                 )
-				->addColumn('hook_name', Table::TYPE_TEXT, 255, [], 'Hook Name')
-				->addColumn('status', Table::TYPE_TEXT, 64, [], 'Log Status')
+                ->addColumn('hook_name', Table::TYPE_TEXT, 255, [], 'Hook Name')
+                ->addColumn('status', Table::TYPE_TEXT, 64, [], 'Log Status')
                 ->addColumn('store_ids', Table::TYPE_TEXT, 64, ['nullable' => false], 'Stores')
                 ->addColumn('hook_type', Table::TYPE_TEXT, 64, ['nullable' => false], 'Hook Type')
                 ->addColumn('response', Table::TYPE_TEXT, '2M', [], 'Response')

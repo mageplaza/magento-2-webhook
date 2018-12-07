@@ -34,20 +34,19 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="abandoned_time" translate="label comment" type="text" sortOrder="2" showInDefault="1">
-                    <label>Abandoned Cart After (minutes)</label>
-                    <comment>Recommend period time: 1, 6, 10, 12, 24</comment>
+                    <label>Abandoned Cart After</label>
+                    <comment>Please specify value in hours. Recommend: 1, 6, 10, 12, 24</comment>
                 </field>
                 <field id="alert_enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1">
                     <label>Alert on Error</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[
-                    To avoid going to spambox, you should install <a href="https://www.mageplaza.com/magento-2-smtp/" target="_blank">SMTP</a>]]></comment>
+                    <comment><![CDATA[To avoid going to spambox, you should install <a href="https://www.mageplaza.com/magento-2-smtp/" target="_blank">SMTP</a>]]></comment>
                 </field>
-                <field id="keep_log" translate="label" type="text" sortOrder="10" showInDefault="1">
+                <field id="keep_log" translate="label comment" type="text" sortOrder="10" showInDefault="1">
                     <label>Keep logs</label>
-                    <comment>Automatically clean log if it reachs this number. It will be done daily.</comment>
+                    <comment>The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation.</comment>
                 </field>
-                <field id="send_to" translate="label" type="text" sortOrder="10" showInDefault="1">
+                <field id="send_to" translate="label comment" type="text" sortOrder="10" showInDefault="1">
                     <label>Send To</label>
                     <comment>Separated by comma (,)</comment>
                 </field>

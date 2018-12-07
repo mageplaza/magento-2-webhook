@@ -21,19 +21,19 @@
 
 namespace Mageplaza\Webhook\Helper;
 
+use Liquid\Template;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\HTTP\Adapter\CurlFactory;
+use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
-use Liquid\Template;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
-use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
-use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\HistoryFactory;
-use Magento\Framework\Mail\Template\TransportBuilder;
-use Magento\Framework\App\Area;
-use Magento\Backend\Model\UrlInterface;
+use Mageplaza\Webhook\Model\HookFactory;
 
 /**
  * Class Data
@@ -62,6 +62,7 @@ class Data extends CoreHelper
      * @var HistoryFactory
      */
     protected $historyFactory;
+
     /**
      * @var TransportBuilder
      */
@@ -98,12 +99,12 @@ class Data extends CoreHelper
     {
         parent::__construct($context, $objectManager, $storeManager);
 
-        $this->liquidFilters = $liquidFilters;
-        $this->curlFactory = $curlFactory;
-        $this->hookFactory = $hookFactory;
-        $this->historyFactory = $historyFactory;
+        $this->liquidFilters    = $liquidFilters;
+        $this->curlFactory      = $curlFactory;
+        $this->hookFactory      = $hookFactory;
+        $this->historyFactory   = $historyFactory;
         $this->transportBuilder = $transportBuilder;
-        $this->backendUrl = $backendUrl;
+        $this->backendUrl       = $backendUrl;
     }
 
     /**
@@ -114,14 +115,14 @@ class Data extends CoreHelper
      */
     public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
-        $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
+        $url            = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
         $authentication = $hook->getAuthentication();
-        $method = $hook->getMethod();
-        $username = $hook->getUsername();
-        $password = $hook->getPassword();
+        $method         = $hook->getMethod();
+        $username       = $hook->getUsername();
+        $password       = $hook->getPassword();
         if ($authentication === Authentication::BASIC) {
             $authentication = $this->getBasicAuthHeader($username, $password);
-        } elseif ($authentication === Authentication::DIGEST) {
+        } else if ($authentication === Authentication::DIGEST) {
             $authentication = $this->getDigestAuthHeader(
                 $url,
                 $method,
@@ -135,11 +136,11 @@ class Data extends CoreHelper
                 $hook->getClientNonce(),
                 $hook->getOpaque());
         }
-        $body = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
-        $headers = $hook->getHeaders();
+        $body        = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
+        $headers     = $hook->getHeaders();
         $contentType = $hook->getContentType();
-        return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
 
+        return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
     }
 
     /**
@@ -149,8 +150,8 @@ class Data extends CoreHelper
      */
     public function generateLiquidTemplate($item, $templateHtml)
     {
-        try{
-            $template = new Template;
+        try {
+            $template       = new Template;
             $filtersMethods = $this->liquidFilters->getFiltersMethods();
 
             $template->registerFilter($this->liquidFilters);
@@ -159,10 +160,12 @@ class Data extends CoreHelper
             $content = $template->render([
                 'item' => $item,
             ]);
+
             return $content;
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $this->_logger->critical($e->getMessage());
         }
+
         return '';
     }
 
@@ -186,8 +189,8 @@ class Data extends CoreHelper
         $headersConfig = [];
 
         foreach ($headers as $header) {
-            $key = $header['name'];
-            $value = $header['value'];
+            $key             = $header['name'];
+            $value           = $header['value'];
             $headersConfig[] = trim($key) . ': ' . trim($value);
         }
 
@@ -205,7 +208,7 @@ class Data extends CoreHelper
         $result = ['success' => false];
 
         try {
-            $resultCurl = $curl->read();
+            $resultCurl         = $curl->read();
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
                 $result['status'] = \Zend_Http_Response::extractCode($resultCurl);
@@ -241,12 +244,13 @@ class Data extends CoreHelper
      */
     public function getDigestAuthHeader($url, $method, $username, $realm, $password, $nonce, $algorithm, $qop, $nonceCount, $clientNonce, $opaque)
     {
-        $uri = parse_url($url)[2];
-        $method = $method ?: 'GET';
-        $A1 = md5("{$username}:{$realm}:{$password}");
-        $A2 = md5("{$method}:{$uri}");
-        $response = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
+        $uri          = parse_url($url)[2];
+        $method       = $method ?: 'GET';
+        $A1           = md5("{$username}:{$realm}:{$password}");
+        $A2           = md5("{$method}:{$uri}");
+        $response     = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
         $digestHeader = "Digest username=\"{$username}\", realm=\"{$realm}\", nonce=\"{$nonce}\", uri=\"{$uri}\", cnonce=\"{$clientNonce}\", nc={$nonceCount}, qop=\"{$qop}\", response=\"{$response}\", opaque=\"{$opaque}\", algorithm=\"{$algorithm}\"";
+
         return $digestHeader;
     }
 
@@ -275,19 +279,19 @@ class Data extends CoreHelper
             ->setOrder('priority', 'ASC');
 
         $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',',$this->getConfigGeneral('send_to'));
+        $sendTo     = explode(',', $this->getConfigGeneral('send_to'));
 
         foreach ($hookCollection as $hook) {
             try {
                 $history = $this->historyFactory->create();
-                $data = [
-                    'hook_id' => $hook->getId(),
-                    'hook_name' => $hook->getName(),
-                    'store_ids' => $hook->getStoreIds(),
-                    'hook_type' => $hook->getHookType(),
-                    'priority' => $hook->getPriority(),
+                $data    = [
+                    'hook_id'     => $hook->getId(),
+                    'hook_name'   => $hook->getName(),
+                    'store_ids'   => $hook->getStoreIds(),
+                    'hook_type'   => $hook->getHookType(),
+                    'priority'    => $hook->getPriority(),
                     'payload_url' => $this->generateLiquidTemplate($item, $hook->getPayloadUrl()),
-                    'body' => $this->generateLiquidTemplate($item, $hook->getBody())
+                    'body'        => $this->generateLiquidTemplate($item, $hook->getBody())
                 ];
                 $history->addData($data);
                 try {
@@ -321,7 +325,6 @@ class Data extends CoreHelper
                 }
             }
         }
-
     }
 
     /**
@@ -338,12 +341,12 @@ class Data extends CoreHelper
             $this->transportBuilder
                 ->setTemplateIdentifier($emailTemplate)
                 ->setTemplateOptions([
-                    'area' => Area::AREA_FRONTEND,
+                    'area'  => Area::AREA_FRONTEND,
                     'store' => $storeId,
                 ])
                 ->setTemplateVars([
                     'viewLogUrl' => $this->backendUrl->getUrl('mpwebhook/logs/'),
-                    'mes' => $mes
+                    'mes'        => $mes
                 ])
                 ->setFrom('general')
                 ->addTo($sendTo);
@@ -358,6 +361,9 @@ class Data extends CoreHelper
         return false;
     }
 
+    /**
+     * @return int
+     */
     public function getStoreId()
     {
         return $this->storeManager->getStore()->getId();

@@ -23,21 +23,21 @@ namespace Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttr;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\DataObject;
-use Magento\Sales\Model\OrderFactory;
 use Magento\Quote\Model\ResourceModel\Quote;
+use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusResource;
-use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\HookFactory;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttr;
-use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
-use Magento\Catalog\Model\CategoryFactory;
 
 /**
  * Class Body
@@ -54,7 +54,6 @@ class Body extends Element implements RendererInterface
      * @var OrderFactory
      */
     protected $orderFactory;
-
 
     /**
      * @var LiquidFilters
@@ -139,17 +138,17 @@ class Body extends Element implements RendererInterface
     {
         parent::__construct($context, $data);
 
-        $this->liquidFilters = $liquidFilters;
-        $this->orderFactory = $orderFactory;
-        $this->invoiceResource = $invoiceResource;
-        $this->shipmentResource = $shipmentResource;
-        $this->creditmemoResource = $creditmemoResource;
-        $this->hookFactory = $hookFactory;
+        $this->liquidFilters       = $liquidFilters;
+        $this->orderFactory        = $orderFactory;
+        $this->invoiceResource     = $invoiceResource;
+        $this->shipmentResource    = $shipmentResource;
+        $this->creditmemoResource  = $creditmemoResource;
+        $this->hookFactory         = $hookFactory;
         $this->orderStatusResource = $orderStatusResource;
-        $this->customerResource = $customerResource;
+        $this->customerResource    = $customerResource;
         $this->catalogEavAttribute = $catalogEavAttribute;
-        $this->categoryFactory = $categoryFactory;
-        $this->quoteResource = $quoteResource;
+        $this->categoryFactory     = $categoryFactory;
+        $this->quoteResource       = $quoteResource;
     }
 
     /**
@@ -160,7 +159,7 @@ class Body extends Element implements RendererInterface
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_element = $element;
-        $html = $this->toHtml();
+        $html           = $this->toHtml();
 
         return $html;
     }
@@ -174,8 +173,8 @@ class Body extends Element implements RendererInterface
         $type = $this->_request->getParam('type');
         if (!$type) {
             $hookId = $this->getRequest()->getParam('hook_id');
-            $hook = $this->hookFactory->create()->load($hookId);
-            $type = $hook->getHookType();
+            $hook   = $this->hookFactory->create()->load($hookId);
+            $type   = $hook->getHookType();
         }
         if (!$type) {
             $type = 'order';
@@ -257,10 +256,11 @@ class Body extends Element implements RendererInterface
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name' => $item['COLUMN_NAME'],
+                'name'  => $item['COLUMN_NAME'],
                 'title' => ucwords(str_replace('_', ' ', $item['COLUMN_NAME']))
             ]);
         }
+
         return $attrCollection;
     }
 
@@ -273,10 +273,11 @@ class Body extends Element implements RendererInterface
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name' => $item->getAttributeCode(),
+                'name'  => $item->getAttributeCode(),
                 'title' => $item->getDefaultFrontendLabel()
             ]);
         }
+
         return $attrCollection;
     }
 

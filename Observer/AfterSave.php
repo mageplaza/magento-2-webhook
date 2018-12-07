@@ -22,9 +22,9 @@
 namespace Mageplaza\Webhook\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
-use Mageplaza\Webhook\Model\HookFactory;
-use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Helper\Data;
+use Mageplaza\Webhook\Model\HistoryFactory;
+use Mageplaza\Webhook\Model\HookFactory;
 
 /**
  * Class AfterSave
@@ -69,9 +69,9 @@ abstract class AfterSave implements ObserverInterface
         Data $helper
     )
     {
-        $this->hookFactory = $hookFactory;
+        $this->hookFactory    = $hookFactory;
         $this->historyFactory = $historyFactory;
-        $this->helper = $helper;
+        $this->helper         = $helper;
     }
 
     /**
@@ -81,7 +81,7 @@ abstract class AfterSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getDataObject();
-        $this->send($item,$this->hookType);
+        $this->send($item, $this->hookType);
     }
 
     /**
@@ -101,25 +101,25 @@ abstract class AfterSave implements ObserverInterface
      */
     protected function send($item, $hookType)
     {
-        if(!$this->helper->isEnabled()){
+        if (!$this->helper->isEnabled()) {
             return;
         }
         $hookCollection = $this->hookFactory->create()->getCollection()
             ->addFieldToFilter('hook_type', $hookType)
             ->addFieldToFilter('status', 1)
             ->setOrder('priority', 'ASC');
-        $isSendMail = $this->helper->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',',$this->helper->getConfigGeneral('send_to'));
+        $isSendMail     = $this->helper->getConfigGeneral('alert_enabled');
+        $sendTo         = explode(',', $this->helper->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             $history = $this->historyFactory->create();
-            $data = [
-                'hook_id' => $hook->getId(),
-                'hook_name' => $hook->getName(),
-                'store_ids' => $hook->getStoreIds(),
-                'hook_type' => $hook->getHookType(),
-                'priority' => $hook->getPriority(),
+            $data    = [
+                'hook_id'     => $hook->getId(),
+                'hook_name'   => $hook->getName(),
+                'store_ids'   => $hook->getStoreIds(),
+                'hook_type'   => $hook->getHookType(),
+                'priority'    => $hook->getPriority(),
                 'payload_url' => $this->helper->generateLiquidTemplate($item, $hook->getPayloadUrl()),
-                'body' => $this->helper->generateLiquidTemplate($item, $hook->getBody())
+                'body'        => $this->helper->generateLiquidTemplate($item, $hook->getBody())
             ];
             $history->addData($data);
             try {
@@ -137,7 +137,7 @@ abstract class AfterSave implements ObserverInterface
                 $history->setStatus(0)->setMessage($result['message']);
                 if ($isSendMail) {
                     $this->helper->sendMail($sendTo,
-                        __('Something went wrong while sending %1 hook',$hook->getName()),
+                        __('Something went wrong while sending %1 hook', $hook->getName()),
                         $this->helper->getConfigGeneral('email_template'),
                         $this->helper->getStoreId()
                     );

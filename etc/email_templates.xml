@@ -20,7 +20,6 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 -->
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
     <template id="mp_webhook_general_email_template" label="Default Mageplaza Webhook Email Template" file="email_template.html" type="html" module="Mageplaza_Webhook" area="frontend"/>
 </config>

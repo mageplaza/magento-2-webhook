@@ -24,9 +24,9 @@ namespace Mageplaza\Webhook\Ui\Component\Listing\Columns;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
  * Class Store
@@ -34,133 +34,134 @@ use Magento\Store\Model\StoreManagerInterface as StoreManager;
  */
 class Store extends Column
 {
-	/**
-	 * Escaper
-	 *
-	 * @var \Magento\Framework\Escaper
-	 */
-	protected $escaper;
+    /**
+     * Escaper
+     *
+     * @var \Magento\Framework\Escaper
+     */
+    protected $escaper;
 
-	/**
-	 * System store
-	 *
-	 * @var SystemStore
-	 */
-	protected $systemStore;
+    /**
+     * System store
+     *
+     * @var SystemStore
+     */
+    protected $systemStore;
 
-	/**
-	 * Store manager
-	 *
-	 * @var StoreManager
-	 */
-	protected $storeManager;
+    /**
+     * Store manager
+     *
+     * @var StoreManager
+     */
+    protected $storeManager;
 
-	/**
-	 * @var string
-	 */
-	protected $storeKey;
+    /**
+     * @var string
+     */
+    protected $storeKey;
 
-	/**
-	 * @param ContextInterface $context
-	 * @param UiComponentFactory $uiComponentFactory
-	 * @param SystemStore $systemStore
-	 * @param Escaper $escaper
-	 * @param array $components
-	 * @param array $data
-	 * @param string $storeKey
-	 */
-	public function __construct(
-		ContextInterface $context,
-		UiComponentFactory $uiComponentFactory,
-		SystemStore $systemStore,
-		Escaper $escaper,
-		array $components = [],
-		array $data = [],
-		$storeKey = 'store_ids'
-	)
-	{
-		parent::__construct($context, $uiComponentFactory, $components, $data);
+    /**
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param SystemStore $systemStore
+     * @param Escaper $escaper
+     * @param array $components
+     * @param array $data
+     * @param string $storeKey
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        SystemStore $systemStore,
+        Escaper $escaper,
+        array $components = [],
+        array $data = [],
+        $storeKey = 'store_ids'
+    )
+    {
+        parent::__construct($context, $uiComponentFactory, $components, $data);
 
         $this->systemStore = $systemStore;
-        $this->escaper = $escaper;
-        $this->storeKey = $storeKey;
-	}
+        $this->escaper     = $escaper;
+        $this->storeKey    = $storeKey;
+    }
 
-	/**
-	 * Prepare Data Source
-	 *
-	 * @param array $dataSource
-	 * @return array
-	 */
-	public function prepareDataSource(array $dataSource)
-	{
-		if (isset($dataSource['data']['items'])) {
-			foreach ($dataSource['data']['items'] as & $item) {
-				$item[$this->getData('name')] = explode(',', $item[$this->getData('name')]);
-				$item[$this->getData('name')] = $this->prepareItem($item);
-			}
-		}
+    /**
+     * Prepare Data Source
+     *
+     * @param array $dataSource
+     * @return array
+     */
+    public function prepareDataSource(array $dataSource)
+    {
+        if (isset($dataSource['data']['items'])) {
+            foreach ($dataSource['data']['items'] as & $item) {
+                $item[$this->getData('name')] = explode(',', $item[$this->getData('name')]);
+                $item[$this->getData('name')] = $this->prepareItem($item);
+            }
+        }
 
-		return $dataSource;
-	}
+        return $dataSource;
+    }
 
-	/**
-	 * Get data
-	 *
-	 * @param array $item
-	 * @return string
-	 */
-	protected function prepareItem(array $item)
-	{
-		$content = '';
-		$origStores = $item[$this->storeKey];
-		if (!is_array($origStores)) {
-			$origStores = [$origStores];
-		}
-		if (in_array(0, $origStores)) {
-			return __('All Store Views');
-		}
-		$data = $this->systemStore->getStoresStructure(false, $origStores);
+    /**
+     * Get data
+     *
+     * @param array $item
+     * @return string
+     */
+    protected function prepareItem(array $item)
+    {
+        $content    = '';
+        $origStores = $item[$this->storeKey];
+        if (!is_array($origStores)) {
+            $origStores = [$origStores];
+        }
+        if (in_array(0, $origStores)) {
+            return __('All Store Views');
+        }
+        $data = $this->systemStore->getStoresStructure(false, $origStores);
 
-		foreach ($data as $website) {
-			$content .= "<b>" . $website['label'] . "</b><br/>";
-			foreach ($website['children'] as $group) {
-				$content .= str_repeat('&nbsp;', 3) . "<b>" . $this->escaper->escapeHtml($group['label']) . "</b><br/>";
-				foreach ($group['children'] as $store) {
-					$content .= str_repeat('&nbsp;', 6) . $this->escaper->escapeHtml($store['label']) . "<br/>";
-				}
-			}
-		}
+        foreach ($data as $website) {
+            $content .= "<b>" . $website['label'] . "</b><br/>";
+            foreach ($website['children'] as $group) {
+                $content .= str_repeat('&nbsp;', 3) . "<b>" . $this->escaper->escapeHtml($group['label']) . "</b><br/>";
+                foreach ($group['children'] as $store) {
+                    $content .= str_repeat('&nbsp;', 6) . $this->escaper->escapeHtml($store['label']) . "<br/>";
+                }
+            }
+        }
 
-		return $content;
-	}
+        return $content;
+    }
 
-	/**
-	 * Prepare component configuration
-	 *
-	 * @return void
-	 */
-	public function prepare()
-	{
-		parent::prepare();
-		if ($this->getStoreManager()->isSingleStoreMode()) {
-			$this->_data['config']['componentDisabled'] = true;
-		}
-	}
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+        if ($this->getStoreManager()->isSingleStoreMode()) {
+            $this->_data['config']['componentDisabled'] = true;
+        }
+    }
 
-	/**
-	 * Get StoreManager dependency
-	 *
-	 * @return StoreManager
-	 *
-	 * @deprecated
-	 */
-	private function getStoreManager()
-	{
-		if ($this->storeManager === null) {
-			$this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-				->get('Magento\Store\Model\StoreManagerInterface');
-		}
-		return $this->storeManager;
-	}
+    /**
+     * Get StoreManager dependency
+     *
+     * @return StoreManager
+     *
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager === null) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+
+        return $this->storeManager;
+    }
 }

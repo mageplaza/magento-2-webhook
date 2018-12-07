@@ -69,7 +69,4 @@
     <event name="customer_login">
         <observer name="mp_wh_customer_login" instance="Mageplaza\Webhook\Observer\CustomerLogin"/>
     </event>
-    <!--<event name="checkout_cart_update_items_after">-->
-        <!--<observer name="mp_wh_update_cart" instance="Mageplaza\Webhook\Observer\UpdateCart"/>-->
-    <!--</event>-->
 </config>

@@ -22,7 +22,6 @@
 namespace Mageplaza\Webhook\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Class History
@@ -30,14 +29,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  */
 class History extends AbstractDb
 {
-
-    public function __construct(
-        Context $context
-    )
-    {
-        parent::__construct($context);
-    }
-
     /**
      * Initialize resource model
      *
@@ -47,5 +38,4 @@ class History extends AbstractDb
     {
         $this->_init('mageplaza_webhook_history', 'id');
     }
-
 }

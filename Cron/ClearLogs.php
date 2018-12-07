@@ -22,8 +22,8 @@
 namespace Mageplaza\Webhook\Cron;
 
 use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\HistoryFactory;
+use Mageplaza\Webhook\Model\HookFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -66,10 +66,10 @@ class ClearLogs
         Data $helper
     )
     {
-        $this->hookFactory = $hookFactory;
+        $this->hookFactory    = $hookFactory;
         $this->historyFactory = $historyFactory;
-        $this->logger = $logger;
-        $this->helper = $helper;
+        $this->logger         = $logger;
+        $this->helper         = $helper;
     }
 
     /**

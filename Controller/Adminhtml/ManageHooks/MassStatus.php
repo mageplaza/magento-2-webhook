@@ -62,7 +62,7 @@ class MassStatus extends Action
     {
         parent::__construct($context);
 
-        $this->filter = $filter;
+        $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
     }
 
@@ -72,15 +72,15 @@ class MassStatus extends Action
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $status = (int)$this->getRequest()->getParam('status');
+        $collection  = $this->filter->getCollection($this->collectionFactory->create());
+        $status      = (int)$this->getRequest()->getParam('status');
         $hookUpdated = 0;
         foreach ($collection as $hook) {
             try {
-				$hook->setStatus($status)
+                $hook->setStatus($status)
                     ->save();
 
-				$hookUpdated++;
+                $hookUpdated++;
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {

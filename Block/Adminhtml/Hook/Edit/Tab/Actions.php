@@ -27,9 +27,9 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
-use Mageplaza\Webhook\Model\Config\Source\Method;
-use Mageplaza\Webhook\Model\Config\Source\ContentType;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
+use Mageplaza\Webhook\Model\Config\Source\ContentType;
+use Mageplaza\Webhook\Model\Config\Source\Method;
 
 /**
  * Class Actions
@@ -81,9 +81,9 @@ class Actions extends Generic implements TabInterface
     {
         parent::__construct($context, $registry, $formFactory, $data);
 
-        $this->fieldFactory = $fieldFactory;
-        $this->method = $method;
-        $this->contentType = $contentType;
+        $this->fieldFactory   = $fieldFactory;
+        $this->method         = $method;
+        $this->contentType    = $contentType;
         $this->authentication = $authentication;
     }
 
@@ -107,11 +107,11 @@ class Actions extends Generic implements TabInterface
             'class'  => 'fieldset-wide'
         ]);
         $fieldset->addField('payload_url', 'text', [
-            'name'     => 'payload_url',
-            'label'    => __('Payload URL'),
-            'title'    => __('Payload URL'),
-            'required' => true,
-            'note'     => __('You can insert a variable'),
+            'name'               => 'payload_url',
+            'label'              => __('Payload URL'),
+            'title'              => __('Payload URL'),
+            'required'           => true,
+            'note'               => __('You can insert a variable'),
             'after_element_html' => '<a id="insert-variable-upload" class="btn">' . __('Insert Variable') . '</a>',
         ]);
         $fieldset->addField('method', 'select', [
@@ -128,50 +128,50 @@ class Actions extends Generic implements TabInterface
             'values' => $this->authentication->toOptionArray(),
 
         ]);
-        $username = $fieldset->addField('username', 'text', [
-            'name'   => 'username',
-            'label'  => __('Username'),
-            'title'  => __('Username'),
+        $username       = $fieldset->addField('username', 'text', [
+            'name'  => 'username',
+            'label' => __('Username'),
+            'title' => __('Username'),
         ]);
-        $realm = $fieldset->addField('realm', 'text', [
-            'name'   => 'realm',
-            'label'  => __('Realm'),
-            'title'  => __('Realm'),
+        $realm          = $fieldset->addField('realm', 'text', [
+            'name'  => 'realm',
+            'label' => __('Realm'),
+            'title' => __('Realm'),
         ]);
-        $password = $fieldset->addField('password', 'password', [
-            'name'   => 'password',
-            'label'  => __('Password'),
-            'title'  => __('Password'),
+        $password       = $fieldset->addField('password', 'password', [
+            'name'  => 'password',
+            'label' => __('Password'),
+            'title' => __('Password'),
         ]);
-        $nonce = $fieldset->addField('nonce', 'text', [
-            'name'   => 'nonce',
-            'label'  => __('Nonce'),
-            'title'  => __('Nonce'),
+        $nonce          = $fieldset->addField('nonce', 'text', [
+            'name'  => 'nonce',
+            'label' => __('Nonce'),
+            'title' => __('Nonce'),
         ]);
-        $algorithm = $fieldset->addField('algorithm', 'text', [
-            'name'   => 'algorithm',
-            'label'  => __('Algorithm'),
-            'title'  => __('Algorithm'),
+        $algorithm      = $fieldset->addField('algorithm', 'text', [
+            'name'  => 'algorithm',
+            'label' => __('Algorithm'),
+            'title' => __('Algorithm'),
         ]);
-        $qop = $fieldset->addField('qop', 'text', [
-            'name'   => 'qop',
-            'label'  => __('qop'),
-            'title'  => __('qop'),
+        $qop            = $fieldset->addField('qop', 'text', [
+            'name'  => 'qop',
+            'label' => __('qop'),
+            'title' => __('qop'),
         ]);
-        $nonceCount = $fieldset->addField('nonce_count', 'text', [
-            'name'   => 'nonce_count',
-            'label'  => __('Nonce Count'),
-            'title'  => __('Nonce Count'),
+        $nonceCount     = $fieldset->addField('nonce_count', 'text', [
+            'name'  => 'nonce_count',
+            'label' => __('Nonce Count'),
+            'title' => __('Nonce Count'),
         ]);
-        $clientNonce = $fieldset->addField('client_nonce', 'text', [
-            'name'   => 'client_nonce',
-            'label'  => __('Client Nonce'),
-            'title'  => __('Client Nonce'),
+        $clientNonce    = $fieldset->addField('client_nonce', 'text', [
+            'name'  => 'client_nonce',
+            'label' => __('Client Nonce'),
+            'title' => __('Client Nonce'),
         ]);
-        $opaque = $fieldset->addField('opaque', 'text', [
-            'name'   => 'opaque',
-            'label'  => __('Opaque'),
-            'title'  => __('Opaque'),
+        $opaque         = $fieldset->addField('opaque', 'text', [
+            'name'  => 'opaque',
+            'label' => __('Opaque'),
+            'title' => __('Opaque'),
         ]);
         /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
         $rendererBlock = $this->getLayout()
@@ -194,7 +194,7 @@ class Actions extends Generic implements TabInterface
             'name'  => 'body',
             'label' => __('Body'),
             'title' => __('Body'),
-            'note' => __('Supports <a href="https://shopify.github.io/liquid/" target="_blank">Liquid template</a>')
+            'note'  => __('Supports <a href="https://shopify.github.io/liquid/" target="_blank">Liquid template</a>')
         ])->setRenderer($rendererBlock);
 
         $refField = $this->fieldFactory->create(['fieldData' => ['value' => 'basic,digest', 'separator' => ','], 'fieldPrefix' => '']);
@@ -275,7 +275,7 @@ class Actions extends Generic implements TabInterface
      */
     public function getFormHtml()
     {
-        $formHtml = parent::getFormHtml();
+        $formHtml  = parent::getFormHtml();
         $childHtml = $this->getChildHtml();
 
         return $formHtml . $childHtml;

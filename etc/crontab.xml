@@ -23,10 +23,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="index">
         <job name="mageplaza_webhook_abandoned_cart" instance="Mageplaza\Webhook\Cron\AbandonedCart" method="execute">
-            <schedule>* * * * *</schedule>
+            <schedule>0 * * * *</schedule>
         </job>
         <job name="mageplaza_webhook_clear_logs" instance="Mageplaza\Webhook\Cron\ClearLogs" method="execute">
-            <schedule>* * * * *</schedule>
+            <schedule>0 1 * * *</schedule>
         </job>
     </group>
 </config>
