@@ -32,7 +32,7 @@ use Mageplaza\Webhook\Model\Config\Source\ContentType;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
 
 /**
- * Class Template
+ * Class Actions
  * @package Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab
  */
 class Actions extends Generic implements TabInterface
