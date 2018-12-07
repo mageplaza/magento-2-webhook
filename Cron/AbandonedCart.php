@@ -23,11 +23,8 @@ namespace Mageplaza\Webhook\Cron;
 
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
-use Mageplaza\Webhook\Model\HookFactory;
 use Psr\Log\LoggerInterface;
 use Magento\Quote\Model\QuoteFactory;
-use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class AbandonedCart
@@ -51,35 +48,20 @@ class AbandonedCart
     protected $helper;
 
     /**
-     * @var DateTime
-     */
-    protected $date;
-    /**
-     * @var TimezoneInterface
-     */
-    protected $timezone;
-
-    /**
      * AbandonedCart constructor.
      * @param LoggerInterface $logger
-     * @param DateTime $date
      * @param QuoteFactory $quoteFactory
-     * @param TimezoneInterface $timezone
      * @param Data $helper
      */
     public function __construct(
         LoggerInterface $logger,
-        DateTime $date,
         QuoteFactory $quoteFactory,
-        TimezoneInterface $timezone,
         Data $helper
     )
     {
         $this->logger       = $logger;
         $this->quoteFactory = $quoteFactory;
         $this->helper       = $helper;
-        $this->date         = $date;
-        $this->timezone     = $timezone;
     }
 
     /**
@@ -93,18 +75,16 @@ class AbandonedCart
         }
 
         $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
-        $update        = (new \DateTime('',new \DateTimeZone('UTC')))->sub(new \DateInterval("PT{$abandonedTime}M"));
-        $updateFrom    = clone $update;
-        $updateFrom    = $this->convertToLocaleTime($updateFrom);
-        $updateTo      = $update->add(new \DateInterval("PT1H"));
-        $updateTo      = $this->convertToLocaleTime($updateTo);
+        $update        = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}M"));
+        $updateTo      = clone $update;
+        $updateFrom    = $update->sub(new \DateInterval("PT1H"));
 
         $quoteCollection           = $this->quoteFactory->create()->getCollection()
-            ->addFieldToFilter('is_active', 0)
+            ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
             ->addFieldToFilter('updated_at', ['to' => $updateTo]);
         $noneUpdateQuoteCollection = $this->quoteFactory->create()->getCollection()
-            ->addFieldToFilter('is_active', 0)
+            ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('created_at', ['from' => $updateFrom])
             ->addFieldToFilter('created_at', ['to' => $updateTo])
             ->addFieldToFilter('updated_at', ['eq' => '0000-00-00 00:00:00']);
@@ -119,15 +99,5 @@ class AbandonedCart
         } catch (\Exception $e) {
             $this->logger->critical($e->getLogMessage());
         }
-    }
-
-    public function convertToLocaleTime($time)
-    {
-        $localTime = new \DateTime($time, new \DateTimeZone('UTC'));
-        $localTime->setTimezone(new \DateTimeZone($this->timezone->getConfigTimezone()));
-
-//        $localTime = $localTime->format('Y-m-d H:i:s');
-
-        return $localTime;
     }
 }
