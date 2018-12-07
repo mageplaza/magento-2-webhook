@@ -75,7 +75,7 @@ class AbandonedCart
         }
 
         $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
-        $update        = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}M"));
+        $update        = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
         $updateTo      = clone $update;
         $updateFrom    = $update->sub(new \DateInterval("PT1H"));
 

@@ -183,8 +183,8 @@ class Actions extends Generic implements TabInterface
         ])->setRenderer($rendererBlock);
         $fieldset->addField('content_type', 'select', [
             'name'   => 'content_type',
-            'label'  => __('Content-type'),
-            'title'  => __('Content-type'),
+            'label'  => __('Content Type'),
+            'title'  => __('Content Type'),
             'values' => $this->contentType->toOptionArray(),
 
         ]);
