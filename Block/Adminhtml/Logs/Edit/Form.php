@@ -76,6 +76,8 @@ class Form extends Generic
         /** @var \Mageplaza\Webhook\Model\History $log */
         $log = $this->_coreRegistry->registry('mageplaza_webhook_log');
 
+        $log->getStatus() == '1' ? $log->setStatus(__('Success')) : $log->setStatus(__('Error'));
+
         $form->setHtmlIdPrefix('log_');
         $form->setFieldNameSuffix('log');
 
