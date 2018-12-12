@@ -77,7 +77,7 @@ class HookType implements ArrayInterface
             self::NEW_ORDER_COMMENT => 'New Order Comment',
             self::NEW_INVOICE       => 'New Invoice',
             self::NEW_SHIPMENT      => 'New Shipment',
-            self::NEW_CREDITMEMO    => 'New Credit Memmo',
+            self::NEW_CREDITMEMO    => 'New Credit Memo',
             self::NEW_CUSTOMER      => 'New Customer',
             self::UPDATE_CUSTOMER   => 'Update Customer',
             self::DELETE_CUSTOMER   => 'Delete Customer',
