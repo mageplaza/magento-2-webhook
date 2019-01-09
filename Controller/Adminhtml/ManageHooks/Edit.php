@@ -52,8 +52,7 @@ class Edit extends AbstractManageHooks
         Registry $coreRegistry,
         Context $context,
         PageFactory $resultPageFactory
-    )
-    {
+    ){
         parent::__construct($hookFactory, $coreRegistry, $context);
 
         $this->resultPageFactory = $resultPageFactory;

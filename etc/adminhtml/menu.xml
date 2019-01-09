@@ -22,8 +22,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Mageplaza_Webhook::webhook" title="Webhook" module="Mageplaza_Webhook" sortOrder="45" resource="Mageplaza_Webhook::webhook" parent="Mageplaza_Core::menu" dependsOnConfig="mp_webhook/general/enabled" dependsOnModule="Mageplaza_Webhook"/>
+        <add id="Mageplaza_Webhook::webhook" title="Webhook" module="Mageplaza_Webhook" sortOrder="46" resource="Mageplaza_Webhook::webhook" parent="Magento_Backend::system"/>
         <add id="Mageplaza_Webhook::manage_hooks" title="Manage Hooks" module="Mageplaza_Webhook" sortOrder="20" action="mpwebhook/managehooks" resource="Mageplaza_Webhook::manage_hooks" parent="Mageplaza_Webhook::webhook"/>
         <add id="Mageplaza_Webhook::logs" title="Logs" module="Mageplaza_Webhook" sortOrder="20" action="mpwebhook/logs" resource="Mageplaza_Webhook::logs" parent="Mageplaza_Webhook::webhook"/>
+        <add id="Mageplaza_Webhook::configuration" title="Configuration" module="Mageplaza_Webhook" sortOrder="1000" action="adminhtml/system_config/edit/section/mp_webhook" resource="Mageplaza_Webhook::configuration" parent="Mageplaza_Webhook::webhook"/>
     </menu>
 </config>

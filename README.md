@@ -68,9 +68,11 @@ This is really practical in stores with Sales and Customer Care departments whic
 
 ### Send leads/customer data to CRM or Email Marketing tools
 
-![Imgur](https://i.imgur.com/SuRp9eA.png)
 
 Webhook is a supportive tool to CRM or Email Marketing systems used in e-commerce businesses. The data of customers or orders or any related updates is necessary to be sent instantly to these systems. Then, the stores can appoint quickly sales actions accordingly. 
+
+![Imgur](https://i.imgur.com/SuRp9eA.png)
+
 
 ### Log requests and response
 
@@ -93,7 +95,7 @@ Clean logs daily when the total reaches a specific number.
 Resend replaced requests after fixing errors.
 
 
-## 6. Full features list
+## 6. Full feature list
 
 ### General Configuration
 - Enable/ Disable the module 
@@ -101,7 +103,7 @@ Resend replaced requests after fixing errors.
 - Send alert emails when errors occur 
 - Choose email template
 - Set total number for logs
-- Clean logs on a daily basis 
+- Clean logs on a daily basis
 
 ### Manage Hooks 
 - Set name for a new hook
@@ -124,10 +126,9 @@ Resend replaced requests after fixing errors.
 ### 7.1 How to configure
 
 Login to the **Magento Admin**, choose `Store > Settings > Configuration > Mageplaza Extensions > Webhook`.
-
 ![Imgur](https://i.imgur.com/lb28XMh.png)
 
-- **Enable**: Select  `Yes` to enable the module and `No` to disable. 
+- **Enable**:Select  `Yes` to enable the module and `No` to disable. 
 - **Abandoned Cart After (minutes)**: Set minutes for Abandoned Cart. Recommend period time: 1, 6, 10, 12, 24
 - **Keep logs**: Automatically clean log if it reaches this number. It will be done daily. 
 - **Alert on Error**: Select “Yes” to send error notice via emails. To avoid sending to spam box, [SMTP](https://www.mageplaza.com/magento-2-smtp/) should be installed. 
@@ -136,6 +137,7 @@ Login to the **Magento Admin**, choose `Store > Settings > Configuration > Magep
 ![Imgur](https://i.imgur.com/j4ZnDaI.png)
 
 - **Send to**: Input email addresses to receive error notice.
+
 - **Email Template**: Follow `Marketing > Email Templates > Add New Template` to create your wished templates. You can select Default Mageplaza Webhook Email Template(Default).
 
 
@@ -172,17 +174,17 @@ Select **Trigger events** (New Order, New Product, Update Product, Delete Produc
 
 ![Imgur](https://i.imgur.com/lhaspGa.gif)
 
-- **Payload URL**:  
+- **Payload URL**: 
 
-  - Select **Insert Variable** button to insert variable. For example: Method **POST**: https://domain.freshsales.io/api/leads, **GET**: https://domain.freshsales.io/leads/view/4000831345, or  https://domain.freshsales.io/leads/view/4000831345new_shipment={inserted variable} 
+  - Select **Insert Variable** button to insert variable. For example: Method **POST**: https://domain.freshsales.io/api/leads, **GET**: https://domain.freshsales.io/leads/view/4000831345 or  https://domain.freshsales.io/leads/view/4000831345 new_shipment={inserted variable} 
 
-  - Domain is the API account name. To sign up API account, follow the link: https://www.freshworks.com/freshsales-crm/. 
+
+  - Domain is the API account name. To sign up API account, follow the link: https://www.freshworks.com/freshsales-crm/.
 Find more about API [here](https://www.freshsales.io/api/#introduction).
 
   - This is a required field, not allow leaving blank
 
 - **Method** :  Select method to send  HTTP request. If leave this blank, the default method will be GET
-
   - GET: get data from the server 
   - POST: create new object 
   - PUT: Update the object
@@ -191,17 +193,15 @@ Find more about API [here](https://www.freshsales.io/api/#introduction).
   - CONNECT: Converts the requested connection into a transparent TCP / IP tunnel, usually to facilitate SSL encryption (HTTPS) through an unencrypted HTTP proxy.
   - OPTIONS: Describe the options. An OPTIONS request should return data describing what other methods and operations the server supports at certain URLs.
   - TRACE: Repeat the request so that customers can see any changes or additions (if any) that have been made by the intermediate servers. 
-  - PATCH: Apply a modified part to an object. 
+  - PATCH: Apply a modified part to an object.   
   
 - **Authentication**: Select the type of data access authentication you want from the server. When you submit a request, you typically have to include parameters to make sure the request has access and returns the data you want. You should leave this field blank to limit access.
 
 ![Imgur](https://i.imgur.com/C9mvIJi.png)
-
-  - **Basic**: Display 2 Username and Password fields. Fill in the information to authenticate access.
-
-  `Note`: In the process of being strictly enforced throughout the entire data cycle to SSL for security, authentication is transmitted over unsafe lines.
-
-  - **Digest**: Fill out some credentials below:
+ 
+    - **Basic**: Display 2 Username and Password fields. Fill in the information to authenticate access.
+    - **Note**: In the process of being strictly enforced throughout the entire data cycle to SSL for security, authentication is transmitted over unsafe lines.
+    - **Digest**: Fill out some credentials below:
 
 
 ![Imgur](https://i.imgur.com/TbH4AvX.png)
@@ -214,7 +214,7 @@ Find more about API [here](https://www.freshsales.io/api/#introduction).
 
 ![Imgur](https://i.imgur.com/CKSNQkS.png)
 
-- **Body**: For methods like POST or PUT, you need to add content to the body section to send the request. Click `Insert Variable` to select the variable.
+- **Body**: For methods like POST or PUT, you need to add content to the body section to send the request. Click `Insert Variable` to select the variable.  
 
 ### 7.3 Hook Logs
 
@@ -225,6 +225,7 @@ This section will record Webhooks change logs such as Name, Status, Entity, Mess
 ![Imgur](https://i.imgur.com/b89rx5I.png)
 
 #### View logs
+
 
 Click view to view the log details
 
@@ -237,6 +238,3 @@ You need to run the following command to install the library:
 ```
 composer require liquid/liquid
 ```
-
-
-

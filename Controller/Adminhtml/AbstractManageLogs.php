@@ -49,6 +49,7 @@ abstract class AbstractManageLogs extends Action
 
     /**
      * AbstractManageHooks constructor.
+     *
      * @param HistoryFactory $historyFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -60,7 +61,7 @@ abstract class AbstractManageLogs extends Action
     )
     {
         $this->historyFactory = $historyFactory;
-        $this->coreRegistry   = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }

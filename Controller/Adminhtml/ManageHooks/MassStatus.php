@@ -58,8 +58,7 @@ class MassStatus extends Action
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory
-    )
-    {
+    ){
         parent::__construct($context);
 
         $this->filter            = $filter;

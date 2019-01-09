@@ -58,8 +58,7 @@ class Replay extends AbstractManageLogs
         Context $context,
         HookFactory $hookFactory,
         Data $helperData
-    )
-    {
+    ){
         parent::__construct($historyFactory, $coreRegistry, $context);
 
         $this->hookFactory = $hookFactory;

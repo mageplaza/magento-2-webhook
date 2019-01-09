@@ -32,8 +32,7 @@ $fieldClass         .= ($addOn) ? ' with-addon' : '';
 $fieldClass         .= ($element->getRequired()) ? ' _required' : '';
 $fieldClass         .= ($note) ? ' with-note' : '';
 
-$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
-    . $block->getUiId('form-field', $element->getId());
+$fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId('form-field', $element->getId());
 $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonEncode($block->getModifier()) : '{}';
 ?>
 
@@ -106,7 +105,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
             <a id="ox_variable_item-head" href="#ox_variable_item-link"
                onclick="Fieldset.toggleCollapse('ox_variable_item'); return false;"><?= __('Item Attribute') ?></a>
         </div>
-        <input id="ox_provider_item-state" type="hidden">
+        <input id="ox_variable_item-state" value="1" type="hidden">
 
         <fieldset class="config admin__collapsible-block admin__scope-old" id="ox_variable_item">
             <?php foreach ($attrCollection as $attr) : ?>
@@ -133,11 +132,11 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
     </script>
 </div>
 <script type="text/x-magento-init">
-		{
-			"*": {
-				"Mageplaza_Webhook/js/hook/initActionsTab":{
-					"modifiersData": <?= $modifiersData ?>
-				}
-			}
-		}
+    {
+        "*": {
+            "Mageplaza_Webhook/js/hook/initActionsTab":{
+                "modifiersData": <?= $modifiersData ?>
+            }
+        }
+    }
 </script>

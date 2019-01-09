@@ -51,8 +51,7 @@ class Log extends AbstractManageHooks
         Context $context,
         LayoutFactory $resultLayoutFactory
 
-    )
-    {
+    ){
         parent::__construct($hookFactory, $coreRegistry, $context);
 
         $this->resultLayoutFactory = $resultLayoutFactory;

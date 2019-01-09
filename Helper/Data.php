@@ -267,6 +267,8 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function sendObserver($item, $hookType)
     {
@@ -363,6 +365,7 @@ class Data extends CoreHelper
 
     /**
      * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getStoreId()
     {

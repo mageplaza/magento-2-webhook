@@ -26,6 +26,7 @@
             <general>
                 <enabled>1</enabled>
                 <abandoned_time>10</abandoned_time>
+                <keep_log>10</keep_log>
             </general>
         </mp_webhook>
     </default>

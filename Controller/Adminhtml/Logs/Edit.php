@@ -52,8 +52,7 @@ class Edit extends AbstractManageLogs
         Registry $coreRegistry,
         Context $context,
         PageFactory $resultPageFactory
-    )
-    {
+    ){
         parent::__construct($historyFactory, $coreRegistry, $context);
 
         $this->resultPageFactory = $resultPageFactory;

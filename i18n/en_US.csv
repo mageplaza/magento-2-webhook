@@ -15,7 +15,7 @@ qop,qop
 "Client Nonce","Client Nonce"
 Opaque,Opaque
 Header,Header
-Content-type,Content-type
+"Content Type","Content Type"
 Body,Body
 "Supports <a href=""https://shopify.github.io/liquid/"" target=""_blank"">Liquid template</a>","Supports <a href=""https://shopify.github.io/liquid/"" target=""_blank"">Liquid template</a>"
 "General Information","General Information"
@@ -79,6 +79,8 @@ Words,Words
 "Encode Url","Encode Url"
 Price,Price
 "If Empty","If Empty"
+Success,Success
+Error,Error
 "Log ID","Log ID"
 Entity,Entity
 Response,Response
@@ -129,12 +131,12 @@ Delete,Delete
 Webhook,Webhook
 Logs,Logs
 Enable,Enable
-"Abandoned Cart After (minutes)","Abandoned Cart After (minutes)"
-"Recommend period time: 1, 6, 10, 12, 24","Recommend period time: 1, 6, 10, 12, 24"
+"Abandoned Cart After","Abandoned Cart After"
+"Please specify value in hours. Recommend: 1, 6, 10, 12, 24","Please specify value in hours. Recommend: 1, 6, 10, 12, 24"
 "Alert on Error","Alert on Error"
 "To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>","To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>"
 "Keep logs","Keep logs"
-"Automatically clean log if it reachs this number. It will be done daily.","Automatically clean log if it reachs this number. It will be done daily."
+"The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation.","The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation."
 "Send To","Send To"
 "Separated by comma (,)","Separated by comma (,)"
 "Email Template","Email Template"

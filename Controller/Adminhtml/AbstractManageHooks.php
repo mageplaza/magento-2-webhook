@@ -57,8 +57,7 @@ abstract class AbstractManageHooks extends Action
         HookFactory $hookFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
+    ){
         $this->hookFactory  = $hookFactory;
         $this->coreRegistry = $coreRegistry;
 

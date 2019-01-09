@@ -45,7 +45,9 @@ class LiquidFilters
 
     /**
      * @param $subject
+     *
      * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function price($subject)
     {
