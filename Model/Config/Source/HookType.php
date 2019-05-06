@@ -44,6 +44,7 @@ class HookType implements ArrayInterface
     const UPDATE_CATEGORY   = 'update_category';
     const DELETE_CATEGORY   = 'delete_category';
     const CUSTOMER_LOGIN    = 'customer_login';
+    const SUBSCRIBER        = 'subscriber';
     //    const UPDATE_CART = 'update_cart';
     const ABANDONED_CART = 'abandoned_cart';
 
@@ -88,6 +89,7 @@ class HookType implements ArrayInterface
             self::UPDATE_CATEGORY   => 'Update Category',
             self::DELETE_CATEGORY   => 'Delete Category',
             self::CUSTOMER_LOGIN    => 'Customer Login',
+            self::SUBSCRIBER        => 'Subscriber',
             //            self::UPDATE_CART => 'Update cart',
             self::ABANDONED_CART    => 'Abandoned Cart',
         ];

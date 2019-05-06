@@ -160,6 +160,7 @@ class Data extends CoreHelper
             $content = $template->render([
                 'item' => $item,
             ]);
+            
 
             return $content;
         } catch (\Exception $e) {
