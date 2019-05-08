@@ -38,6 +38,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusResourc
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\HookFactory;
+use Magento\Newsletter\Model\ResourceModel\Subscriber;
 
 /**
  * Class Body
@@ -105,6 +106,8 @@ class Body extends Element implements RendererInterface
      */
     protected $quoteResource;
 
+    protected $subscriber;
+
     /**
      * Body constructor.
      * @param Context $context
@@ -134,21 +137,23 @@ class Body extends Element implements RendererInterface
         CategoryFactory $categoryFactory,
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
+        Subscriber $subscriber,
         array $data = [])
     {
         parent::__construct($context, $data);
 
-        $this->liquidFilters       = $liquidFilters;
-        $this->orderFactory        = $orderFactory;
-        $this->invoiceResource     = $invoiceResource;
-        $this->shipmentResource    = $shipmentResource;
-        $this->creditmemoResource  = $creditmemoResource;
-        $this->hookFactory         = $hookFactory;
+        $this->liquidFilters = $liquidFilters;
+        $this->orderFactory = $orderFactory;
+        $this->invoiceResource = $invoiceResource;
+        $this->shipmentResource = $shipmentResource;
+        $this->creditmemoResource = $creditmemoResource;
+        $this->hookFactory = $hookFactory;
         $this->orderStatusResource = $orderStatusResource;
-        $this->customerResource    = $customerResource;
+        $this->customerResource = $customerResource;
         $this->catalogEavAttribute = $catalogEavAttribute;
-        $this->categoryFactory     = $categoryFactory;
-        $this->quoteResource       = $quoteResource;
+        $this->categoryFactory = $categoryFactory;
+        $this->quoteResource = $quoteResource;
+        $this->subscriber = $subscriber;
     }
 
     /**
@@ -159,7 +164,7 @@ class Body extends Element implements RendererInterface
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_element = $element;
-        $html           = $this->toHtml();
+        $html = $this->toHtml();
 
         return $html;
     }
@@ -173,8 +178,8 @@ class Body extends Element implements RendererInterface
         $type = $this->_request->getParam('type');
         if (!$type) {
             $hookId = $this->getRequest()->getParam('hook_id');
-            $hook   = $this->hookFactory->create()->load($hookId);
-            $type   = $hook->getHookType();
+            $hook = $this->hookFactory->create()->load($hookId);
+            $type = $hook->getHookType();
         }
         if (!$type) {
             $type = 'order';
@@ -237,6 +242,25 @@ class Body extends Element implements RendererInterface
                     ->describeTable($this->quoteResource->getMainTable());
                 $attrCollection = $this->getAttrCollectionFromDb($collectionData);
                 break;
+            case HookType::SUBSCRIBER:
+                $collectionData = $this->subscriber->getConnection()
+                    ->describeTable($this->subscriber->getMainTable());;
+                $attrCollection = $this->getAttrCollectionFromDb($collectionData);
+                $attrArray = [
+                    new DataObject(['name' => 'entity_id', 'title' => 'Customer Id']),
+                    new DataObject(['name' => 'email', 'title' => 'Email']),
+                    new DataObject(['name' => 'group_id', 'title' => 'Group Id']),
+                    new DataObject(['name' => 'store_id', 'title' => 'Store Id']),
+                    new DataObject(['name' => 'is_active', 'title' => 'Is Activate']),
+                    new DataObject(['name' => 'firstname', 'title' => 'Firstname']),
+                    new DataObject(['name' => 'middlename', 'title' => 'Middlename']),
+                    new DataObject(['name' => 'lastname', 'title' => 'Lastname']),
+                    new DataObject(['name' => 'suffix', 'title' => 'Suffix']),
+                    new DataObject(['name' => 'dob', 'title' => 'Date of Bith']),
+                    new DataObject(['name' => 'gender', 'title' => 'Gender'])
+                ];
+                $attrCollection = array_merge($attrCollection, $attrArray);
+                break;
             default:
                 $collectionData = $this->orderFactory->create()->getResource()->getConnection()
                     ->describeTable($this->orderFactory->create()->getResource()->getMainTable());
@@ -256,7 +280,7 @@ class Body extends Element implements RendererInterface
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name'  => $item['COLUMN_NAME'],
+                'name' => $item['COLUMN_NAME'],
                 'title' => ucwords(str_replace('_', ' ', $item['COLUMN_NAME']))
             ]);
         }
@@ -273,7 +297,7 @@ class Body extends Element implements RendererInterface
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name'  => $item->getAttributeCode(),
+                'name' => $item->getAttributeCode(),
                 'title' => $item->getDefaultFrontendLabel()
             ]);
         }
