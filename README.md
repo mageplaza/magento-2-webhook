@@ -1,9 +1,9 @@
-# Magento 2 Webhook Free Extension
+# Magento 2 Webhook FREE Extension
 
 [Mageplaza Webhook](https://www.mageplaza.com/magento-2-webhook/) for Magento 2 supports online store to send an API request via a webhook to a configurable destination (URL) when specific trigger events take place. Webhook a very useful and necessary tool which allows stores to update instant and real-time notifications. 
 
 
-## 1. Documentation
+## 1. Webhook Documentation
 
 - [Installation guide](https://www.mageplaza.com/install-magento-2-extension/)
 - [User guide](https://docs.mageplaza.com/webhook/index.html)
@@ -11,7 +11,7 @@
 - [Contribute on Github](https://github.com/mageplaza/magento-2-webhook)
 - [Get Support](https://github.com/mageplaza/magento-2-webhook/issues)
 
-## 2. FAQs
+## 2. Webhook FAQs
 
 **Q: I got error: Mageplaza_Core has been already defined**
 
@@ -40,12 +40,12 @@ php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
 
 ```
-## 4. Highlight features
+## 4. Magento 2 Webhook Highlight features
 
 ### Send API requests when specific events occur
 
 
-Webhook quickly detect any updates of stores and send API requests to other servers or applications right when the specific events take place. The hooks can be created based on such events as below:
+**Mageplaza Webhook module** quickly detect any updates of stores and send API requests to other servers or applications right when the specific events take place. The hooks can be created based on such events as below:
 
 - New Order/ Invoice/ Shipment/ Credit Memo
 - New Order Comment
@@ -56,7 +56,7 @@ Webhook quickly detect any updates of stores and send API requests to other serv
 - Abandoned Cart
 
 
-![Imgur](https://i.imgur.com/fgA2Y8r.png)
+![Send API requests when specific events occur](https://i.imgur.com/fgA2Y8r.png)
 
 ### Send API requests when cart abandonment happens
 
@@ -64,21 +64,21 @@ One of the typical features of Webhook is to allow sending the notice at the exa
 
 This is really practical in stores with Sales and Customer Care departments which need this information to keep up with customers’ behaviors.
 
-![Imgur](https://i.imgur.com/37lI90u.png)
+![Send API requests when cart abandonment happens](https://i.imgur.com/37lI90u.png)
 
 ### Send leads/customer data to CRM or Email Marketing tools
 
 
 Webhook is a supportive tool to CRM or Email Marketing systems used in e-commerce businesses. The data of customers or orders or any related updates is necessary to be sent instantly to these systems. Then, the stores can appoint quickly sales actions accordingly. 
 
-![Imgur](https://i.imgur.com/SuRp9eA.png)
+![Send leads/customer data to CRM or Email Marketing tools](https://i.imgur.com/SuRp9eA.png)
 
 
 ### Log requests and response
 
 Status and error messages of hooks can be updated quickly via hook logs. Admin can quickly preview the response of Log ID easily. 
 
-![Imgur](https://i.imgur.com/Zqa95iV.png)
+![Log requests and response](https://i.imgur.com/Zqa95iV.png)
 
 ## 5. More features
 
@@ -95,7 +95,7 @@ Clean logs daily when the total reaches a specific number.
 Resend replaced requests after fixing errors.
 
 
-## 6. Full feature list
+## 6. Full Magento 2 Webhook feature
 
 ### General Configuration
 - Enable/ Disable the module 
@@ -121,9 +121,9 @@ Resend replaced requests after fixing errors.
 - Select action for a log: Preview response or Replay (with fixed logs)
 
 
-## 7. User guide
+## 7. Webhook user guide
 
-### 7.1 How to configure
+### 7.1 How to configure Magento 2 Webhook
 
 Login to the **Magento Admin**, choose `Store > Settings > Configuration > Mageplaza Extensions > Webhook`.
 ![Imgur](https://i.imgur.com/lb28XMh.png)
@@ -134,7 +134,7 @@ Login to the **Magento Admin**, choose `Store > Settings > Configuration > Magep
 - **Alert on Error**: Select “Yes” to send error notice via emails. To avoid sending to spam box, [SMTP](https://www.mageplaza.com/magento-2-smtp/) should be installed. 
 
 
-![Imgur](https://i.imgur.com/j4ZnDaI.png)
+![How to configure Magento 2 Webhook](https://i.imgur.com/j4ZnDaI.png)
 
 - **Send to**: Input email addresses to receive error notice.
 
@@ -147,7 +147,7 @@ Login to the **Magento Admin**, choose `Store > Settings > Configuration > Magep
 
 From the **Admin Panel**, go to `Mageplaza > Webhook > Manage Hooks`.
 
-![Imgur](https://i.imgur.com/0kJFVFW.png)
+![Manage Magento 2 Hook](https://i.imgur.com/0kJFVFW.png)
 
 - The grid includes the main hook information:  Name, Status, Store View, Entity, Created Date và Update Date,...
 - Admin can select actions: 
@@ -162,9 +162,9 @@ From the **Admin Panel**, go to `Mageplaza > Webhook > Manage Hooks`.
 Select **Trigger events** (New Order, New Product, Update Product, Delete Product,...) to create new Hook
 
 
-![Imgur](https://i.imgur.com/5fnfrNb.gif)
+![Create a Hook in Magento 2](https://i.imgur.com/5fnfrNb.gif)
 
-![Imgur](https://i.imgur.com/3JHzhFx.png)
+![Create a Hook in Magento 2](https://i.imgur.com/3JHzhFx.png)
 
 - **Name**: Set name for a new hook. This will be used when sending emails to customers.
 - **Status**: Select“ Enable” to activate the hook.
@@ -172,7 +172,7 @@ Select **Trigger events** (New Order, New Product, Update Product, Delete Produc
 - **Priority**: Set priority for the hook. The smaller number, the higher priority.
 
 
-![Imgur](https://i.imgur.com/lhaspGa.gif)
+![Create a Magento 2 Hook](https://i.imgur.com/lhaspGa.gif)
 
 - **Payload URL**: 
 
@@ -197,14 +197,14 @@ Find more about API [here](https://www.freshsales.io/api/#introduction).
   
 - **Authentication**: Select the type of data access authentication you want from the server. When you submit a request, you typically have to include parameters to make sure the request has access and returns the data you want. You should leave this field blank to limit access.
 
-![Imgur](https://i.imgur.com/C9mvIJi.png)
+![Create a Magento 2 Hook](https://i.imgur.com/C9mvIJi.png)
  
     - **Basic**: Display 2 Username and Password fields. Fill in the information to authenticate access.
     - **Note**: In the process of being strictly enforced throughout the entire data cycle to SSL for security, authentication is transmitted over unsafe lines.
     - **Digest**: Fill out some credentials below:
 
 
-![Imgur](https://i.imgur.com/TbH4AvX.png)
+![Create a Magento 2 Hook](https://i.imgur.com/TbH4AvX.png)
 
 
 
@@ -212,7 +212,7 @@ Find more about API [here](https://www.freshsales.io/api/#introduction).
 
 - **Content-type**: Select the content type to send the data. For Method GET you can leave this field blank.
 
-![Imgur](https://i.imgur.com/CKSNQkS.png)
+![Create a Magento 2 Hook](https://i.imgur.com/CKSNQkS.png)
 
 - **Body**: For methods like POST or PUT, you need to add content to the body section to send the request. Click `Insert Variable` to select the variable.  
 
@@ -222,14 +222,14 @@ From the Admin Panel, go to `Mageplaza > Webhook > Logs`
 
 This section will record Webhooks change logs such as Name, Status, Entity, Message, etc. 
 
-![Imgur](https://i.imgur.com/b89rx5I.png)
+![Magento 2 Hook Logs](https://i.imgur.com/b89rx5I.png)
 
 #### View logs
 
 
 Click view to view the log details
 
-![Imgur](https://i.imgur.com/yCsaTIO.png)
+![Magento 2 wwwbhook View logs](https://i.imgur.com/yCsaTIO.png)
 
 ## Installation guide library
 
@@ -238,3 +238,25 @@ You need to run the following command to install the library:
 ```
 composer require liquid/liquid
 ```
+
+
+**People also search:**
+- magento webhooks
+- magento 2 webhooks
+- magento webhook
+- magento 2 webhook
+- magento 2 hooks
+- magento webhook integration
+- magento 2 webhook integration
+
+
+
+**Other free extension on Github**
+- [Magento 2 SEO](https://github.com/mageplaza/magento-2-seo)
+- [Google Maps](https://github.com/mageplaza/magento-2-google-maps)
+- [Magento 2 Delete Orders](https://github.com/mageplaza/magento-2-delete-orders)
+- [Magento 2 GDPR Free](https://github.com/mageplaza/magento-2-gdpr)
+- [Magento 2 login as customers](https://github.com/mageplaza/magento-2-login-as-customer)
+- [Magento 2 Same Order Number](https://github.com/mageplaza/magento-2-same-order-number)
+- [Magento 2 Layered Navigation](https://github.com/mageplaza/magento-2-ajax-layered-navigation)
+- [Magento 2 security suitr](https://github.com/mageplaza/magento-2-security)
