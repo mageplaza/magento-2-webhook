@@ -48,6 +48,7 @@ class General extends Generic implements TabInterface
 
     /**
      * General constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -62,12 +63,11 @@ class General extends Generic implements TabInterface
         Enabledisable $enableDisable,
         Store $systemStore,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $registry, $formFactory, $data);
 
         $this->enabledisable = $enableDisable;
-        $this->systemStore   = $systemStore;
+        $this->systemStore = $systemStore;
     }
 
     /**

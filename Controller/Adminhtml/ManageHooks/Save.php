@@ -41,6 +41,7 @@ class Save extends AbstractManageHooks
 
     /**
      * Save constructor.
+     *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -51,7 +52,7 @@ class Save extends AbstractManageHooks
         Registry $coreRegistry,
         Context $context,
         Data $helperData
-    ){
+    ) {
         parent::__construct($hookFactory, $coreRegistry, $context);
 
         $this->helperData = $helperData;

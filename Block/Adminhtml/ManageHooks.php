@@ -37,6 +37,7 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
 
     /**
      * ManageHooks constructor.
+     *
      * @param Context $context
      * @param HookType $hookType
      * @param array $data
@@ -44,8 +45,8 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
     public function __construct(
         Context $context,
         HookType $hookType,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         parent::__construct($context, $data);
 
         $this->hookType = $hookType;
@@ -82,7 +83,10 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
         foreach ($this->hookType->toOptionArray() as $hookType) {
             $splitButtonOptions[$hookType['value']] = [
                 'label'   => $hookType['label'],
-                'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', ['type' => $hookType['value']]) . "')",
+                'onclick' => "setLocation('" . $this->getUrl(
+                    'mpwebhook/managehooks/new',
+                    ['type' => $hookType['value']]
+                ) . "')",
                 'default' => $hookType['value'] === 'new_order' ? true : false,
             ];
         }

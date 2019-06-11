@@ -35,7 +35,7 @@ class Delete extends AbstractManageLogs
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $log            = $this->initLog();
+        $log = $this->initLog();
         if ($log->getId()) {
             try {
                 /** @var \Mageplaza\Webhook\Model\History $log */

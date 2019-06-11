@@ -36,6 +36,7 @@ class Subscriber extends AfterSave
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
+     *
      * @throws \Exception
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -47,10 +48,11 @@ class Subscriber extends AfterSave
         echo "<pre>";
         var_dump($item->getSubscriberEmail());
         echo "</pre>";
-        $sub= $customer->get($item->getSubscriberEmail());
+        $sub = $customer->get($item->getSubscriberEmail());
         echo "<pre>";
         var_dump($sub->getLastname());
-        echo "</pre>";die;
+        echo "</pre>";
+        die;
         $this->send($item, $this->hookType);
     }
 }

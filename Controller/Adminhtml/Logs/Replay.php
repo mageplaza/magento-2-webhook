@@ -46,6 +46,7 @@ class Replay extends AbstractManageLogs
 
     /**
      * Replay constructor.
+     *
      * @param HistoryFactory $historyFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -58,11 +59,11 @@ class Replay extends AbstractManageLogs
         Context $context,
         HookFactory $hookFactory,
         Data $helperData
-    ){
+    ) {
         parent::__construct($historyFactory, $coreRegistry, $context);
 
         $this->hookFactory = $hookFactory;
-        $this->helperData  = $helperData;
+        $this->helperData = $helperData;
     }
 
     /**
@@ -72,12 +73,12 @@ class Replay extends AbstractManageLogs
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $log            = $this->initLog();
+        $log = $this->initLog();
         $resultRedirect->setPath('mpwebhook/logs');
         if ($log->getId()) {
             try {
                 $hookId = $log->getHookId();
-                $hook   = $this->hookFactory->create()->load($hookId);
+                $hook = $this->hookFactory->create()->load($hookId);
                 if (!$hook->getId()) {
                     $this->messageManager->addError('The Hook no longer exits');
 

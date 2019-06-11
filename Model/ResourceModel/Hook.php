@@ -40,14 +40,14 @@ class Hook extends AbstractDb
 
     /**
      * Hook constructor.
+     *
      * @param Context $context
      * @param DateTime $date
      */
     public function __construct(
         Context $context,
         DateTime $date
-    )
-    {
+    ) {
         $this->date = $date;
 
         parent::__construct($context);
@@ -65,7 +65,9 @@ class Hook extends AbstractDb
 
     /**
      * before save callback
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
+     *
      * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)

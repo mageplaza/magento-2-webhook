@@ -40,6 +40,7 @@ class Form extends Generic
 
     /**
      * Form constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -51,8 +52,8 @@ class Form extends Generic
         Registry $registry,
         FormFactory $formFactory,
         HookType $hookType,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         parent::__construct($context, $registry, $formFactory, $data);
 
         $this->hookType = $hookType;

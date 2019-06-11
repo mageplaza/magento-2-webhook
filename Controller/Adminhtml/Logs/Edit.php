@@ -42,6 +42,7 @@ class Edit extends AbstractManageLogs
 
     /**
      * Edit constructor.
+     *
      * @param HistoryFactory $historyFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -52,7 +53,7 @@ class Edit extends AbstractManageLogs
         Registry $coreRegistry,
         Context $context,
         PageFactory $resultPageFactory
-    ){
+    ) {
         parent::__construct($historyFactory, $coreRegistry, $context);
 
         $this->resultPageFactory = $resultPageFactory;

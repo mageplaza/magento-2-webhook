@@ -49,6 +49,7 @@ abstract class AbstractManageHooks extends Action
 
     /**
      * AbstractManageHooks constructor.
+     *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -57,8 +58,8 @@ abstract class AbstractManageHooks extends Action
         HookFactory $hookFactory,
         Registry $coreRegistry,
         Context $context
-    ){
-        $this->hookFactory  = $hookFactory;
+    ) {
+        $this->hookFactory = $hookFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -66,6 +67,7 @@ abstract class AbstractManageHooks extends Action
 
     /**
      * @param bool $register
+     *
      * @return bool|\Mageplaza\Webhook\Model\Hook
      */
     protected function initHook($register = false)

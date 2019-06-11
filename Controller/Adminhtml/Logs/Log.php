@@ -40,6 +40,7 @@ class Log extends AbstractManageHooks
 
     /**
      * Log constructor.
+     *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -50,8 +51,7 @@ class Log extends AbstractManageHooks
         Registry $coreRegistry,
         Context $context,
         LayoutFactory $resultLayoutFactory
-
-    ){
+    ) {
         parent::__construct($hookFactory, $coreRegistry, $context);
 
         $this->resultLayoutFactory = $resultLayoutFactory;
@@ -67,4 +67,3 @@ class Log extends AbstractManageHooks
         return $this->resultLayoutFactory->create();
     }
 }
-

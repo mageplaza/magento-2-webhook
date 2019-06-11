@@ -58,8 +58,7 @@ abstract class AbstractManageLogs extends Action
         HistoryFactory $historyFactory,
         Registry $coreRegistry,
         Context $context
-    )
-    {
+    ) {
         $this->historyFactory = $historyFactory;
         $this->coreRegistry = $coreRegistry;
 

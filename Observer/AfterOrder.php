@@ -36,6 +36,7 @@ class AfterOrder extends AfterSave
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
+     *
      * @throws \Exception
      */
     public function execute(\Magento\Framework\Event\Observer $observer)

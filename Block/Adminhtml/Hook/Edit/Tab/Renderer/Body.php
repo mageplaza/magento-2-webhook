@@ -29,6 +29,7 @@ use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\DataObject;
+use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
@@ -38,7 +39,6 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History as OrderStatusResourc
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\HookFactory;
-use Magento\Newsletter\Model\ResourceModel\Subscriber;
 
 /**
  * Class Body
@@ -110,6 +110,7 @@ class Body extends Element implements RendererInterface
 
     /**
      * Body constructor.
+     *
      * @param Context $context
      * @param OrderFactory $orderFactory
      * @param InvoiceResource $invoiceResource
@@ -138,8 +139,8 @@ class Body extends Element implements RendererInterface
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
         Subscriber $subscriber,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         parent::__construct($context, $data);
 
         $this->liquidFilters = $liquidFilters;
@@ -244,7 +245,8 @@ class Body extends Element implements RendererInterface
                 break;
             case HookType::SUBSCRIBER:
                 $collectionData = $this->subscriber->getConnection()
-                    ->describeTable($this->subscriber->getMainTable());;
+                    ->describeTable($this->subscriber->getMainTable());
+                ;
                 $attrCollection = $this->getAttrCollectionFromDb($collectionData);
                 $attrArray = [
                     new DataObject(['name' => 'entity_id', 'title' => 'Customer Id']),
@@ -273,6 +275,7 @@ class Body extends Element implements RendererInterface
 
     /**
      * @param $collection
+     *
      * @return array
      */
     protected function getAttrCollectionFromDb($collection)
@@ -280,7 +283,7 @@ class Body extends Element implements RendererInterface
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name' => $item['COLUMN_NAME'],
+                'name'  => $item['COLUMN_NAME'],
                 'title' => ucwords(str_replace('_', ' ', $item['COLUMN_NAME']))
             ]);
         }
@@ -290,6 +293,7 @@ class Body extends Element implements RendererInterface
 
     /**
      * @param $collection
+     *
      * @return array
      */
     protected function getAttrCollectionFromEav($collection)
@@ -297,7 +301,7 @@ class Body extends Element implements RendererInterface
         $attrCollection = [];
         foreach ($collection as $item) {
             $attrCollection[] = new DataObject([
-                'name' => $item->getAttributeCode(),
+                'name'  => $item->getAttributeCode(),
                 'title' => $item->getDefaultFrontendLabel()
             ]);
         }

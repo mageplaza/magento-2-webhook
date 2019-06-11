@@ -49,6 +49,7 @@ class AbandonedCart
 
     /**
      * AbandonedCart constructor.
+     *
      * @param LoggerInterface $logger
      * @param QuoteFactory $quoteFactory
      * @param Data $helper
@@ -57,11 +58,10 @@ class AbandonedCart
         LoggerInterface $logger,
         QuoteFactory $quoteFactory,
         Data $helper
-    )
-    {
-        $this->logger       = $logger;
+    ) {
+        $this->logger = $logger;
         $this->quoteFactory = $quoteFactory;
-        $this->helper       = $helper;
+        $this->helper = $helper;
     }
 
     /**
@@ -73,12 +73,12 @@ class AbandonedCart
             return;
         }
 
-        $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
-        $update        = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
-        $updateTo      = clone $update;
-        $updateFrom    = $update->sub(new \DateInterval("PT1H"));
+        $abandonedTime = (int) $this->helper->getConfigGeneral('abandoned_time');
+        $update = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
+        $updateTo = clone $update;
+        $updateFrom = $update->sub(new \DateInterval("PT1H"));
 
-        $quoteCollection           = $this->quoteFactory->create()->getCollection()
+        $quoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
             ->addFieldToFilter('updated_at', ['to' => $updateTo]);

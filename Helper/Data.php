@@ -75,6 +75,7 @@ class Data extends CoreHelper
 
     /**
      * Data constructor.
+     *
      * @param Context $context
      * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
@@ -95,34 +96,34 @@ class Data extends CoreHelper
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
         HistoryFactory $historyFactory
-    )
-    {
+    ) {
         parent::__construct($context, $objectManager, $storeManager);
 
-        $this->liquidFilters    = $liquidFilters;
-        $this->curlFactory      = $curlFactory;
-        $this->hookFactory      = $hookFactory;
-        $this->historyFactory   = $historyFactory;
+        $this->liquidFilters = $liquidFilters;
+        $this->curlFactory = $curlFactory;
+        $this->hookFactory = $hookFactory;
+        $this->historyFactory = $historyFactory;
         $this->transportBuilder = $transportBuilder;
-        $this->backendUrl       = $backendUrl;
+        $this->backendUrl = $backendUrl;
     }
 
     /**
      * @param $hook
      * @param bool $item
      * @param bool $log
+     *
      * @return array
      */
     public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
-        $url            = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
+        $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
         $authentication = $hook->getAuthentication();
-        $method         = $hook->getMethod();
-        $username       = $hook->getUsername();
-        $password       = $hook->getPassword();
+        $method = $hook->getMethod();
+        $username = $hook->getUsername();
+        $password = $hook->getPassword();
         if ($authentication === Authentication::BASIC) {
             $authentication = $this->getBasicAuthHeader($username, $password);
-        } else if ($authentication === Authentication::DIGEST) {
+        } elseif ($authentication === Authentication::DIGEST) {
             $authentication = $this->getDigestAuthHeader(
                 $url,
                 $method,
@@ -134,10 +135,11 @@ class Data extends CoreHelper
                 $hook->getQop(),
                 $hook->getNonceCount(),
                 $hook->getClientNonce(),
-                $hook->getOpaque());
+                $hook->getOpaque()
+            );
         }
-        $body        = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
-        $headers     = $hook->getHeaders();
+        $body = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
+        $headers = $hook->getHeaders();
         $contentType = $hook->getContentType();
 
         return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
@@ -146,12 +148,13 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $templateHtml
+     *
      * @return string
      */
     public function generateLiquidTemplate($item, $templateHtml)
     {
         try {
-            $template       = new Template;
+            $template = new Template;
             $filtersMethods = $this->liquidFilters->getFiltersMethods();
 
             $template->registerFilter($this->liquidFilters);
@@ -160,7 +163,6 @@ class Data extends CoreHelper
             $content = $template->render([
                 'item' => $item,
             ]);
-            
 
             return $content;
         } catch (\Exception $e) {
@@ -177,6 +179,7 @@ class Data extends CoreHelper
      * @param $url
      * @param $body
      * @param $method
+     *
      * @return array
      */
     public function sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method)
@@ -190,8 +193,8 @@ class Data extends CoreHelper
         $headersConfig = [];
 
         foreach ($headers as $header) {
-            $key             = $header['name'];
-            $value           = $header['value'];
+            $key = $header['name'];
+            $value = $header['value'];
             $headersConfig[] = trim($key) . ': ' . trim($value);
         }
 
@@ -209,7 +212,7 @@ class Data extends CoreHelper
         $result = ['success' => false];
 
         try {
-            $resultCurl         = $curl->read();
+            $resultCurl = $curl->read();
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
                 $result['status'] = \Zend_Http_Response::extractCode($resultCurl);
@@ -241,15 +244,27 @@ class Data extends CoreHelper
      * @param $nonceCount
      * @param $clientNonce
      * @param $opaque
+     *
      * @return string
      */
-    public function getDigestAuthHeader($url, $method, $username, $realm, $password, $nonce, $algorithm, $qop, $nonceCount, $clientNonce, $opaque)
-    {
-        $uri          = parse_url($url)[2];
-        $method       = $method ?: 'GET';
-        $A1           = md5("{$username}:{$realm}:{$password}");
-        $A2           = md5("{$method}:{$uri}");
-        $response     = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
+    public function getDigestAuthHeader(
+        $url,
+        $method,
+        $username,
+        $realm,
+        $password,
+        $nonce,
+        $algorithm,
+        $qop,
+        $nonceCount,
+        $clientNonce,
+        $opaque
+    ) {
+        $uri = parse_url($url)[2];
+        $method = $method ?: 'GET';
+        $A1 = md5("{$username}:{$realm}:{$password}");
+        $A2 = md5("{$method}:{$uri}");
+        $response = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
         $digestHeader = "Digest username=\"{$username}\", realm=\"{$realm}\", nonce=\"{$nonce}\", uri=\"{$uri}\", cnonce=\"{$clientNonce}\", nc={$nonceCount}, qop=\"{$qop}\", response=\"{$response}\", opaque=\"{$opaque}\", algorithm=\"{$algorithm}\"";
 
         return $digestHeader;
@@ -258,6 +273,7 @@ class Data extends CoreHelper
     /**
      * @param $username
      * @param $password
+     *
      * @return string
      */
     public function getBasicAuthHeader($username, $password)
@@ -282,12 +298,12 @@ class Data extends CoreHelper
             ->setOrder('priority', 'ASC');
 
         $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo     = explode(',', $this->getConfigGeneral('send_to'));
+        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
 
         foreach ($hookCollection as $hook) {
             try {
                 $history = $this->historyFactory->create();
-                $data    = [
+                $data = [
                     'hook_id'     => $hook->getId(),
                     'hook_name'   => $hook->getName(),
                     'store_ids'   => $hook->getStoreIds(),
@@ -311,7 +327,8 @@ class Data extends CoreHelper
                 } else {
                     $history->setStatus(0)->setMessage($result['message']);
                     if ($isSendMail) {
-                        $this->sendMail($sendTo,
+                        $this->sendMail(
+                            $sendTo,
                             __('Something went wrong while sending %1 hook', $hook->getName()),
                             $this->getConfigGeneral('email_template'),
                             $this->storeManager->getStore()->getId()
@@ -321,10 +338,12 @@ class Data extends CoreHelper
                 $history->save();
             } catch (\Exception $e) {
                 if ($isSendMail) {
-                    $this->sendMail($sendTo,
+                    $this->sendMail(
+                        $sendTo,
                         __('Something went wrong while sending %1 hook', $hook->getName()),
                         $this->getConfigGeneral('email_template'),
-                        $this->storeManager->getStore()->getId());
+                        $this->storeManager->getStore()->getId()
+                    );
                 }
             }
         }

@@ -77,19 +77,19 @@ class Store extends Column
         array $components = [],
         array $data = [],
         $storeKey = 'store_ids'
-    )
-    {
+    ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
 
         $this->systemStore = $systemStore;
-        $this->escaper     = $escaper;
-        $this->storeKey    = $storeKey;
+        $this->escaper = $escaper;
+        $this->storeKey = $storeKey;
     }
 
     /**
      * Prepare Data Source
      *
      * @param array $dataSource
+     *
      * @return array
      */
     public function prepareDataSource(array $dataSource)
@@ -108,11 +108,12 @@ class Store extends Column
      * Get data
      *
      * @param array $item
+     *
      * @return string
      */
     protected function prepareItem(array $item)
     {
-        $content    = '';
+        $content = '';
         $origStores = $item[$this->storeKey];
         if (!is_array($origStores)) {
             $origStores = [$origStores];

@@ -37,6 +37,7 @@ class BeforeSave implements ObserverInterface
 
     /**
      * BeforeSave constructor.
+     *
      * @param Data $helper
      */
     public function __construct(Data $helper)

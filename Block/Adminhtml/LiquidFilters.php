@@ -36,6 +36,7 @@ class LiquidFilters
 
     /**
      * LiquidFilters constructor.
+     *
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(StoreManagerInterface $storeManager)
@@ -60,6 +61,7 @@ class LiquidFilters
      * @param $subject
      * @param $fieldAround
      * @param $fieldSeparate
+     *
      * @return mixed
      */
     public function mpCorrect($subject, $fieldAround, $fieldSeparate)
@@ -90,6 +92,7 @@ class LiquidFilters
 
     /**
      * @param $subject
+     *
      * @return int
      */
     public function count($subject)
@@ -111,7 +114,10 @@ class LiquidFilters
             'ceil'           => ['label' => __('Ceil'), 'params' => []],
             'date'           => ['label' => __('Date'), 'params' => [['label' => __('Date Format'), 'defVal' => '']]],
             'default'        => ['label' => __('Default'), 'params' => [['label' => __('Default'), 'defVal' => '']]],
-            'divided_by'     => ['label' => __('Divided By'), 'params' => [['label' => __('Divided By'), 'defVal' => '']]],
+            'divided_by'     => [
+                'label'  => __('Divided By'),
+                'params' => [['label' => __('Divided By'), 'defVal' => '']]
+            ],
             'downcase'       => ['label' => __('Lower Case'), 'params' => []],
             'escape'         => ['label' => __('Escape'), 'params' => []],
             'escape_once'    => ['label' => __('Escape once'), 'params' => []],
@@ -124,21 +130,54 @@ class LiquidFilters
             'plus'           => ['label' => __('Plus'), 'params' => [['label' => __('Plus'), 'defVal' => '']]],
             'prepend'        => ['label' => __('Prepend'), 'params' => [['label' => __('Prepend'), 'defVal' => '']]],
             'remove'         => ['label' => __('Remove'), 'params' => [['label' => __('Remove'), 'defVal' => '']]],
-            'remove_first'   => ['label' => __('Remove First'), 'params' => [['label' => __('Remove'), 'defVal' => '']]],
-            'replace'        => ['label' => __('Replace'), 'params' => [['label' => __('Search'), 'defVal' => ''], ['label' => __('Replace'), 'defVal' => '']]],
-            'replace_first'  => ['label' => __('Replace First'), 'params' => [['label' => __('Search'), 'defVal' => ''], ['label' => __('Replace'), 'defVal' => '']]],
+            'remove_first'   => [
+                'label'  => __('Remove First'),
+                'params' => [['label' => __('Remove'), 'defVal' => '']]
+            ],
+            'replace'        => [
+                'label'  => __('Replace'),
+                'params' => [
+                    ['label' => __('Search'), 'defVal' => ''],
+                    ['label' => __('Replace'), 'defVal' => '']
+                ]
+            ],
+            'replace_first'  => [
+                'label'  => __('Replace First'),
+                'params' => [
+                    ['label' => __('Search'), 'defVal' => ''],
+                    ['label' => __('Replace'), 'defVal' => '']
+                ]
+            ],
             'reverse'        => ['label' => __('Reverse Array'), 'params' => []],
             'round'          => ['label' => __('Round'), 'params' => [['label' => __('Count'), 'defVal' => '']]],
             'rstrip'         => ['label' => __('Right Trim'), 'params' => []],
             'size'           => ['label' => __('Array Size'), 'params' => []],
-            'slice'          => ['label' => __('Slice'), 'params' => [['label' => __('From'), 'defVal' => ''], ['label' => __('To'), 'defVal' => '']]],
+            'slice'          => [
+                'label'  => __('Slice'),
+                'params' => [
+                    ['label' => __('From'), 'defVal' => ''],
+                    ['label' => __('To'), 'defVal' => '']
+                ]
+            ],
             'sort'           => ['label' => __('Array Sort'), 'params' => []],
             'strip'          => ['label' => __('Trim Text'), 'params' => []],
             'strip_html'     => ['label' => __('Strip Html Tags'), 'params' => []],
             'strip_newlines' => ['label' => __('Strip New Line'), 'params' => []],
             'times'          => ['label' => __('Times'), 'params' => [['label' => __('Times'), 'defVal' => '']]],
-            'truncate'       => ['label' => __('Truncate'), 'params' => [['label' => __('Count'), 'Chars' => ''], ['label' => __('Append Last'), 'defVal' => '']]],
-            'truncatewords'  => ['label' => __('Truncate Words'), 'params' => [['label' => __('Words'), 'defVal' => ''], ['label' => __('Append Last'), 'defVal' => '']]],
+            'truncate'       => [
+                'label'  => __('Truncate'),
+                'params' => [
+                    ['label' => __('Count'), 'Chars' => ''],
+                    ['label' => __('Append Last'), 'defVal' => '']
+                ]
+            ],
+            'truncatewords'  => [
+                'label'  => __('Truncate Words'),
+                'params' => [
+                    ['label' => __('Words'), 'defVal' => ''],
+                    ['label' => __('Append Last'), 'defVal' => '']
+                ]
+            ],
             'ucwords'        => ['label' => __('Uppercase first character of each word '), 'params' => []],
             'uniq'           => ['label' => __('Unique Id Of Array'), 'params' => []],
             'upcase'         => ['label' => __('Upper Case'), 'params' => []],
@@ -166,6 +205,7 @@ class LiquidFilters
     /**
      * @param $subject
      * @param $default
+     *
      * @return mixed
      */
     public function ifEmpty($subject, $default)

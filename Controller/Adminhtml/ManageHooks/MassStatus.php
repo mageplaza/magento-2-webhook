@@ -50,6 +50,7 @@ class MassStatus extends Action
 
     /**
      * MassStatus constructor.
+     *
      * @param Context $context
      * @param Filter $filter
      * @param CollectionFactory $collectionFactory
@@ -58,10 +59,10 @@ class MassStatus extends Action
         Context $context,
         Filter $filter,
         CollectionFactory $collectionFactory
-    ){
+    ) {
         parent::__construct($context);
 
-        $this->filter            = $filter;
+        $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
     }
 
@@ -71,8 +72,8 @@ class MassStatus extends Action
      */
     public function execute()
     {
-        $collection  = $this->filter->getCollection($this->collectionFactory->create());
-        $status      = (int)$this->getRequest()->getParam('status');
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
+        $status = (int) $this->getRequest()->getParam('status');
         $hookUpdated = 0;
         foreach ($collection as $hook) {
             try {
@@ -83,7 +84,10 @@ class MassStatus extends Action
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->_getSession()->addException($e, __('Something went wrong while updating status for %1.', $hook->getName()));
+                $this->_getSession()->addException(
+                    $e,
+                    __('Something went wrong while updating status for %1.', $hook->getName())
+                );
             }
         }
 

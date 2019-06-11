@@ -52,8 +52,7 @@ class Actions extends Column
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
 
         $this->urlBuilder = $urlBuilder;
@@ -63,6 +62,7 @@ class Actions extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
+     *
      * @return array
      */
     public function prepareDataSource(array $dataSource)

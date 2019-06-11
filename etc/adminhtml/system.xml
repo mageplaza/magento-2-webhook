@@ -42,7 +42,6 @@
                     <label>Keep logs</label>
                     <comment>The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation. Default: 10</comment>
                 </field>
-                
                 <field id="alert_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1">
                     <label>Alert on Error</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

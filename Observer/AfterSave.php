@@ -59,6 +59,7 @@ abstract class AfterSave implements ObserverInterface
 
     /**
      * AfterSave constructor.
+     *
      * @param HookFactory $hookFactory
      * @param HistoryFactory $historyFactory
      * @param Data $helper
@@ -67,15 +68,15 @@ abstract class AfterSave implements ObserverInterface
         HookFactory $hookFactory,
         HistoryFactory $historyFactory,
         Data $helper
-    )
-    {
-        $this->hookFactory    = $hookFactory;
+    ) {
+        $this->hookFactory = $hookFactory;
         $this->historyFactory = $historyFactory;
-        $this->helper         = $helper;
+        $this->helper = $helper;
     }
 
     /**
      * @param \Magento\Framework\Event\Observer $observer
+     *
      * @throws \Exception
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -86,6 +87,7 @@ abstract class AfterSave implements ObserverInterface
 
     /**
      * @param $observer
+     *
      * @throws \Exception
      */
     protected function updateObserver($observer)
@@ -97,6 +99,7 @@ abstract class AfterSave implements ObserverInterface
     /**
      * @param $item
      * @param $hookType
+     *
      * @throws \Exception
      */
     protected function send($item, $hookType)
@@ -108,11 +111,11 @@ abstract class AfterSave implements ObserverInterface
             ->addFieldToFilter('hook_type', $hookType)
             ->addFieldToFilter('status', 1)
             ->setOrder('priority', 'ASC');
-        $isSendMail     = $this->helper->getConfigGeneral('alert_enabled');
-        $sendTo         = explode(',', $this->helper->getConfigGeneral('send_to'));
+        $isSendMail = $this->helper->getConfigGeneral('alert_enabled');
+        $sendTo = explode(',', $this->helper->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             $history = $this->historyFactory->create();
-            $data    = [
+            $data = [
                 'hook_id'     => $hook->getId(),
                 'hook_name'   => $hook->getName(),
                 'store_ids'   => $hook->getStoreIds(),
@@ -136,7 +139,8 @@ abstract class AfterSave implements ObserverInterface
             } else {
                 $history->setStatus(0)->setMessage($result['message']);
                 if ($isSendMail) {
-                    $this->helper->sendMail($sendTo,
+                    $this->helper->sendMail(
+                        $sendTo,
                         __('Something went wrong while sending %1 hook', $hook->getName()),
                         $this->helper->getConfigGeneral('email_template'),
                         $this->helper->getStoreId()

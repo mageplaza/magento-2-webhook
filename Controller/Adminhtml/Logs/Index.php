@@ -40,13 +40,14 @@ class Index extends Action
 
     /**
      * Index constructor.
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory
-    ){
+    ) {
         parent::__construct($context);
 
         $this->resultPageFactory = $resultPageFactory;

@@ -131,12 +131,13 @@ Delete,Delete
 Webhook,Webhook
 Logs,Logs
 Enable,Enable
+"<a href=""https://www.mageplaza.com/kb/webhook/"" target=""_blank"">How to integrate with others</a>","<a href=""https://www.mageplaza.com/kb/webhook/"" target=""_blank"">How to integrate with others</a>"
 "Abandoned Cart After","Abandoned Cart After"
-"Please specify value in hours. Recommend: 1, 6, 10, 12, 24","Please specify value in hours. Recommend: 1, 6, 10, 12, 24"
-"Alert on Error","Alert on Error"
-"To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>","To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>"
+"How to deteminte as Abandonded Cart. Enter number of hour(s). Recommend: 1, 6, 10, 12, 24. Default: 10","How to deteminte as Abandonded Cart. Enter number of hour(s). Recommend: 1, 6, 10, 12, 24. Default: 10"
 "Keep logs","Keep logs"
-"The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation.","The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation."
+"The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation. Default: 10","The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation. Default: 10"
+"Alert on Error","Alert on Error"
+"Send alert email to your email addresses if any error. To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>","Send alert email to your email addresses if any error. To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>"
 "Send To","Send To"
 "Separated by comma (,)","Separated by comma (,)"
 "Email Template","Email Template"
