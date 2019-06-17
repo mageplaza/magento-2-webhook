@@ -248,20 +248,6 @@ class Body extends Element implements RendererInterface
                     ->describeTable($this->subscriber->getMainTable());
                 ;
                 $attrCollection = $this->getAttrCollectionFromDb($collectionData);
-                $attrArray = [
-                    new DataObject(['name' => 'entity_id', 'title' => 'Customer Id']),
-                    new DataObject(['name' => 'email', 'title' => 'Email']),
-                    new DataObject(['name' => 'group_id', 'title' => 'Group Id']),
-                    new DataObject(['name' => 'store_id', 'title' => 'Store Id']),
-                    new DataObject(['name' => 'is_active', 'title' => 'Is Activate']),
-                    new DataObject(['name' => 'firstname', 'title' => 'Firstname']),
-                    new DataObject(['name' => 'middlename', 'title' => 'Middlename']),
-                    new DataObject(['name' => 'lastname', 'title' => 'Lastname']),
-                    new DataObject(['name' => 'suffix', 'title' => 'Suffix']),
-                    new DataObject(['name' => 'dob', 'title' => 'Date of Bith']),
-                    new DataObject(['name' => 'gender', 'title' => 'Gender'])
-                ];
-                $attrCollection = array_merge($attrCollection, $attrArray);
                 break;
             default:
                 $collectionData = $this->orderFactory->create()->getResource()->getConnection()
