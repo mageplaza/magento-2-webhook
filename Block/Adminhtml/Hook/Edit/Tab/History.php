@@ -27,6 +27,7 @@ use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Model\ResourceModel\History\CollectionFactory;
+use Mageplaza\Webhook\Model\Config\Source\Status;
 
 /**
  * Class History
@@ -44,6 +45,8 @@ class History extends Extended implements TabInterface
      */
     protected $coreRegistry;
 
+    protected $_status;
+
     /**
      * History constructor.
      *
@@ -51,6 +54,7 @@ class History extends Extended implements TabInterface
      * @param Registry $coreRegistry
      * @param Data $backendHelper
      * @param CollectionFactory $historyCollectionFactory
+     * @param Status $status
      * @param array $data
      */
     public function __construct(
@@ -58,10 +62,12 @@ class History extends Extended implements TabInterface
         Registry $coreRegistry,
         Data $backendHelper,
         CollectionFactory $historyCollectionFactory,
+        Status $status,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
 
+        $this->_status                  = $status;
         $this->coreRegistry             = $coreRegistry;
         $this->historyCollectionFactory = $historyCollectionFactory;
     }
@@ -74,7 +80,7 @@ class History extends Extended implements TabInterface
         parent::_construct();
 
         $this->setId('hook_history_grid');
-        $this->setDefaultSort('hook_id');
+        $this->setDefaultSort('id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(false);
         $this->setUseAjax(true);
@@ -85,13 +91,10 @@ class History extends Extended implements TabInterface
      */
     protected function _prepareCollection()
     {
-        $hook    = $this->getHook();
+        $hook       = $this->getHook();
         $collection = $this->historyCollectionFactory->create();
         $collection = $collection->addFieldToFilter('hook_id', $hook->getId());
         $this->setCollection($collection);
-//        echo "<pre>";
-//        var_dump($collection->getSize());die('1231');
-//        echo "</pre>";
 
         return parent::_prepareCollection();
     }
@@ -110,51 +113,31 @@ class History extends Extended implements TabInterface
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
-        $this->addColumn('hook_id', [
-            'header' => __('Hook ID'),
-            'name'   => 'hook_id',
-            'index'  => 'hook_id',
-            'type'             => 'number',
-            'header_css_class' => 'col-id',
-            'column_css_class' => 'col-id'
-        ]);
         $this->addColumn('hook_name', [
             'header' => __('Hook Name'),
             'name'   => 'hook_name',
             'index'  => 'hook_name'
         ]);
         $this->addColumn('status', [
-            'header' => __('Status'),
-            'name'   => 'status',
-            'index'  => 'status'
+            'header'           => __('Status'),
+            'name'             => 'status',
+            'index'            => 'status',
+            'type'             => 'options',
+            'sortable'         => false,
+            'options'          => $this->_status->toArray(),
+            'header_css_class' => 'col-status',
+            'column_css_class' => 'col-status'
         ]);
-//        $this->addColumn('generate_status', [
-//            'header' => __('Generation status'),
-//            'name'   => 'generate_status',
-//            'index'  => 'generate_status',
-//        ]);
-//        $this->addColumn('delivery_status', [
-//            'header' => __('Delivery'),
-//            'name'   => 'delivery_status',
-//            'index'  => 'delivery_status',
-//        ]);
-//        $this->addColumn('file', [
-//            'header'   => __('Download'),
-//            'name'     => 'file',
-//            'index'    => 'file',
-//            'renderer' => \Mageplaza\OrderExport\Block\Widget\Grid\Column\Renderer\Download::class,
-//        ]);
-//        $this->addColumn('message', [
-//            'header' => __('Message'),
-//            'name'   => 'message',
-//            'index'  => 'message',
-//        ]);
-//        $this->addColumn('created_at', [
-//            'header'           => __('Generation time'),
-//            'index'            => 'created_at',
-//            'header_css_class' => 'col-name',
-//            'column_css_class' => 'col-name'
-//        ]);
+        $this->addColumn('hook_type', [
+            'header' => __('Entity'),
+            'name'   => 'hook_type',
+            'index'  => 'hook_type'
+        ]);
+        $this->addColumn('message', [
+            'header' => __('Message'),
+            'name'   => 'message',
+            'index'  => 'message'
+        ]);
 
         return $this;
     }
@@ -166,7 +149,7 @@ class History extends Extended implements TabInterface
      */
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/log', ['id' => $this->getHook()->getId()]);
+        return $this->getUrl('*/*/log', ['hook_id' => $this->getHook()->getId()]);
     }
 
     /**
