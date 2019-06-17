@@ -45,6 +45,9 @@ class History extends Extended implements TabInterface
      */
     protected $coreRegistry;
 
+    /**
+     * @var Status
+     */
     protected $_status;
 
     /**
