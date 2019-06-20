@@ -56,6 +56,24 @@
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
             </group>
+            <group id="cron" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Schedule For Cron</label>
+                <field id="schedule" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Schedule For Cron</label>
+                    <source_model>Mageplaza\Milestone\Model\Config\Source\Schedule</source_model>
+                    <comment>
+                        <![CDATA[
+                        Applied for Processing Type as Cron
+                        ]]>
+                    </comment>
+                </field>
+                <field id="start_time" translate="label" type="time" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Start Time</label>
+                    <depends>
+                        <field id="schedule" separator=",">day,week,month</field>
+                    </depends>
+                </field>
+            </group>
         </section>
     </system>
 </config>

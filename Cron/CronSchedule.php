@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Mageplaza
  *
@@ -15,16 +14,31 @@
  * version in the future.
  *
  * @category    Mageplaza
- * @package     Mageplaza_Webhook
+ * @package     Mageplaza_Milestone
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Mageplaza_Webhook" setup_version="1.0.1">
-        <sequence>
-            <module name="Mageplaza_Core"/>
-            <module name="Magento_Backend"/>
-        </sequence>
-    </module>
-</config>
+
+namespace Mageplaza\Webhook\Cron;
+
+
+
+/**
+ * Class ApplyRule
+ * @package Mageplaza\Milestone\Cron
+ */
+class CronSchedule
+{
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function execute()
+    {
+
+    }
+}

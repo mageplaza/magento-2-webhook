@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+<?php
 /**
  * Mageplaza
  *
@@ -19,12 +18,24 @@
  * @copyright   Copyright (c) Mageplaza (https://www.mageplaza.com/)
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Mageplaza_Webhook" setup_version="1.0.1">
-        <sequence>
-            <module name="Mageplaza_Core"/>
-            <module name="Magento_Backend"/>
-        </sequence>
-    </module>
-</config>
+
+namespace Mageplaza\Webhook\Model\ResourceModel;
+
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+/**
+ * Class Hook
+ * @package Mageplaza\Webhook\Model\ResourceModel
+ */
+class CronSchedule extends AbstractDb
+{
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('mageplaza_webhook_cron_schedule', 'id');
+    }
+}

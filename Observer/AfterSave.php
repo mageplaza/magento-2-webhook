@@ -22,9 +22,12 @@
 namespace Mageplaza\Webhook\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Setup\Exception;
 use Mageplaza\Webhook\Helper\Data;
+use Mageplaza\Webhook\Model\Config\Source\Schedule;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
+use Mageplaza\Webhook\Model\CronScheduleFactory;
 
 /**
  * Class AfterSave
@@ -41,6 +44,8 @@ abstract class AfterSave implements ObserverInterface
      * @var HistoryFactory
      */
     protected $historyFactory;
+
+    protected $scheduleFactory;
 
     /**
      * @var Data
@@ -62,16 +67,19 @@ abstract class AfterSave implements ObserverInterface
      *
      * @param HookFactory $hookFactory
      * @param HistoryFactory $historyFactory
+     * @param CronScheduleFactory $cronScheduleFactory
      * @param Data $helper
      */
     public function __construct(
         HookFactory $hookFactory,
         HistoryFactory $historyFactory,
+        CronScheduleFactory $cronScheduleFactory,
         Data $helper
     ) {
-        $this->hookFactory = $hookFactory;
-        $this->historyFactory = $historyFactory;
-        $this->helper = $helper;
+        $this->hookFactory     = $hookFactory;
+        $this->historyFactory  = $historyFactory;
+        $this->helper          = $helper;
+        $this->scheduleFactory = $cronScheduleFactory;
     }
 
     /**
@@ -82,7 +90,18 @@ abstract class AfterSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getDataObject();
-        $this->send($item, $this->hookType);
+        if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
+            $schedule= $this->scheduleFactory->create();
+            $data = [
+                'hook_type' => $this->hookType,
+                'event_id' => $item->getId(),
+                'status' => '0'
+            ];
+            $schedule->addData($data);
+            $schedule->save();
+        } else {
+            $this->send($item, $this->hookType);
+        }
     }
 
     /**
@@ -93,7 +112,18 @@ abstract class AfterSave implements ObserverInterface
     protected function updateObserver($observer)
     {
         $item = $observer->getDataObject();
-        $this->send($item, $this->hookTypeUpdate);
+        if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
+            $schedule= $this->scheduleFactory->create();
+            $data = [
+                'hook_type' => $this->hookTypeUpdate,
+                'event_id' => $item->getId(),
+                'status' => '0'
+            ];
+            $schedule->addData($data);
+            $schedule->save();
+        } else {
+            $this->send($item, $this->hookTypeUpdate);
+        }
     }
 
     /**
@@ -111,11 +141,11 @@ abstract class AfterSave implements ObserverInterface
             ->addFieldToFilter('hook_type', $hookType)
             ->addFieldToFilter('status', 1)
             ->setOrder('priority', 'ASC');
-        $isSendMail = $this->helper->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',', $this->helper->getConfigGeneral('send_to'));
+        $isSendMail     = $this->helper->getConfigGeneral('alert_enabled');
+        $sendTo         = explode(',', $this->helper->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             $history = $this->historyFactory->create();
-            $data = [
+            $data    = [
                 'hook_id'     => $hook->getId(),
                 'hook_name'   => $hook->getName(),
                 'store_ids'   => $hook->getStoreIds(),
