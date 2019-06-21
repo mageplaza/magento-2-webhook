@@ -90,10 +90,6 @@ abstract class AfterSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getDataObject();
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info(get_class($item));
         if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
             $schedule= $this->scheduleFactory->create();
             $data = [
@@ -116,10 +112,6 @@ abstract class AfterSave implements ObserverInterface
     protected function updateObserver($observer)
     {
         $item = $observer->getDataObject();
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info(get_class($item));
         if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
             $schedule= $this->scheduleFactory->create();
             $data = [
