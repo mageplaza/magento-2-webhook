@@ -83,12 +83,14 @@ class Config
     }
 
     /**
-     * @param array $result
+     * @param $result
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function addApplyWebhookCron(&$result)
     {
-        $schedule   = $this->helper->getRuleSchedule();
-        $startTime  = $this->helper->getRuleStartTime();
+        $schedule   = $this->helper->getCronSchedule();
+        $startTime  = $this->helper->getCronSchedule('start_time');
         $collection = $this->collectionFactory->create()
             ->addFieldToFilter('status', '0');
 

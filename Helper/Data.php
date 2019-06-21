@@ -30,6 +30,7 @@ use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
+use Mageplaza\Webhook\Model\Config\Source\Schedule;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
 use Mageplaza\Webhook\Model\HistoryFactory;
@@ -400,5 +401,49 @@ class Data extends CoreHelper
     public function getStoreId()
     {
         return $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * @param string $schedule
+     * @param array $startTime
+     *
+     * @return string
+     */
+    public function getCronExpr($schedule, $startTime)
+    {
+        $cronExprArray = [
+            (int) $startTime[1], // Minute
+            (int) $startTime[0], // Hour
+            $schedule === Schedule::CRON_MONTHLY ? 1 : '*', // Day of the Month
+            '*', // Month of the Year
+            $schedule === Schedule::CRON_WEEKLY ? 0 : '*', // Day of the Week
+        ];
+
+        if ($schedule === Schedule::CRON_MINUTE) {
+            return '* * * * *';
+        }
+
+        return implode(' ', $cronExprArray);
+    }
+
+    /**
+     * @param null $field
+     *
+     * @return mixed
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getCronSchedule($field = null)
+    {
+        $storeId = $this->getStoreId();
+        if ($field) {
+            return $this->getModuleConfig('cron/schedule', $storeId);
+        }
+
+        return $this->getModuleConfig('cron/' . $field, $storeId);
+    }
+
+    public function getObjectClass($classPath)
+    {
+        return $this->objectManager->create($classPath);
     }
 }
