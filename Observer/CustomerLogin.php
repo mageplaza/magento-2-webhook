@@ -42,6 +42,6 @@ class CustomerLogin extends AfterSave
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getCustomer();
-        $this->send($item, $this->hookType);
+        $this->helper->send($item, $this->hookType);
     }
 }

@@ -117,6 +117,55 @@ class Data extends CoreHelper
         $this->customer         = $customer;
     }
 
+    public function send($item, $hookType){
+        if (!$this->isEnabled()) {
+            return;
+        }
+        $hookCollection = $this->hookFactory->create()->getCollection()
+            ->addFieldToFilter('hook_type', $hookType)
+            ->addFieldToFilter('status', 1)
+            ->setOrder('priority', 'ASC');
+        $isSendMail     = $this->getConfigGeneral('alert_enabled');
+        $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
+        foreach ($hookCollection as $hook) {
+            $history = $this->historyFactory->create();
+            $data    = [
+                'hook_id'     => $hook->getId(),
+                'hook_name'   => $hook->getName(),
+                'store_ids'   => $hook->getStoreIds(),
+                'hook_type'   => $hook->getHookType(),
+                'priority'    => $hook->getPriority(),
+                'payload_url' => $this->generateLiquidTemplate($item, $hook->getPayloadUrl()),
+                'body'        => $this->generateLiquidTemplate($item, $hook->getBody())
+            ];
+            $history->addData($data);
+            try {
+                $result = $this->sendHttpRequestFromHook($hook, $item);
+                $history->setResponse(isset($result['response']) ? $result['response'] : '');
+            } catch (\Exception $e) {
+                $result = [
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ];
+            }
+            if ($result['success'] == true) {
+                $history->setStatus(1);
+            } else {
+                $history->setStatus(0)->setMessage($result['message']);
+                if ($isSendMail) {
+                    $this->sendMail(
+                        $sendTo,
+                        __('Something went wrong while sending %1 hook', $hook->getName()),
+                        $this->getConfigGeneral('email_template'),
+                        $this->getStoreId()
+                    );
+                }
+            }
+
+            $history->save();
+        }
+    }
+
     /**
      * @param $hook
      * @param bool $item

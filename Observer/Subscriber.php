@@ -42,6 +42,6 @@ class Subscriber extends AfterSave
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getEvent()->getSubscriber();
-        $this->send($item, $this->hookType);
+        $this->helper->send($item, $this->hookType);
     }
 }

@@ -60,7 +60,7 @@
                 <label>Schedule For Cron</label>
                 <field id="schedule" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Schedule For Cron</label>
-                    <source_model>Mageplaza\Milestone\Model\Config\Source\Schedule</source_model>
+                    <source_model>Mageplaza\Webhook\Model\Config\Source\Schedule</source_model>
                     <comment>
                         <![CDATA[
                         Applied for Processing Type as Cron

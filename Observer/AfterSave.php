@@ -21,13 +21,13 @@
 
 namespace Mageplaza\Webhook\Observer;
 
+use Exception;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Setup\Exception;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\Schedule;
-use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\CronScheduleFactory;
+use Magento\Framework\Message\ManagerInterface;
 
 /**
  * Class AfterSave
@@ -41,10 +41,8 @@ abstract class AfterSave implements ObserverInterface
     protected $hookFactory;
 
     /**
-     * @var HistoryFactory
+     * @var CronScheduleFactory
      */
-    protected $historyFactory;
-
     protected $scheduleFactory;
 
     /**
@@ -63,23 +61,28 @@ abstract class AfterSave implements ObserverInterface
     protected $hookTypeUpdate = '';
 
     /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * AfterSave constructor.
      *
      * @param HookFactory $hookFactory
-     * @param HistoryFactory $historyFactory
      * @param CronScheduleFactory $cronScheduleFactory
+     * @param LoggerInterface $logger
      * @param Data $helper
      */
     public function __construct(
         HookFactory $hookFactory,
-        HistoryFactory $historyFactory,
         CronScheduleFactory $cronScheduleFactory,
+        ManagerInterface $messageManager,
         Data $helper
     ) {
         $this->hookFactory     = $hookFactory;
-        $this->historyFactory  = $historyFactory;
         $this->helper          = $helper;
         $this->scheduleFactory = $cronScheduleFactory;
+        $this->messageManager  = $messageManager;
     }
 
     /**
@@ -91,16 +94,27 @@ abstract class AfterSave implements ObserverInterface
     {
         $item = $observer->getDataObject();
         if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
-            $schedule= $this->scheduleFactory->create();
-            $data = [
-                'hook_type' => $this->hookType,
-                'event_id' => $item->getId(),
-                'status' => '0'
-            ];
-            $schedule->addData($data);
-            $schedule->save();
+            $hookCollection = $this->hookFactory->create()->getCollection()
+                ->addFieldToFilter('hook_type', $this->hookType)
+                ->addFieldToFilter('status', 1)
+                ->setOrder('priority', 'ASC');
+            if ($hookCollection->getSize() > 0) {
+                $schedule = $this->scheduleFactory->create();
+                $data     = [
+                    'hook_type' => $this->hookType,
+                    'event_id'  => $item->getId(),
+                    'status'    => '0'
+                ];
+
+                try {
+                    $schedule->addData($data);
+                    $schedule->save();
+                } catch (Exception $exception) {
+                    $this->messageManager->addError($exception->getMessage());
+                }
+            }
         } else {
-            $this->send($item, $this->hookType);
+            $this->helper->send($item, $this->hookType);
         }
     }
 
@@ -113,72 +127,26 @@ abstract class AfterSave implements ObserverInterface
     {
         $item = $observer->getDataObject();
         if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
-            $schedule= $this->scheduleFactory->create();
-            $data = [
-                'hook_type' => $this->hookTypeUpdate,
-                'event_id' => $item->getId(),
-                'status' => '0'
-            ];
-            $schedule->addData($data);
-            $schedule->save();
-        } else {
-            $this->send($item, $this->hookTypeUpdate);
-        }
-    }
-
-    /**
-     * @param $item
-     * @param $hookType
-     *
-     * @throws \Exception
-     */
-    protected function send($item, $hookType)
-    {
-        if (!$this->helper->isEnabled()) {
-            return;
-        }
-        $hookCollection = $this->hookFactory->create()->getCollection()
-            ->addFieldToFilter('hook_type', $hookType)
-            ->addFieldToFilter('status', 1)
-            ->setOrder('priority', 'ASC');
-        $isSendMail     = $this->helper->getConfigGeneral('alert_enabled');
-        $sendTo         = explode(',', $this->helper->getConfigGeneral('send_to'));
-        foreach ($hookCollection as $hook) {
-            $history = $this->historyFactory->create();
-            $data    = [
-                'hook_id'     => $hook->getId(),
-                'hook_name'   => $hook->getName(),
-                'store_ids'   => $hook->getStoreIds(),
-                'hook_type'   => $hook->getHookType(),
-                'priority'    => $hook->getPriority(),
-                'payload_url' => $this->helper->generateLiquidTemplate($item, $hook->getPayloadUrl()),
-                'body'        => $this->helper->generateLiquidTemplate($item, $hook->getBody())
-            ];
-            $history->addData($data);
-            try {
-                $result = $this->helper->sendHttpRequestFromHook($hook, $item);
-                $history->setResponse(isset($result['response']) ? $result['response'] : '');
-            } catch (\Exception $e) {
-                $result = [
-                    'success' => false,
-                    'message' => $e->getMessage()
+            $hookCollection = $this->hookFactory->create()->getCollection()
+                ->addFieldToFilter('hook_type', $this->hookType)
+                ->addFieldToFilter('status', 1)
+                ->setOrder('priority', 'ASC');
+            if ($hookCollection->getSize() > 0) {
+                $schedule = $this->scheduleFactory->create();
+                $data     = [
+                    'hook_type' => $this->hookTypeUpdate,
+                    'event_id'  => $item->getId(),
+                    'status'    => '0'
                 ];
-            }
-            if ($result['success'] == true) {
-                $history->setStatus(1);
-            } else {
-                $history->setStatus(0)->setMessage($result['message']);
-                if ($isSendMail) {
-                    $this->helper->sendMail(
-                        $sendTo,
-                        __('Something went wrong while sending %1 hook', $hook->getName()),
-                        $this->helper->getConfigGeneral('email_template'),
-                        $this->helper->getStoreId()
-                    );
+                try {
+                    $schedule->addData($data);
+                    $schedule->save();
+                } catch (Exception $exception) {
+                    $this->messageManager->addError($exception->getMessage());
                 }
             }
-
-            $history->save();
+        } else {
+            $this->helper->send($item, $this->hookTypeUpdate);
         }
     }
 }

@@ -28,7 +28,11 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Sales\Model\Order\InvoiceFactory;
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Newsletter\Model\SubscriberFactory;
 use Mageplaza\Webhook\Helper\Data;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ApplyRule
@@ -51,13 +55,45 @@ class CronSchedule
      */
     protected $orderFactory;
 
+    /**
+     * @var HistoryFactory
+     */
     protected $orderHistory;
 
+    /**
+     * @var InvoiceFactory
+     */
     protected $invoice;
 
+    /**
+     * @var CustomerFactory
+     */
     protected $customer;
 
+    /**
+     * @var ProductFactory
+     */
+    protected $product;
+
+    /**
+     * @var CategoryFactory
+     */
+    protected $category;
+
+    /**
+     * @var Data
+     */
     protected $helper;
+
+    /**
+     * @var SubscriberFactory
+     */
+    protected $subscribe;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
 
     /**
      * CronSchedule constructor.
@@ -67,8 +103,12 @@ class CronSchedule
      * @param OrderFactory $orderFactory
      * @param HistoryFactory $historyFactory
      * @param InvoiceFactory $invoiceFactory
-     * @param CreditmemoFactory $creditmemoFactory
      * @param CustomerFactory $customerFactory
+     * @param ProductFactory $productFactory
+     * @param CategoryFactory $categoryFactory
+     * @param SubscriberFactory $subscriberFactory
+     * @param LoggerInterface $logger
+     * @param Data $data
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -77,6 +117,10 @@ class CronSchedule
         HistoryFactory $historyFactory,
         InvoiceFactory $invoiceFactory,
         CustomerFactory $customerFactory,
+        ProductFactory $productFactory,
+        CategoryFactory $categoryFactory,
+        SubscriberFactory $subscriberFactory,
+        LoggerInterface $logger,
         Data $data
     ) {
         $this->collectionFactory = $collectionFactory;
@@ -85,6 +129,10 @@ class CronSchedule
         $this->orderHistory      = $historyFactory;
         $this->invoice           = $invoiceFactory;
         $this->customer          = $customerFactory;
+        $this->product           = $productFactory;
+        $this->category          = $categoryFactory;
+        $this->subscribe         = $subscriberFactory;
+        $this->logger            = $logger;
         $this->helper            = $data;
     }
 
@@ -112,11 +160,11 @@ class CronSchedule
                     break;
                 case HookType::NEW_SHIPMENT:
                     $shipment = $this->helper->getObjectClass('\Magento\Sales\Model\Order\Shipment');
-                    $item = $shipment->load($eventID);
+                    $item     = $shipment->load($eventID);
                     break;
                 case HookType::NEW_CREDITMEMO:
                     $creditmemo = $this->helper->getObjectClass('\Magento\Sales\Model\Order\Creditmemo');
-                    $item = $creditmemo->load($eventID);
+                    $item       = $creditmemo->load($eventID);
                     break;
                 case HookType::NEW_CUSTOMER:
                 case HookType::UPDATE_CUSTOMER:
@@ -124,13 +172,25 @@ class CronSchedule
                 case HookType::CUSTOMER_LOGIN:
                     $item = $this->customer->create()->load($eventID);
                     break;
+                case HookType::NEW_PRODUCT:
+                case HookType::UPDATE_PRODUCT:
+                case HookType::DELETE_PRODUCT:
+                    $item = $this->product->create()->load($eventID);
+                    break;
+                case HookType::NEW_CATEGORY:
+                case HookType::UPDATE_CATEGORY:
+                case HookType::DELETE_CATEGORY:
+                    $item = $this->category->create()->load($eventID);
+                    break;
+                case HookType::SUBSCRIBER:
+                    $item = $this->subscribe->create()->load($eventID);
             }
-
-            /** @var  $hookCollection */
-            $hookCollection = $this->hookFactory->create()->getCollection()
-                ->addFieldToFilter('hook_type', $hookType)
-                ->addFieldToFilter('status', 1)
-                ->setOrder('priority', 'ASC');
+            $this->helper->send($item, $hookType);
+            try {
+                $cronTab->setStatus('1')->save();
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception->getLogMessage());
+            }
         }
     }
 }
