@@ -93,7 +93,7 @@ abstract class AfterSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getDataObject();
-        if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
+        if ($this->helper->getCronSchedule() === Schedule::DISABLE) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
@@ -126,7 +126,7 @@ abstract class AfterSave implements ObserverInterface
     protected function updateObserver($observer)
     {
         $item = $observer->getDataObject();
-        if ($this->helper->getModuleConfig('cron/schedule') !== Schedule::DISABLE) {
+        if ($this->helper->getCronSchedule() === Schedule::DISABLE) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
