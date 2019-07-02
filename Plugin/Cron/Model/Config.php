@@ -73,7 +73,7 @@ class Config
      */
     public function afterGetJobs(\Magento\Cron\Model\Config $config, $result)
     {
-        if (!$this->helper->isEnabled() || $this->helper->getCronSchedule() !== Schedule::DISABLE) {
+        if (!$this->helper->isEnabled() || $this->helper->getCronSchedule() === Schedule::DISABLE) {
             return $result;
         }
 
