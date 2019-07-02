@@ -484,7 +484,7 @@ class Data extends CoreHelper
     public function getCronSchedule($field = null)
     {
         $storeId = $this->getStoreId();
-        if ($field) {
+        if ($field === null) {
             return $this->getModuleConfig('cron/schedule', $storeId);
         }
 
