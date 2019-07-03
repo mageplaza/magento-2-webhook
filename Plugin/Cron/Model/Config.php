@@ -78,7 +78,6 @@ class Config
         }
 
         $this->addApplyWebhookCron($result);
-
         return $result;
     }
 
@@ -98,7 +97,7 @@ class Config
             return;
         }
 
-        $result['default']['mpwebhook_cron_schedule'] = [
+        $result['index']['mpwebhook_cron_schedule'] = [
             'name'     => 'mpwebhook_cron_schedule',
             'instance' => CronSchedule::class,
             'method'   => 'execute',
