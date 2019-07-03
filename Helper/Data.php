@@ -117,7 +117,8 @@ class Data extends CoreHelper
         $this->customer         = $customer;
     }
 
-    public function send($item, $hookType){
+    public function send($item, $hookType)
+    {
         if (!$this->isEnabled()) {
             return;
         }
@@ -454,20 +455,20 @@ class Data extends CoreHelper
 
     /**
      * @param string $schedule
-     * @param array $startTime
+     * @param string $startTime
      *
      * @return string
      */
     public function getCronExpr($schedule, $startTime)
     {
+        $ArTime     = explode(',', $startTime);
         $cronExprArray = [
-            (int) $startTime[1], // Minute
-            (int) $startTime[0], // Hour
+            (int) $ArTime[1], // Minute
+            (int) $ArTime[0], // Hour
             $schedule === Schedule::CRON_MONTHLY ? 1 : '*', // Day of the Month
             '*', // Month of the Year
             $schedule === Schedule::CRON_WEEKLY ? 0 : '*', // Day of the Week
         ];
-
         if ($schedule === Schedule::CRON_MINUTE) {
             return '* * * * *';
         }
