@@ -21,7 +21,9 @@
 
 namespace Mageplaza\Webhook\Observer;
 
+use Exception;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
+use Mageplaza\Webhook\Model\Config\Source\Schedule;
 
 /**
  * Class CustomerLogin
@@ -42,6 +44,28 @@ class Subscriber extends AfterSave
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getEvent()->getSubscriber();
-        $this->helper->send($item, $this->hookType);
+        if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
+            $hookCollection = $this->hookFactory->create()->getCollection()
+                ->addFieldToFilter('hook_type', $this->hookType)
+                ->addFieldToFilter('status', 1)
+                ->setOrder('priority', 'ASC');
+            if ($hookCollection->getSize() > 0) {
+                $schedule = $this->scheduleFactory->create();
+                $data     = [
+                    'hook_type' => $this->hookType,
+                    'event_id'  => $item->getId(),
+                    'status'    => '0'
+                ];
+
+                try {
+                    $schedule->addData($data);
+                    $schedule->save();
+                } catch (Exception $exception) {
+                    $this->messageManager->addError($exception->getMessage());
+                }
+            }
+        } else {
+            $this->helper->send($item, $this->hookType);
+        }
     }
 }
