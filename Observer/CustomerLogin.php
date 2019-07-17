@@ -22,6 +22,7 @@
 namespace Mageplaza\Webhook\Observer;
 
 use Exception;
+use Magento\Store\Model\Store;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\Config\Source\Schedule;
 
@@ -48,6 +49,10 @@ class CustomerLogin extends AfterSave
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
+                ->addFieldToFilter('store_ids', [
+                    ['finset' => Store::DEFAULT_STORE_ID],
+                    ['finset' => $this->storeManager->getStore()->getId()]
+                ])
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();

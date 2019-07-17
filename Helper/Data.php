@@ -28,6 +28,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 use Mageplaza\Webhook\Model\Config\Source\Schedule;
@@ -125,6 +126,10 @@ class Data extends CoreHelper
         $hookCollection = $this->hookFactory->create()->getCollection()
             ->addFieldToFilter('hook_type', $hookType)
             ->addFieldToFilter('status', 1)
+            ->addFieldToFilter('store_ids', [
+                ['finset' => Store::DEFAULT_STORE_ID],
+                ['finset' => $this->storeManager->getStore()->getId()]
+            ])
             ->setOrder('priority', 'ASC');
         $isSendMail     = $this->getConfigGeneral('alert_enabled');
         $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
@@ -492,6 +497,11 @@ class Data extends CoreHelper
         return $this->getModuleConfig('cron/' . $field, $storeId);
     }
 
+    /**
+     * @param $classPath
+     *
+     * @return mixed
+     */
     public function getObjectClass($classPath)
     {
         return $this->objectManager->create($classPath);

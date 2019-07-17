@@ -28,6 +28,8 @@ use Mageplaza\Webhook\Model\Config\Source\Schedule;
 use Mageplaza\Webhook\Model\HookFactory;
 use Mageplaza\Webhook\Model\CronScheduleFactory;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class AfterSave
@@ -66,23 +68,31 @@ abstract class AfterSave implements ObserverInterface
     protected $messageManager;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * AfterSave constructor.
      *
      * @param HookFactory $hookFactory
      * @param CronScheduleFactory $cronScheduleFactory
-     * @param LoggerInterface $logger
+     * @param ManagerInterface $messageManager
+     * @param StoreManagerInterface $storeManager
      * @param Data $helper
      */
     public function __construct(
         HookFactory $hookFactory,
         CronScheduleFactory $cronScheduleFactory,
         ManagerInterface $messageManager,
+        StoreManagerInterface $storeManager,
         Data $helper
     ) {
         $this->hookFactory     = $hookFactory;
         $this->helper          = $helper;
         $this->scheduleFactory = $cronScheduleFactory;
         $this->messageManager  = $messageManager;
+        $this->storeManager    = $storeManager;
     }
 
     /**
@@ -93,10 +103,14 @@ abstract class AfterSave implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $item = $observer->getDataObject();
-        if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
+        if ($this->helper->getCronSchedule() !== Schedule::DISABLE && $this->helper->getCronSchedule() !== null) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
+                ->addFieldToFilter('store_ids', [
+                    ['finset' => Store::DEFAULT_STORE_ID],
+                    ['finset' => $this->storeManager->getStore()->getId()]
+                ])
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
@@ -130,6 +144,10 @@ abstract class AfterSave implements ObserverInterface
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
+                ->addFieldToFilter('store_ids', [
+                    ['finset' => Store::DEFAULT_STORE_ID],
+                    ['finset' => $this->storeManager->getStore()->getId()]
+                ])
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
