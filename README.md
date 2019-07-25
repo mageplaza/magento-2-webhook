@@ -239,8 +239,13 @@ You need to run the following command to install the library:
 composer require liquid/liquid
 ```
 
+## License
 
-**People also search:**
+From June 23th 2019, this extension is licensed under the [MIT License](https://github.com/mageplaza/magento-2-webhook/blob/master/LICENSE)
+
+-----
+
+## People also search:
 - magento webhooks
 - magento 2 webhooks
 - magento webhook
@@ -251,7 +256,7 @@ composer require liquid/liquid
 
 
 
-**Other free extension on Github**
+## Other free extension on Github
 - [Magento 2 SEO](https://github.com/mageplaza/magento-2-seo)
 - [Google Maps](https://github.com/mageplaza/magento-2-google-maps)
 - [Magento 2 Delete Orders](https://github.com/mageplaza/magento-2-delete-orders)
