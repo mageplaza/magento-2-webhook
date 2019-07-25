@@ -21,19 +21,28 @@
 
 namespace Mageplaza\Webhook\Helper;
 
+use Exception;
 use Liquid\Template;
 use Magento\Backend\Model\UrlInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
+use Mageplaza\Webhook\Model\Config\Source\Schedule;
+use Mageplaza\Webhook\Model\Config\Source\Status;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
+use Mageplaza\Webhook\Model\ResourceModel\Hook\Collection;
+use Zend_Http_Response;
 
 /**
  * Class Data
@@ -74,7 +83,13 @@ class Data extends CoreHelper
     protected $backendUrl;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customer;
+
+    /**
      * Data constructor.
+     *
      * @param Context $context
      * @param ObjectManagerInterface $objectManager
      * @param StoreManagerInterface $storeManager
@@ -84,6 +99,7 @@ class Data extends CoreHelper
      * @param LiquidFilters $liquidFilters
      * @param HookFactory $hookFactory
      * @param HistoryFactory $historyFactory
+     * @param CustomerRepositoryInterface $customer
      */
     public function __construct(
         Context $context,
@@ -94,35 +110,100 @@ class Data extends CoreHelper
         CurlFactory $curlFactory,
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
-        HistoryFactory $historyFactory
-    )
-    {
-        parent::__construct($context, $objectManager, $storeManager);
-
-        $this->liquidFilters    = $liquidFilters;
-        $this->curlFactory      = $curlFactory;
-        $this->hookFactory      = $hookFactory;
-        $this->historyFactory   = $historyFactory;
+        HistoryFactory $historyFactory,
+        CustomerRepositoryInterface $customer
+    ) {
+        $this->liquidFilters = $liquidFilters;
+        $this->curlFactory = $curlFactory;
+        $this->hookFactory = $hookFactory;
+        $this->historyFactory = $historyFactory;
         $this->transportBuilder = $transportBuilder;
-        $this->backendUrl       = $backendUrl;
+        $this->backendUrl = $backendUrl;
+        $this->customer = $customer;
+
+        parent::__construct($context, $objectManager, $storeManager);
+    }
+
+    /**
+     * @param $item
+     * @param $hookType
+     *
+     * @throws NoSuchEntityException
+     */
+    public function send($item, $hookType)
+    {
+        if (!$this->isEnabled()) {
+            return;
+        }
+
+        /** @var Collection $hookCollection */
+        $hookCollection = $this->hookFactory->create()->getCollection()
+            ->addFieldToFilter('hook_type', $hookType)
+            ->addFieldToFilter('status', 1)
+            ->addFieldToFilter('store_ids', [
+                ['finset' => Store::DEFAULT_STORE_ID],
+                ['finset' => $this->storeManager->getStore()->getId()]
+            ])
+            ->setOrder('priority', 'ASC');
+        $isSendMail = $this->getConfigGeneral('alert_enabled');
+        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
+        foreach ($hookCollection as $hook) {
+            $history = $this->historyFactory->create();
+            $data = [
+                'hook_id'     => $hook->getId(),
+                'hook_name'   => $hook->getName(),
+                'store_ids'   => $hook->getStoreIds(),
+                'hook_type'   => $hook->getHookType(),
+                'priority'    => $hook->getPriority(),
+                'payload_url' => $this->generateLiquidTemplate($item, $hook->getPayloadUrl()),
+                'body'        => $this->generateLiquidTemplate($item, $hook->getBody())
+            ];
+            $history->addData($data);
+            try {
+                $result = $this->sendHttpRequestFromHook($hook, $item);
+                $history->setResponse(isset($result['response']) ? $result['response'] : '');
+            } catch (Exception $e) {
+                $result = [
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ];
+            }
+            if ($result['success'] === true) {
+                $history->setStatus(Status::SUCCESS);
+            } else {
+                $history->setStatus(Status::ERROR)
+                    ->setMessage($result['message']);
+                if ($isSendMail) {
+                    $this->sendMail(
+                        $sendTo,
+                        __('Something went wrong while sending %1 hook', $hook->getName()),
+                        $this->getConfigGeneral('email_template'),
+                        $this->getStoreId()
+                    );
+                }
+            }
+
+            $history->save();
+        }
     }
 
     /**
      * @param $hook
      * @param bool $item
      * @param bool $log
+     *
      * @return array
      */
     public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
-        $url            = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
+        $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
         $authentication = $hook->getAuthentication();
-        $method         = $hook->getMethod();
-        $username       = $hook->getUsername();
-        $password       = $hook->getPassword();
+        $method = $hook->getMethod();
+        $username = $hook->getUsername();
+        $password = $hook->getPassword();
         if ($authentication === Authentication::BASIC) {
             $authentication = $this->getBasicAuthHeader($username, $password);
-        } else if ($authentication === Authentication::DIGEST) {
+        } elseif ($authentication === Authentication::DIGEST) {
             $authentication = $this->getDigestAuthHeader(
                 $url,
                 $method,
@@ -134,10 +215,12 @@ class Data extends CoreHelper
                 $hook->getQop(),
                 $hook->getNonceCount(),
                 $hook->getClientNonce(),
-                $hook->getOpaque());
+                $hook->getOpaque()
+            );
         }
-        $body        = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
-        $headers     = $hook->getHeaders();
+
+        $body = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
+        $headers = $hook->getHeaders();
         $contentType = $hook->getContentType();
 
         return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
@@ -146,23 +229,22 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $templateHtml
+     *
      * @return string
      */
     public function generateLiquidTemplate($item, $templateHtml)
     {
         try {
-            $template       = new Template;
+            $template = new Template;
             $filtersMethods = $this->liquidFilters->getFiltersMethods();
 
             $template->registerFilter($this->liquidFilters);
-
             $template->parse($templateHtml, $filtersMethods);
-            $content = $template->render([
+
+            return $template->render([
                 'item' => $item,
             ]);
-
-            return $content;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_logger->critical($e->getMessage());
         }
 
@@ -176,6 +258,7 @@ class Data extends CoreHelper
      * @param $url
      * @param $body
      * @param $method
+     *
      * @return array
      */
     public function sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method)
@@ -189,8 +272,8 @@ class Data extends CoreHelper
         $headersConfig = [];
 
         foreach ($headers as $header) {
-            $key             = $header['name'];
-            $value           = $header['value'];
+            $key = $header['name'];
+            $value = $header['value'];
             $headersConfig[] = trim($key) . ': ' . trim($value);
         }
 
@@ -208,10 +291,10 @@ class Data extends CoreHelper
         $result = ['success' => false];
 
         try {
-            $resultCurl         = $curl->read();
+            $resultCurl = $curl->read();
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
-                $result['status'] = \Zend_Http_Response::extractCode($resultCurl);
+                $result['status'] = Zend_Http_Response::extractCode($resultCurl);
                 if (isset($result['status']) && in_array($result['status'], [200, 201])) {
                     $result['success'] = true;
                 } else {
@@ -220,7 +303,7 @@ class Data extends CoreHelper
             } else {
                 $result['message'] = __('Cannot connect to server. Please try again later.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result['message'] = $e->getMessage();
         }
         $curl->close();
@@ -240,15 +323,27 @@ class Data extends CoreHelper
      * @param $nonceCount
      * @param $clientNonce
      * @param $opaque
+     *
      * @return string
      */
-    public function getDigestAuthHeader($url, $method, $username, $realm, $password, $nonce, $algorithm, $qop, $nonceCount, $clientNonce, $opaque)
-    {
-        $uri          = parse_url($url)[2];
-        $method       = $method ?: 'GET';
-        $A1           = md5("{$username}:{$realm}:{$password}");
-        $A2           = md5("{$method}:{$uri}");
-        $response     = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
+    public function getDigestAuthHeader(
+        $url,
+        $method,
+        $username,
+        $realm,
+        $password,
+        $nonce,
+        $algorithm,
+        $qop,
+        $nonceCount,
+        $clientNonce,
+        $opaque
+    ) {
+        $uri = parse_url($url)[2];
+        $method = $method ?: 'GET';
+        $A1 = md5("{$username}:{$realm}:{$password}");
+        $A2 = md5("{$method}:{$uri}");
+        $response = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
         $digestHeader = "Digest username=\"{$username}\", realm=\"{$realm}\", nonce=\"{$nonce}\", uri=\"{$uri}\", cnonce=\"{$clientNonce}\", nc={$nonceCount}, qop=\"{$qop}\", response=\"{$response}\", opaque=\"{$opaque}\", algorithm=\"{$algorithm}\"";
 
         return $digestHeader;
@@ -257,6 +352,7 @@ class Data extends CoreHelper
     /**
      * @param $username
      * @param $password
+     *
      * @return string
      */
     public function getBasicAuthHeader($username, $password)
@@ -268,25 +364,27 @@ class Data extends CoreHelper
      * @param $item
      * @param $hookType
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function sendObserver($item, $hookType)
     {
         if (!$this->isEnabled()) {
             return;
         }
+
+        /** @var Collection $hookCollection */
         $hookCollection = $this->hookFactory->create()->getCollection()
             ->addFieldToFilter('hook_type', $hookType)
             ->addFieldToFilter('status', 1)
             ->setOrder('priority', 'ASC');
 
         $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo     = explode(',', $this->getConfigGeneral('send_to'));
+        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
 
         foreach ($hookCollection as $hook) {
             try {
                 $history = $this->historyFactory->create();
-                $data    = [
+                $data = [
                     'hook_id'     => $hook->getId(),
                     'hook_name'   => $hook->getName(),
                     'store_ids'   => $hook->getStoreIds(),
@@ -299,18 +397,20 @@ class Data extends CoreHelper
                 try {
                     $result = $this->sendHttpRequestFromHook($hook, $item);
                     $history->setResponse(isset($result['response']) ? $result['response'] : '');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $result = [
                         'success' => false,
                         'message' => $e->getMessage()
                     ];
                 }
-                if ($result['success'] == true) {
-                    $history->setStatus(1);
+                if ($result['success'] === true) {
+                    $history->setStatus(Status::SUCCESS);
                 } else {
-                    $history->setStatus(0)->setMessage($result['message']);
+                    $history->setStatus(Status::ERROR)
+                        ->setMessage($result['message']);
                     if ($isSendMail) {
-                        $this->sendMail($sendTo,
+                        $this->sendMail(
+                            $sendTo,
                             __('Something went wrong while sending %1 hook', $hook->getName()),
                             $this->getConfigGeneral('email_template'),
                             $this->storeManager->getStore()->getId()
@@ -318,12 +418,14 @@ class Data extends CoreHelper
                     }
                 }
                 $history->save();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if ($isSendMail) {
-                    $this->sendMail($sendTo,
+                    $this->sendMail(
+                        $sendTo,
                         __('Something went wrong while sending %1 hook', $hook->getName()),
                         $this->getConfigGeneral('email_template'),
-                        $this->storeManager->getStore()->getId());
+                        $this->storeManager->getStore()->getId()
+                    );
                 }
             }
         }
@@ -336,6 +438,7 @@ class Data extends CoreHelper
      * @param $storeId
      *
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function sendMail($sendTo, $mes, $emailTemplate, $storeId)
     {
@@ -356,7 +459,7 @@ class Data extends CoreHelper
             $transport->sendMessage();
 
             return true;
-        } catch (\Magento\Framework\Exception\MailException $e) {
+        } catch (MailException $e) {
             $this->_logger->critical($e->getLogMessage());
         }
 
@@ -365,10 +468,59 @@ class Data extends CoreHelper
 
     /**
      * @return int
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getStoreId()
     {
         return $this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * @param string $schedule
+     * @param string $startTime
+     *
+     * @return string
+     */
+    public function getCronExpr($schedule, $startTime)
+    {
+        $ArTime = explode(',', $startTime);
+        $cronExprArray = [
+            (int) $ArTime[1], // Minute
+            (int) $ArTime[0], // Hour
+            $schedule === Schedule::CRON_MONTHLY ? 1 : '*', // Day of the Month
+            '*', // Month of the Year
+            $schedule === Schedule::CRON_WEEKLY ? 0 : '*', // Day of the Week
+        ];
+        if ($schedule === Schedule::CRON_MINUTE) {
+            return '* * * * *';
+        }
+
+        return implode(' ', $cronExprArray);
+    }
+
+    /**
+     * @param null $field
+     *
+     * @return mixed
+     * @throws NoSuchEntityException
+     */
+    public function getCronSchedule($field = null)
+    {
+        $storeId = $this->getStoreId();
+        if ($field === null) {
+            return $this->getModuleConfig('cron/schedule', $storeId);
+        }
+
+        return $this->getModuleConfig('cron/' . $field, $storeId);
+    }
+
+    /**
+     * @param $classPath
+     *
+     * @return mixed
+     */
+    public function getObjectClass($classPath)
+    {
+        return $this->objectManager->create($classPath);
     }
 }

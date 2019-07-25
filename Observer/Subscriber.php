@@ -31,12 +31,12 @@ use Mageplaza\Webhook\Model\Config\Source\Schedule;
  * Class CustomerLogin
  * @package Mageplaza\Webhook\Observer
  */
-class CustomerLogin extends AfterSave
+class Subscriber extends AfterSave
 {
     /**
      * @var string
      */
-    protected $hookType = HookType::CUSTOMER_LOGIN;
+    protected $hookType = HookType::SUBSCRIBER;
 
     /**
      * @param Observer $observer
@@ -45,7 +45,7 @@ class CustomerLogin extends AfterSave
      */
     public function execute(Observer $observer)
     {
-        $item = $observer->getCustomer();
+        $item = $observer->getEvent()->getSubscriber();
         if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)

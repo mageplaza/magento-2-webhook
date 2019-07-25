@@ -19,10 +19,23 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-use Magento\Framework\Component\ComponentRegistrar;
+namespace Mageplaza\Webhook\Model\ResourceModel;
 
-ComponentRegistrar::register(
-    ComponentRegistrar::MODULE,
-    'Mageplaza_Webhook',
-    __DIR__
-);
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
+/**
+ * Class Hook
+ * @package Mageplaza\Webhook\Model\ResourceModel
+ */
+class CronSchedule extends AbstractDb
+{
+    /**
+     * Initialize resource model
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init('mageplaza_webhook_cron_schedule', 'id');
+    }
+}

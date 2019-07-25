@@ -21,10 +21,16 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
 use Mageplaza\Webhook\Helper\Data;
+use Mageplaza\Webhook\Model\Config\Source\Status;
+use Mageplaza\Webhook\Model\History;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
 
@@ -46,6 +52,7 @@ class Replay extends AbstractManageLogs
 
     /**
      * Replay constructor.
+     *
      * @param HistoryFactory $historyFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -58,46 +65,46 @@ class Replay extends AbstractManageLogs
         Context $context,
         HookFactory $hookFactory,
         Data $helperData
-    ){
-        parent::__construct($historyFactory, $coreRegistry, $context);
-
+    ) {
         $this->hookFactory = $hookFactory;
-        $this->helperData  = $helperData;
+        $this->helperData = $helperData;
+
+        parent::__construct($historyFactory, $coreRegistry, $context);
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
-     * @throws \Exception
+     * @return ResponseInterface|Redirect|ResultInterface
+     * @throws Exception
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $log            = $this->initLog();
+        $log = $this->initLog();
         $resultRedirect->setPath('mpwebhook/logs');
         if ($log->getId()) {
             try {
                 $hookId = $log->getHookId();
-                $hook   = $this->hookFactory->create()->load($hookId);
+                $hook = $this->hookFactory->create()->load($hookId);
                 if (!$hook->getId()) {
                     $this->messageManager->addError('The Hook no longer exits');
 
                     return $resultRedirect;
                 }
-                /** @var \Mageplaza\Webhook\Model\History $log */
+                /** @var History $log */
                 $result = $this->helperData->sendHttpRequestFromHook($hook, false, $log);
                 $log->setResponse($result['response']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $result = [
                     'success' => false,
                     'message' => $e->getMessage()
                 ];
             }
-            if ($result['success'] == true) {
-                $log->setStatus(1)->setMessage('');
+            if ($result['success'] === true) {
+                $log->setStatus(Status::SUCCESS)->setMessage('');
                 $this->messageManager->addSuccess(__('The log has been replay successful.'));
             } else {
                 $this->messageManager->addError($result['message']);
-                $log->setStatus(0)->setMessage($result['message']);
+                $log->setStatus(Status::ERROR)->setMessage($result['message']);
             }
             $log->save();
 

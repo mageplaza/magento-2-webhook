@@ -22,9 +22,12 @@
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
+use Mageplaza\Webhook\Model\Hook;
 use Mageplaza\Webhook\Model\HookFactory;
 
 /**
@@ -36,12 +39,13 @@ class Edit extends AbstractManageHooks
     /**
      * Page factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
      * Edit constructor.
+     *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -52,18 +56,18 @@ class Edit extends AbstractManageHooks
         Registry $coreRegistry,
         Context $context,
         PageFactory $resultPageFactory
-    ){
-        parent::__construct($hookFactory, $coreRegistry, $context);
-
+    ) {
         $this->resultPageFactory = $resultPageFactory;
+
+        parent::__construct($hookFactory, $coreRegistry, $context);
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
-        /** @var \Mageplaza\Webhook\Model\Hook $hook */
+        /** @var Hook $hook */
         $hook = $this->initHook();
         if (!$hook) {
             $resultRedirect = $this->resultRedirectFactory->create();
@@ -79,7 +83,7 @@ class Edit extends AbstractManageHooks
 
         $this->coreRegistry->register('mageplaza_webhook_hook', $hook);
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Webhook::webhook');
         $resultPage->getConfig()->getTitle()->set(__('Hook'));

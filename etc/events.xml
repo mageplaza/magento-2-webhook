@@ -69,4 +69,7 @@
     <event name="customer_login">
         <observer name="mp_wh_customer_login" instance="Mageplaza\Webhook\Observer\CustomerLogin"/>
     </event>
+    <event name="newsletter_subscriber_save_after">
+        <observer name="mp_wh_subscriber" instance="Mageplaza\Webhook\Observer\Subscriber"/>
+    </event>
 </config>

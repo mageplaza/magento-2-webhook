@@ -21,9 +21,15 @@
 
 namespace Mageplaza\Webhook\Observer;
 
+use Exception;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\Webhook\Model\HistoryFactory;
+use Mageplaza\Webhook\Model\Config\Source\Schedule;
+use Mageplaza\Webhook\Model\CronScheduleFactory;
 use Mageplaza\Webhook\Model\HookFactory;
 
 /**
@@ -38,9 +44,9 @@ abstract class AfterSave implements ObserverInterface
     protected $hookFactory;
 
     /**
-     * @var HistoryFactory
+     * @var CronScheduleFactory
      */
-    protected $historyFactory;
+    protected $scheduleFactory;
 
     /**
      * @var Data
@@ -58,93 +64,109 @@ abstract class AfterSave implements ObserverInterface
     protected $hookTypeUpdate = '';
 
     /**
+     * @var ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * AfterSave constructor.
+     *
      * @param HookFactory $hookFactory
-     * @param HistoryFactory $historyFactory
+     * @param CronScheduleFactory $cronScheduleFactory
+     * @param ManagerInterface $messageManager
+     * @param StoreManagerInterface $storeManager
      * @param Data $helper
      */
     public function __construct(
         HookFactory $hookFactory,
-        HistoryFactory $historyFactory,
+        CronScheduleFactory $cronScheduleFactory,
+        ManagerInterface $messageManager,
+        StoreManagerInterface $storeManager,
         Data $helper
-    )
-    {
-        $this->hookFactory    = $hookFactory;
-        $this->historyFactory = $historyFactory;
-        $this->helper         = $helper;
+    ) {
+        $this->hookFactory = $hookFactory;
+        $this->helper = $helper;
+        $this->scheduleFactory = $cronScheduleFactory;
+        $this->messageManager = $messageManager;
+        $this->storeManager = $storeManager;
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Exception
+     * @param Observer $observer
+     *
+     * @throws Exception
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $item = $observer->getDataObject();
-        $this->send($item, $this->hookType);
+        $schedule = $this->helper->getCronSchedule();
+        if ($schedule !== Schedule::DISABLE && $schedule !== null) {
+            $hookCollection = $this->hookFactory->create()->getCollection()
+                ->addFieldToFilter('hook_type', $this->hookType)
+                ->addFieldToFilter('status', 1)
+                ->addFieldToFilter('store_ids', [
+                    ['finset' => Store::DEFAULT_STORE_ID],
+                    ['finset' => $this->storeManager->getStore()->getId()]
+                ])
+                ->setOrder('priority', 'ASC');
+            if ($hookCollection->getSize() > 0) {
+                $schedule = $this->scheduleFactory->create();
+                $data = [
+                    'hook_type' => $this->hookType,
+                    'event_id'  => $item->getId(),
+                    'status'    => '0'
+                ];
+
+                try {
+                    $schedule->addData($data);
+                    $schedule->save();
+                } catch (Exception $exception) {
+                    $this->messageManager->addError($exception->getMessage());
+                }
+            }
+        } else {
+            $this->helper->send($item, $this->hookType);
+        }
     }
 
     /**
      * @param $observer
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     protected function updateObserver($observer)
     {
         $item = $observer->getDataObject();
-        $this->send($item, $this->hookTypeUpdate);
-    }
-
-    /**
-     * @param $item
-     * @param $hookType
-     * @throws \Exception
-     */
-    protected function send($item, $hookType)
-    {
-        if (!$this->helper->isEnabled()) {
-            return;
-        }
-        $hookCollection = $this->hookFactory->create()->getCollection()
-            ->addFieldToFilter('hook_type', $hookType)
-            ->addFieldToFilter('status', 1)
-            ->setOrder('priority', 'ASC');
-        $isSendMail     = $this->helper->getConfigGeneral('alert_enabled');
-        $sendTo         = explode(',', $this->helper->getConfigGeneral('send_to'));
-        foreach ($hookCollection as $hook) {
-            $history = $this->historyFactory->create();
-            $data    = [
-                'hook_id'     => $hook->getId(),
-                'hook_name'   => $hook->getName(),
-                'store_ids'   => $hook->getStoreIds(),
-                'hook_type'   => $hook->getHookType(),
-                'priority'    => $hook->getPriority(),
-                'payload_url' => $this->helper->generateLiquidTemplate($item, $hook->getPayloadUrl()),
-                'body'        => $this->helper->generateLiquidTemplate($item, $hook->getBody())
-            ];
-            $history->addData($data);
-            try {
-                $result = $this->helper->sendHttpRequestFromHook($hook, $item);
-                $history->setResponse(isset($result['response']) ? $result['response'] : '');
-            } catch (\Exception $e) {
-                $result = [
-                    'success' => false,
-                    'message' => $e->getMessage()
+        if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
+            $hookCollection = $this->hookFactory->create()->getCollection()
+                ->addFieldToFilter('hook_type', $this->hookType)
+                ->addFieldToFilter('status', 1)
+                ->addFieldToFilter('store_ids', [
+                    ['finset' => Store::DEFAULT_STORE_ID],
+                    ['finset' => $this->storeManager->getStore()->getId()]
+                ])
+                ->setOrder('priority', 'ASC');
+            if ($hookCollection->getSize() > 0) {
+                $schedule = $this->scheduleFactory->create();
+                $data = [
+                    'hook_type' => $this->hookTypeUpdate,
+                    'event_id'  => $item->getId(),
+                    'status'    => '0'
                 ];
-            }
-            if ($result['success'] == true) {
-                $history->setStatus(1);
-            } else {
-                $history->setStatus(0)->setMessage($result['message']);
-                if ($isSendMail) {
-                    $this->helper->sendMail($sendTo,
-                        __('Something went wrong while sending %1 hook', $hook->getName()),
-                        $this->helper->getConfigGeneral('email_template'),
-                        $this->helper->getStoreId()
-                    );
+                try {
+                    $schedule->addData($data);
+                    $schedule->save();
+                } catch (Exception $exception) {
+                    $this->messageManager->addError($exception->getMessage());
                 }
             }
-
-            $history->save();
+        } else {
+            $this->helper->send($item, $this->hookTypeUpdate);
         }
     }
 }

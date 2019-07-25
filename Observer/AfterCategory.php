@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Webhook\Observer;
 
+use Exception;
+use Magento\Framework\Event\Observer;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 
 /**
@@ -40,10 +42,11 @@ class AfterCategory extends AfterSave
     protected $hookTypeUpdate = HookType::UPDATE_CATEGORY;
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Exception
+     * @param Observer $observer
+     *
+     * @throws Exception
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $item = $observer->getDataObject();
         if ($item->getMpNew()) {

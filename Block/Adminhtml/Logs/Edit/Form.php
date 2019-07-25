@@ -26,6 +26,8 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
+use Mageplaza\Webhook\Model\Config\Source\Status;
+use Mageplaza\Webhook\Model\History;
 
 /**
  * Class Form
@@ -40,6 +42,7 @@ class Form extends Generic
 
     /**
      * Form constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -51,11 +54,11 @@ class Form extends Generic
         Registry $registry,
         FormFactory $formFactory,
         HookType $hookType,
-        array $data = [])
-    {
-        parent::__construct($context, $registry, $formFactory, $data);
-
+        array $data = []
+    ) {
         $this->hookType = $hookType;
+
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -73,10 +76,10 @@ class Form extends Generic
             ]
         ]);
         $form->setUseContainer(true);
-        /** @var \Mageplaza\Webhook\Model\History $log */
+        /** @var History $log */
         $log = $this->_coreRegistry->registry('mageplaza_webhook_log');
 
-        $log->getStatus() == '1' ? $log->setStatus(__('Success')) : $log->setStatus(__('Error'));
+        $log->setStatus((int) $log->getStatus() === Status::SUCCESS ? __('Success') : __('Error'));
 
         $form->setHtmlIdPrefix('log_');
         $form->setFieldNameSuffix('log');

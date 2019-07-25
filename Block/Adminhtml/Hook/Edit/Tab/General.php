@@ -21,14 +21,18 @@
 
 namespace Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab;
 
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Config\Model\Config\Source\Enabledisable;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
+use Mageplaza\Webhook\Model\Hook;
 
 /**
  * Class General
@@ -48,6 +52,7 @@ class General extends Generic implements TabInterface
 
     /**
      * General constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -62,12 +67,11 @@ class General extends Generic implements TabInterface
         Enabledisable $enableDisable,
         Store $systemStore,
         array $data = []
-    )
-    {
-        parent::__construct($context, $registry, $formFactory, $data);
-
+    ) {
         $this->enabledisable = $enableDisable;
-        $this->systemStore   = $systemStore;
+        $this->systemStore = $systemStore;
+
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
@@ -75,9 +79,9 @@ class General extends Generic implements TabInterface
      */
     protected function _prepareForm()
     {
-        /** @var \Mageplaza\Webhook\Model\Hook $hook */
+        /** @var Hook $hook */
         $hook = $this->_coreRegistry->registry('mageplaza_webhook_hook');
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('hook_');
@@ -96,9 +100,7 @@ class General extends Generic implements TabInterface
         ]);
         $fieldset->addField('hook_type', 'hidden', [
             'name'  => 'hook_type',
-            'value' => $this->_request->getParam('type')
-                ? $this->_request->getParam('type')
-                : HookType::NEW_ORDER
+            'value' => $this->_request->getParam('type') ?: HookType::NEW_ORDER
         ]);
         $fieldset->addField('status', 'select', [
             'name'   => 'status',
@@ -108,8 +110,8 @@ class General extends Generic implements TabInterface
         ]);
 
         if (!$this->_storeManager->isSingleStoreMode()) {
-            /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
-            $rendererBlock = $this->getLayout()->createBlock('Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element');
+            /** @var RendererInterface $rendererBlock */
+            $rendererBlock = $this->getLayout()->createBlock(Element::class);
             $fieldset->addField('store_ids', 'multiselect', [
                 'name'     => 'store_ids',
                 'label'    => __('Store Views'),

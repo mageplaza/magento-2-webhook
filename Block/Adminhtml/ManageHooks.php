@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Webhook\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Button\SplitButton;
+use Magento\Backend\Block\Widget\Container;
 use Magento\Backend\Block\Widget\Context;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 
@@ -28,7 +30,7 @@ use Mageplaza\Webhook\Model\Config\Source\HookType;
  * Class ManageHooks
  * @package Mageplaza\Webhook\Block\Adminhtml
  */
-class ManageHooks extends \Magento\Backend\Block\Widget\Container
+class ManageHooks extends Container
 {
     /**
      * @var HookType
@@ -37,6 +39,7 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
 
     /**
      * ManageHooks constructor.
+     *
      * @param Context $context
      * @param HookType $hookType
      * @param array $data
@@ -44,15 +47,15 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
     public function __construct(
         Context $context,
         HookType $hookType,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         parent::__construct($context, $data);
 
         $this->hookType = $hookType;
     }
 
     /**
-     * @return \Magento\Backend\Block\Widget\Container
+     * @return Container
      */
 
     protected function _prepareLayout()
@@ -62,7 +65,7 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
             'label'        => __('Add New'),
             'class'        => 'add',
             'button_class' => '',
-            'class_name'   => 'Magento\Backend\Block\Widget\Button\SplitButton',
+            'class_name'   => SplitButton::class,
             'options'      => $this->_getAddProductButtonOptions(),
         ];
         $this->buttonList->add('add_new', $addButtonProps);
@@ -82,8 +85,10 @@ class ManageHooks extends \Magento\Backend\Block\Widget\Container
         foreach ($this->hookType->toOptionArray() as $hookType) {
             $splitButtonOptions[$hookType['value']] = [
                 'label'   => $hookType['label'],
-                'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', ['type' => $hookType['value']]) . "')",
-                'default' => $hookType['value'] === 'new_order' ? true : false,
+                'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', [
+                    'type' => $hookType['value']
+                    ]) . "')",
+                'default' => $hookType['value'] === 'new_order',
             ];
         }
 

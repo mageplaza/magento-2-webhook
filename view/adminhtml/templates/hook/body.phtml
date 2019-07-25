@@ -36,16 +36,16 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
 $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonEncode($block->getModifier()) : '{}';
 ?>
 
-<?php if (!$element->getNoDisplay()): ?>
-    <?php if ($element->getType() == 'hidden'): ?>
+<?php if (!$element->getNoDisplay()) : ?>
+    <?php if ($element->getType() == 'hidden') : ?>
         <?= $element->getElementHtml() ?>
-    <?php else: ?>
+    <?php else : ?>
         <div<?= $fieldAttributes ?>>
-            <?php if ($elementBeforeLabel): ?>
+            <?php if ($elementBeforeLabel) : ?>
                 <?= $element->getElementHtml() ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
                 <?= $note ?>
-            <?php else: ?>
+            <?php else : ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
                 <div class="admin__field-control control">
                     <div id="grid_tab" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -74,7 +74,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
                                  role="tabpanel" aria-expanded="true" aria-hidden="false">
                                 <a id="insert-variable" style="float: right;margin-top: -53px;margin-right: -20px;"
                                    class="btn"><?= __('Insert Variables') ?></a>
-                                <?= ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
+                                <?= $addOn ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
                                 <?= $block->getHintHtml() ?>
                                 <?= $note ?>
                             </div>

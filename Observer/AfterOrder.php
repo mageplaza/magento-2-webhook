@@ -21,6 +21,8 @@
 
 namespace Mageplaza\Webhook\Observer;
 
+use Exception;
+use Magento\Framework\Event\Observer;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 
 /**
@@ -35,10 +37,11 @@ class AfterOrder extends AfterSave
     protected $hookType = HookType::NEW_ORDER;
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
-     * @throws \Exception
+     * @param Observer $observer
+     *
+     * @throws Exception
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $item = $observer->getDataObject();
         if ($item->getMpNew()) {

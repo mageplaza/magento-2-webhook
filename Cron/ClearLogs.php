@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Webhook\Cron;
 
+use Exception;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
@@ -54,6 +55,7 @@ class ClearLogs
 
     /**
      * ClearLogs constructor.
+     *
      * @param HookFactory $hookFactory
      * @param HistoryFactory $historyFactory
      * @param LoggerInterface $logger
@@ -64,12 +66,11 @@ class ClearLogs
         HistoryFactory $historyFactory,
         LoggerInterface $logger,
         Data $helper
-    )
-    {
-        $this->hookFactory    = $hookFactory;
+    ) {
+        $this->hookFactory = $hookFactory;
         $this->historyFactory = $historyFactory;
-        $this->logger         = $logger;
-        $this->helper         = $helper;
+        $this->logger = $logger;
+        $this->helper = $helper;
     }
 
     /**
@@ -77,9 +78,8 @@ class ClearLogs
      */
     public function execute()
     {
-        $limit = (int)$this->helper->getConfigGeneral('keep_log');
-
-        if (!$this->helper->isEnabled() || $limit <= 0) {
+        $limit = (int) $this->helper->getConfigGeneral('keep_log');
+        if ($limit <= 0 || !$this->helper->isEnabled()) {
             return;
         }
         try {
@@ -89,10 +89,12 @@ class ClearLogs
                     ->addFieldToFilter('hook_id', $hook->getId());
                 if ($historyCollection->getSize() > $limit) {
                     $count = $historyCollection->getSize() - $limit;
-                    $historyCollection->getConnection()->query("DELETE FROM {$historyCollection->getMainTable()} WHERE `hook_id`='{$hook->getId()}' LIMIT {$count} ORDER BY `id` DESC");
+                    $historyCollection->getConnection()->query(
+                        "DELETE FROM {$historyCollection->getMainTable()} WHERE `hook_id`='{$hook->getId()}' LIMIT {$count} ORDER BY `id` DESC"
+                    );
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e->getLogMessage());
         }
     }

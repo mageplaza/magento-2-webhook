@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Webhook\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Mageplaza\Webhook\Helper\Data;
 
@@ -37,6 +38,7 @@ class BeforeSave implements ObserverInterface
 
     /**
      * BeforeSave constructor.
+     *
      * @param Data $helper
      */
     public function __construct(Data $helper)
@@ -45,9 +47,9 @@ class BeforeSave implements ObserverInterface
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         if (!$this->helper->isEnabled()) {
             return;

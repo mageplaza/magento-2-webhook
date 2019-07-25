@@ -21,7 +21,11 @@
 
 namespace Mageplaza\Webhook\Cron;
 
+use DateInterval;
+use DateTime;
+use Exception;
 use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Psr\Log\LoggerInterface;
@@ -49,6 +53,7 @@ class AbandonedCart
 
     /**
      * AbandonedCart constructor.
+     *
      * @param LoggerInterface $logger
      * @param QuoteFactory $quoteFactory
      * @param Data $helper
@@ -57,15 +62,14 @@ class AbandonedCart
         LoggerInterface $logger,
         QuoteFactory $quoteFactory,
         Data $helper
-    )
-    {
-        $this->logger       = $logger;
+    ) {
+        $this->logger = $logger;
         $this->quoteFactory = $quoteFactory;
-        $this->helper       = $helper;
+        $this->helper = $helper;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
@@ -73,15 +77,18 @@ class AbandonedCart
             return;
         }
 
-        $abandonedTime = (int)$this->helper->getConfigGeneral('abandoned_time');
-        $update        = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
-        $updateTo      = clone $update;
-        $updateFrom    = $update->sub(new \DateInterval("PT1H"));
+        $abandonedTime = (int) $this->helper->getConfigGeneral('abandoned_time');
+        $update = (new DateTime())->sub(new DateInterval("PT{$abandonedTime}H"));
+        $updateTo = clone $update;
+        $updateFrom = $update->sub(new DateInterval("PT1H"));
 
-        $quoteCollection           = $this->quoteFactory->create()->getCollection()
+        /** @var Collection $quoteCollection */
+        $quoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
             ->addFieldToFilter('updated_at', ['to' => $updateTo]);
+
+        /** @var Collection $noneUpdateQuoteCollection */
         $noneUpdateQuoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('created_at', ['from' => $updateFrom])
@@ -95,7 +102,7 @@ class AbandonedCart
             foreach ($noneUpdateQuoteCollection as $quote) {
                 $this->helper->sendObserver($quote, HookType::ABANDONED_CART);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e->getLogMessage());
         }
     }

@@ -21,7 +21,12 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
+use Exception;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
+use Mageplaza\Webhook\Model\History;
 
 /**
  * Class Delete
@@ -30,25 +35,23 @@ use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
 class Delete extends AbstractManageLogs
 {
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $log            = $this->initLog();
+        $log = $this->initLog();
         if ($log->getId()) {
             try {
-                /** @var \Mageplaza\Webhook\Model\History $log */
+                /** @var History $log */
                 $log->delete();
 
                 $this->messageManager->addSuccess(__('The log has been deleted.'));
                 $resultRedirect->setPath('mpwebhook/*/');
 
                 return $resultRedirect;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-
-                // go back to edit form
                 $resultRedirect->setPath('mpwebhook/*/edit', ['id' => $log->getId()]);
 
                 return $resultRedirect;
@@ -56,7 +59,6 @@ class Delete extends AbstractManageLogs
         }
         // display error message
         $this->messageManager->addError(__('The log to delete was not found.'));
-
         $resultRedirect->setPath('mpwebhook/*/');
 
         return $resultRedirect;

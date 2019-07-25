@@ -22,14 +22,21 @@
 namespace Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Element\Dependence;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Body;
+use Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Headers;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
 use Mageplaza\Webhook\Model\Config\Source\ContentType;
 use Mageplaza\Webhook\Model\Config\Source\Method;
+use Mageplaza\Webhook\Model\Hook;
 
 /**
  * Class Actions
@@ -59,6 +66,7 @@ class Actions extends Generic implements TabInterface
 
     /**
      * Actions constructor.
+     *
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -77,26 +85,25 @@ class Actions extends Generic implements TabInterface
         ContentType $contentType,
         Authentication $authentication,
         array $data = []
-    )
-    {
-        parent::__construct($context, $registry, $formFactory, $data);
-
-        $this->fieldFactory   = $fieldFactory;
-        $this->method         = $method;
-        $this->contentType    = $contentType;
+    ) {
+        $this->fieldFactory = $fieldFactory;
+        $this->method = $method;
+        $this->contentType = $contentType;
         $this->authentication = $authentication;
+
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * @return Generic
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
-        /** @var \Mageplaza\Webhook\Model\Hook $rule */
+        /** @var Hook $rule */
         $hook = $this->_coreRegistry->registry('mageplaza_webhook_hook');
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('hook_');
@@ -128,54 +135,54 @@ class Actions extends Generic implements TabInterface
             'values' => $this->authentication->toOptionArray(),
 
         ]);
-        $username       = $fieldset->addField('username', 'text', [
+        $username = $fieldset->addField('username', 'text', [
             'name'  => 'username',
             'label' => __('Username'),
             'title' => __('Username'),
         ]);
-        $realm          = $fieldset->addField('realm', 'text', [
+        $realm = $fieldset->addField('realm', 'text', [
             'name'  => 'realm',
             'label' => __('Realm'),
             'title' => __('Realm'),
         ]);
-        $password       = $fieldset->addField('password', 'password', [
+        $password = $fieldset->addField('password', 'password', [
             'name'  => 'password',
             'label' => __('Password'),
             'title' => __('Password'),
         ]);
-        $nonce          = $fieldset->addField('nonce', 'text', [
+        $nonce = $fieldset->addField('nonce', 'text', [
             'name'  => 'nonce',
             'label' => __('Nonce'),
             'title' => __('Nonce'),
         ]);
-        $algorithm      = $fieldset->addField('algorithm', 'text', [
+        $algorithm = $fieldset->addField('algorithm', 'text', [
             'name'  => 'algorithm',
             'label' => __('Algorithm'),
             'title' => __('Algorithm'),
         ]);
-        $qop            = $fieldset->addField('qop', 'text', [
+        $qop = $fieldset->addField('qop', 'text', [
             'name'  => 'qop',
             'label' => __('qop'),
             'title' => __('qop'),
         ]);
-        $nonceCount     = $fieldset->addField('nonce_count', 'text', [
+        $nonceCount = $fieldset->addField('nonce_count', 'text', [
             'name'  => 'nonce_count',
             'label' => __('Nonce Count'),
             'title' => __('Nonce Count'),
         ]);
-        $clientNonce    = $fieldset->addField('client_nonce', 'text', [
+        $clientNonce = $fieldset->addField('client_nonce', 'text', [
             'name'  => 'client_nonce',
             'label' => __('Client Nonce'),
             'title' => __('Client Nonce'),
         ]);
-        $opaque         = $fieldset->addField('opaque', 'text', [
+        $opaque = $fieldset->addField('opaque', 'text', [
             'name'  => 'opaque',
             'label' => __('Opaque'),
             'title' => __('Opaque'),
         ]);
-        /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
+        /** @var RendererInterface $rendererBlock */
         $rendererBlock = $this->getLayout()
-            ->createBlock('Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Headers');
+            ->createBlock(Headers::class);
         $fieldset->addField('headers', 'text', [
             'name'  => 'headers',
             'label' => __('Header'),
@@ -188,19 +195,23 @@ class Actions extends Generic implements TabInterface
             'values' => $this->contentType->toOptionArray(),
 
         ]);
-        /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
-        $rendererBlock = $this->getLayout()->createBlock('Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Body');
+        /** @var RendererInterface $rendererBlock */
+        $rendererBlock = $this->getLayout()->createBlock(Body::class);
         $fieldset->addField('body', 'textarea', [
             'name'  => 'body',
             'label' => __('Body'),
             'title' => __('Body'),
-            'note'  => __('Supports <a href="https://shopify.github.io/liquid/" target="_blank">Liquid template</a>')
+            'note'  => __('Supports <a href="%1" target="_blank">Liquid template</a>', 'https://shopify.github.io/liquid/')
         ])->setRenderer($rendererBlock);
 
-        $refField = $this->fieldFactory->create(['fieldData' => ['value' => 'basic,digest', 'separator' => ','], 'fieldPrefix' => '']);
+        $refField = $this->fieldFactory->create([
+            'fieldData'   => ['value' => 'basic,digest', 'separator' => ','],
+            'fieldPrefix' => ''
+        ]);
 
-        $this->setChild('form_after',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence')
+        $this->setChild(
+            'form_after',
+            $this->getLayout()->createBlock(Dependence::class)
                 ->addFieldMap($authentication->getHtmlId(), $authentication->getName())
                 ->addFieldMap($username->getHtmlId(), $username->getName())
                 ->addFieldMap($realm->getHtmlId(), $realm->getName())
@@ -275,7 +286,7 @@ class Actions extends Generic implements TabInterface
      */
     public function getFormHtml()
     {
-        $formHtml  = parent::getFormHtml();
+        $formHtml = parent::getFormHtml();
         $childHtml = $this->getChildHtml();
 
         return $formHtml . $childHtml;

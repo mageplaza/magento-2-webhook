@@ -21,12 +21,17 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\HookFactory;
+use RuntimeException;
 
 /**
  * Class Save
@@ -41,6 +46,7 @@ class Save extends AbstractManageHooks
 
     /**
      * Save constructor.
+     *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -51,14 +57,14 @@ class Save extends AbstractManageHooks
         Registry $coreRegistry,
         Context $context,
         Data $helperData
-    ){
-        parent::__construct($hookFactory, $coreRegistry, $context);
-
+    ) {
         $this->helperData = $helperData;
+
+        parent::__construct($hookFactory, $coreRegistry, $context);
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
@@ -93,9 +99,9 @@ class Save extends AbstractManageHooks
             return $resultRedirect;
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while saving the Post.'));
         }
 

@@ -21,7 +21,12 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
+use Exception;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
+use Mageplaza\Webhook\Model\Hook;
 
 /**
  * Class Delete
@@ -30,25 +35,23 @@ use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
 class Delete extends AbstractManageHooks
 {
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $hook           = $this->initHook();
+        $hook = $this->initHook();
         if ($hook->getId()) {
             try {
-                /** @var \Mageplaza\Webhook\Model\Hook $hook */
+                /** @var Hook $hook */
                 $hook->delete();
 
                 $this->messageManager->addSuccess(__('The Hook has been deleted.'));
                 $resultRedirect->setPath('mpwebhook/*/');
 
                 return $resultRedirect;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-
-                // go back to edit form
                 $resultRedirect->setPath('mpwebhook/*/edit', ['hook_id' => $hook->getId()]);
 
                 return $resultRedirect;
@@ -56,7 +59,6 @@ class Delete extends AbstractManageHooks
         }
         // display error message
         $this->messageManager->addError(__('The Hook to delete was not found.'));
-
         $resultRedirect->setPath('mpwebhook/*/');
 
         return $resultRedirect;

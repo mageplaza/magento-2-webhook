@@ -35,6 +35,7 @@
             <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tabs" name="mageplaza_webhook_hook_tabs">
                 <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\General" name="mageplaza_webhook_hook_tab_general"/>
                 <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Actions" name="mageplaza_webhook_hook_tab_actions"/>
+                <block class="Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\History" name="mageplaza_webhook_hook_tab_history"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">hook</argument>
                     <argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_general</argument>
@@ -42,6 +43,10 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">template</argument>
                     <argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_actions</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">history</argument>
+                    <argument name="block" xsi:type="string">mageplaza_webhook_hook_tab_history</argument>
                 </action>
             </block>
         </referenceContainer>

@@ -19,14 +19,14 @@
  * @license     https://www.mageplaza.com/LICENSE.txt
  */
 
-namespace Mageplaza\Webhook\Model\ResourceModel\History;
+namespace Mageplaza\Webhook\Model\ResourceModel\CronSchedule;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Mageplaza\Webhook\Model\ResourceModel\History;
+use Mageplaza\Webhook\Model\ResourceModel\CronSchedule;
 
 /**
  * Class Collection
- * @package Mageplaza\Webhook\Model\ResourceModel\History
+ * @package Mageplaza\Webhook\Model\ResourceModel\Hook
  */
 class Collection extends AbstractCollection
 {
@@ -42,14 +42,14 @@ class Collection extends AbstractCollection
      *
      * @var string
      */
-    protected $_eventPrefix = 'mageplaza_webhook_history_collection';
+    protected $_eventPrefix = 'mageplaza_webhook_cron_schedule_collection';
 
     /**
      * Event object
      *
      * @var string
      */
-    protected $_eventObject = 'history_collection';
+    protected $_eventObject = 'cron_schedule_collection';
 
     /**
      * Define resource model
@@ -58,6 +58,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init(\Mageplaza\Webhook\Model\History::class, History::class);
+        $this->_init(\Mageplaza\Webhook\Model\CronSchedule::class, CronSchedule::class);
     }
 }

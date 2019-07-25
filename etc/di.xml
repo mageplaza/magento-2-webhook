@@ -42,4 +42,7 @@
             <argument name="resourceModel" xsi:type="string">Mageplaza\Webhook\Model\ResourceModel\History</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Cron\Model\Config">
+        <plugin name="mpwebhook_send_cron" type="Mageplaza\Webhook\Plugin\Cron\Model\Config" sortOrder="1"/>
+    </type>
 </config>

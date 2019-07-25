@@ -17,7 +17,7 @@ Opaque,Opaque
 Header,Header
 "Content Type","Content Type"
 Body,Body
-"Supports <a href=""https://shopify.github.io/liquid/"" target=""_blank"">Liquid template</a>","Supports <a href=""https://shopify.github.io/liquid/"" target=""_blank"">Liquid template</a>"
+"Supports <a href=""%1"" target=""_blank"">Liquid template</a>","Supports <a href=""%1"" target=""_blank"">Liquid template</a>"
 "General Information","General Information"
 Name,Name
 Status,Status
@@ -25,6 +25,11 @@ Status,Status
 Priority,Priority
 "0 is highest","0 is highest"
 General,General
+ID,ID
+"Hook Name","Hook Name"
+Entity,Entity
+Message,Message
+Logs,Logs
 Value,Value
 Add,Add
 "HOOK INFORMATION","HOOK INFORMATION"
@@ -82,7 +87,6 @@ Price,Price
 Success,Success
 Error,Error
 "Log ID","Log ID"
-Entity,Entity
 Response,Response
 "Add New","Add New"
 "This hook no longer exists.","This hook no longer exists."
@@ -107,11 +111,16 @@ Hook,Hook
 "Something went wrong while updating status for %1.","Something went wrong while updating status for %1."
 "A total of %1 record(s) have been updated.","A total of %1 record(s) have been updated."
 "The hook has been saved.","The hook has been saved."
-"Cannot connect to server. Please try again later.","Cannot connect to server. Please try again later."
 "Something went wrong while sending %1 hook","Something went wrong while sending %1 hook"
+"Cannot connect to server. Please try again later.","Cannot connect to server. Please try again later."
 "--Please Select--","--Please Select--"
 Basic,Basic
 Digest,Digest
+Disable,Disable
+Daily,Daily
+Weekly,Weekly
+Monthly,Monthly
+"Every Minute","Every Minute"
 "All Store Views","All Store Views"
 Preview,Preview
 "Insert Variables","Insert Variables"
@@ -129,25 +138,25 @@ Delete,Delete
 "Please correct your json data","Please correct your json data"
 "Click to each attribute to add filter & insert it to template","Click to each attribute to add filter & insert it to template"
 Webhook,Webhook
-Logs,Logs
 Enable,Enable
+"<a href=""https://www.mageplaza.com/kb/webhook/"" target=""_blank"">How to integrate with others</a>","<a href=""https://www.mageplaza.com/kb/webhook/"" target=""_blank"">How to integrate with others</a>"
 "Abandoned Cart After","Abandoned Cart After"
-"Please specify value in hours. Recommend: 1, 6, 10, 12, 24","Please specify value in hours. Recommend: 1, 6, 10, 12, 24"
-"Alert on Error","Alert on Error"
-"To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>","To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>"
+"How to deteminte as Abandonded Cart. Enter number of hour(s). Recommend: 1, 6, 10, 12, 24. Default: 10","How to deteminte as Abandonded Cart. Enter number of hour(s). Recommend: 1, 6, 10, 12, 24. Default: 10"
 "Keep logs","Keep logs"
-"The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation.","The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation."
+"The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation. Default: 10","The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation. Default: 10"
+"Alert on Error","Alert on Error"
+"Send alert email to your email addresses if any error. To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>","Send alert email to your email addresses if any error. To avoid going to spambox, you should install <a href=""https://www.mageplaza.com/magento-2-smtp/"" target=""_blank"">SMTP</a>"
 "Send To","Send To"
 "Separated by comma (,)","Separated by comma (,)"
 "Email Template","Email Template"
-ID,ID
-Message,Message
+"Schedule For Cron","Schedule For Cron"
+"Applied for Processing Type as Cron","Applied for Processing Type as Cron"
+"Start Time","Start Time"
 View,View
 Replay,Replay
 "Delete Hooks","Delete Hooks"
 "Are you sure you wan't to delete selected Hooks?","Are you sure you wan't to delete selected Hooks?"
 "Change status","Change status"
-Disable,Disable
 "Store View","Store View"
 "Created Date","Created Date"
 "Updated Date","Updated Date"

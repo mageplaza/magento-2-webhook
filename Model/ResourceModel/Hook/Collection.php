@@ -22,6 +22,7 @@
 namespace Mageplaza\Webhook\Model\ResourceModel\Hook;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Webhook\Model\ResourceModel\Hook;
 
 /**
  * Class Collection
@@ -57,6 +58,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Webhook\Model\Hook', 'Mageplaza\Webhook\Model\ResourceModel\Hook');
+        $this->_init(\Mageplaza\Webhook\Model\Hook::class, Hook::class);
     }
 }

@@ -24,6 +24,7 @@ namespace Mageplaza\Webhook\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Mageplaza\Webhook\Model\Hook;
 use Mageplaza\Webhook\Model\HookFactory;
 
 /**
@@ -43,12 +44,13 @@ abstract class AbstractManageHooks extends Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
     /**
      * AbstractManageHooks constructor.
+     *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
@@ -57,8 +59,8 @@ abstract class AbstractManageHooks extends Action
         HookFactory $hookFactory,
         Registry $coreRegistry,
         Context $context
-    ){
-        $this->hookFactory  = $hookFactory;
+    ) {
+        $this->hookFactory = $hookFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
@@ -66,13 +68,14 @@ abstract class AbstractManageHooks extends Action
 
     /**
      * @param bool $register
-     * @return bool|\Mageplaza\Webhook\Model\Hook
+     *
+     * @return bool|Hook
      */
     protected function initHook($register = false)
     {
         $hookId = $this->getRequest()->getParam('hook_id');
 
-        /** @var \Mageplaza\Webhook\Model\Hook $hook */
+        /** @var Hook $hook */
         $hook = $this->hookFactory->create();
 
         if ($hookId) {

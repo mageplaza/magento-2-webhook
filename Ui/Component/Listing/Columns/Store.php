@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Webhook\Ui\Component\Listing\Columns;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
@@ -37,7 +38,7 @@ class Store extends Column
     /**
      * Escaper
      *
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
@@ -77,26 +78,25 @@ class Store extends Column
         array $components = [],
         array $data = [],
         $storeKey = 'store_ids'
-    )
-    {
-        parent::__construct($context, $uiComponentFactory, $components, $data);
-
+    ) {
         $this->systemStore = $systemStore;
-        $this->escaper     = $escaper;
-        $this->storeKey    = $storeKey;
+        $this->escaper = $escaper;
+        $this->storeKey = $storeKey;
+
+        parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
     /**
      * Prepare Data Source
      *
      * @param array $dataSource
+     *
      * @return array
      */
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = explode(',', $item[$this->getData('name')]);
                 $item[$this->getData('name')] = $this->prepareItem($item);
             }
         }
@@ -108,12 +108,13 @@ class Store extends Column
      * Get data
      *
      * @param array $item
+     *
      * @return string
      */
     protected function prepareItem(array $item)
     {
-        $content    = '';
-        $origStores = $item[$this->storeKey];
+        $content = '';
+        $origStores = explode(',', $item[$this->storeKey]);
         if (!is_array($origStores)) {
             $origStores = [$origStores];
         }
@@ -158,8 +159,8 @@ class Store extends Column
     private function getStoreManager()
     {
         if ($this->storeManager === null) {
-            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Store\Model\StoreManagerInterface');
+            $this->storeManager = ObjectManager::getInstance()
+                ->get(StoreManager::class);
         }
 
         return $this->storeManager;

@@ -25,6 +25,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Zend_Db_Exception;
 
 /**
  * Class InstallSchema
@@ -35,7 +36,8 @@ class InstallSchema implements InstallSchemaInterface
     /**
      * @param SchemaSetupInterface $setup
      * @param ModuleContextInterface $context
-     * @throws \Zend_Db_Exception
+     *
+     * @throws Zend_Db_Exception
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -46,7 +48,13 @@ class InstallSchema implements InstallSchemaInterface
         if (!$installer->tableExists('mageplaza_webhook_hook')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_webhook_hook'))
-                ->addColumn('hook_id', Table::TYPE_INTEGER, null, ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true], 'Feed Id')
+                ->addColumn(
+                    'hook_id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true],
+                    'Feed Id'
+                )
                 ->addColumn('name', Table::TYPE_TEXT, 255, ['nullable' => false], 'Name')
                 ->addColumn('status', Table::TYPE_INTEGER, 1, ['nullable' => false], 'Hook Status')
                 ->addColumn('store_ids', Table::TYPE_TEXT, 64, ['nullable' => false], 'Stores')
@@ -67,8 +75,20 @@ class InstallSchema implements InstallSchemaInterface
                 ->addColumn('headers', Table::TYPE_TEXT, '2M', [], 'Header')
                 ->addColumn('content_type', Table::TYPE_TEXT, 64, [], 'Content-type')
                 ->addColumn('body', Table::TYPE_TEXT, '2M', [], 'Header')
-                ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, ['default' => Table::TIMESTAMP_INIT], 'Created At')
-                ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, ['default' => Table::TIMESTAMP_INIT], 'Update At')
+                ->addColumn(
+                    'created_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    ['default' => Table::TIMESTAMP_INIT],
+                    'Created At'
+                )
+                ->addColumn(
+                    'updated_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    ['default' => Table::TIMESTAMP_INIT],
+                    'Update At'
+                )
                 ->setComment('Hook Table');
 
             $connection->createTable($table);
@@ -77,7 +97,13 @@ class InstallSchema implements InstallSchemaInterface
         if (!$installer->tableExists('mageplaza_webhook_history')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('mageplaza_webhook_history'))
-                ->addColumn('id', Table::TYPE_INTEGER, null, ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true], 'Log Id')
+                ->addColumn(
+                    'id',
+                    Table::TYPE_INTEGER,
+                    null,
+                    ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true],
+                    'Log Id'
+                )
                 ->addColumn('hook_id', Table::TYPE_INTEGER, null, ['nullable' => false, 'unsigned' => true], 'Hook Id')
                 ->addIndex($installer->getIdxName('mageplaza_webhook_history', ['hook_id']), ['hook_id'])
                 ->addForeignKey(
@@ -96,8 +122,20 @@ class InstallSchema implements InstallSchemaInterface
                 ->addColumn('payload_url', Table::TYPE_TEXT, 512, ['nullable' => false], 'Payload URL')
                 ->addColumn('message', Table::TYPE_TEXT, 512, [], 'Message')
                 ->addColumn('body', Table::TYPE_TEXT, '2M', [], 'Body')
-                ->addColumn('created_at', Table::TYPE_TIMESTAMP, null, ['default' => Table::TIMESTAMP_INIT], 'Created At')
-                ->addColumn('updated_at', Table::TYPE_TIMESTAMP, null, ['default' => Table::TIMESTAMP_INIT], 'Update At')
+                ->addColumn(
+                    'created_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    ['default' => Table::TIMESTAMP_INIT],
+                    'Created At'
+                )
+                ->addColumn(
+                    'updated_at',
+                    Table::TYPE_TIMESTAMP,
+                    null,
+                    ['default' => Table::TIMESTAMP_INIT],
+                    'Update At'
+                )
                 ->setComment('Product Feed Table');
 
             $connection->createTable($table);
