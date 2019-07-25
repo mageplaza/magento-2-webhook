@@ -22,9 +22,12 @@
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
+use Mageplaza\Webhook\Model\History;
 use Mageplaza\Webhook\Model\HistoryFactory;
 
 /**
@@ -36,7 +39,7 @@ class Edit extends AbstractManageLogs
     /**
      * Page factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
@@ -54,17 +57,17 @@ class Edit extends AbstractManageLogs
         Context $context,
         PageFactory $resultPageFactory
     ) {
-        parent::__construct($historyFactory, $coreRegistry, $context);
-
         $this->resultPageFactory = $resultPageFactory;
+
+        parent::__construct($historyFactory, $coreRegistry, $context);
     }
 
     /**
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Redirect|Page
      */
     public function execute()
     {
-        /** @var \Mageplaza\Webhook\Model\History $log */
+        /** @var History $log */
         $log = $this->initLog();
         if (!$log) {
             $resultRedirect = $this->resultRedirectFactory->create();
@@ -73,7 +76,7 @@ class Edit extends AbstractManageLogs
             return $resultRedirect;
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page|Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Mageplaza_Webhook::webhook');
         $resultPage->getConfig()->getTitle()->set(__('Log'));

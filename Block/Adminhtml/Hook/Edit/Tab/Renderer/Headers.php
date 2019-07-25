@@ -22,6 +22,7 @@
 namespace Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer;
 
 use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
+use Magento\Framework\Phrase;
 
 /**
  * Class Headers
@@ -52,7 +53,7 @@ class Headers extends AbstractFieldArray
     /**
      * Get Button Label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getAddButtonLabel()
     {

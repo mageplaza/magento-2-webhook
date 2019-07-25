@@ -21,7 +21,11 @@
 
 namespace Mageplaza\Webhook\Cron;
 
+use DateInterval;
+use DateTime;
+use Exception;
 use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Psr\Log\LoggerInterface;
@@ -65,7 +69,7 @@ class AbandonedCart
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute()
     {
@@ -74,14 +78,17 @@ class AbandonedCart
         }
 
         $abandonedTime = (int) $this->helper->getConfigGeneral('abandoned_time');
-        $update = (new \DateTime())->sub(new \DateInterval("PT{$abandonedTime}H"));
+        $update = (new DateTime())->sub(new DateInterval("PT{$abandonedTime}H"));
         $updateTo = clone $update;
-        $updateFrom = $update->sub(new \DateInterval("PT1H"));
+        $updateFrom = $update->sub(new DateInterval("PT1H"));
 
+        /** @var Collection $quoteCollection */
         $quoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('updated_at', ['from' => $updateFrom])
             ->addFieldToFilter('updated_at', ['to' => $updateTo]);
+
+        /** @var Collection $noneUpdateQuoteCollection */
         $noneUpdateQuoteCollection = $this->quoteFactory->create()->getCollection()
             ->addFieldToFilter('is_active', 1)
             ->addFieldToFilter('created_at', ['from' => $updateFrom])
@@ -95,7 +102,7 @@ class AbandonedCart
             foreach ($noneUpdateQuoteCollection as $quote) {
                 $this->helper->sendObserver($quote, HookType::ABANDONED_CART);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->critical($e->getLogMessage());
         }
     }

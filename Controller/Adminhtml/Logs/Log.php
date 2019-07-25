@@ -22,7 +22,10 @@
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Layout;
 use Magento\Framework\View\Result\LayoutFactory;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
 use Mageplaza\Webhook\Model\HookFactory;
@@ -34,7 +37,7 @@ use Mageplaza\Webhook\Model\HookFactory;
 class Log extends AbstractManageHooks
 {
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     protected $resultLayoutFactory;
 
@@ -52,13 +55,13 @@ class Log extends AbstractManageHooks
         Context $context,
         LayoutFactory $resultLayoutFactory
     ) {
-        parent::__construct($hookFactory, $coreRegistry, $context);
-
         $this->resultLayoutFactory = $resultLayoutFactory;
+
+        parent::__construct($hookFactory, $coreRegistry, $context);
     }
 
     /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Layout
+     * @return ResponseInterface|ResultInterface|Layout
      */
     public function execute()
     {

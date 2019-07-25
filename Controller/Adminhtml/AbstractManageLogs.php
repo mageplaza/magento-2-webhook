@@ -24,6 +24,7 @@ namespace Mageplaza\Webhook\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
+use Mageplaza\Webhook\Model\History;
 use Mageplaza\Webhook\Model\HistoryFactory;
 
 /**
@@ -43,7 +44,7 @@ abstract class AbstractManageLogs extends Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     public $coreRegistry;
 
@@ -66,13 +67,13 @@ abstract class AbstractManageLogs extends Action
     }
 
     /**
-     * @return bool|\Mageplaza\Webhook\Model\History
+     * @return bool|History
      */
     protected function initLog()
     {
         $logId = $this->getRequest()->getParam('id');
 
-        /** @var \Mageplaza\Webhook\Model\History $log */
+        /** @var History $log */
         $log = $this->historyFactory->create();
 
         if ($logId) {

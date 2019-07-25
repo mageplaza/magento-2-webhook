@@ -21,11 +21,11 @@
 
 namespace Mageplaza\Webhook\Plugin\Cron\Model;
 
-use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Mageplaza\Webhook\Cron\CronSchedule;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\Config\Source\Schedule;
 use Mageplaza\Webhook\Model\ResourceModel\CronSchedule\CollectionFactory;
-use Mageplaza\Webhook\Cron\CronSchedule;
 
 /**
  * Class Config
@@ -33,12 +33,6 @@ use Mageplaza\Webhook\Cron\CronSchedule;
  */
 class Config
 {
-
-    /**
-     * @var DateTime
-     */
-    private $date;
-
     /**
      * @var Data
      */
@@ -52,24 +46,23 @@ class Config
     /**
      * Config constructor.
      *
-     * @param DateTime $date
      * @param Data $helper
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        DateTime $date,
         Data $helper,
         CollectionFactory $collectionFactory
     ) {
-        $this->date   = $date;
         $this->helper = $helper;
         $this->collectionFactory = $collectionFactory;
     }
 
     /**
      * @param \Magento\Cron\Model\Config $config
-     * @param array $result
+     * @param $result
      *
-     * @return array
+     * @return mixed
+     * @throws NoSuchEntityException
      */
     public function afterGetJobs(\Magento\Cron\Model\Config $config, $result)
     {
@@ -78,18 +71,19 @@ class Config
         }
 
         $this->addApplyWebhookCron($result);
+
         return $result;
     }
 
     /**
      * @param $result
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     private function addApplyWebhookCron(&$result)
     {
-        $schedule   = $this->helper->getCronSchedule();
-        $startTime  = $this->helper->getCronSchedule('start_time');
+        $schedule = $this->helper->getCronSchedule();
+        $startTime = $this->helper->getCronSchedule('start_time');
         $collection = $this->collectionFactory->create()
             ->addFieldToFilter('status', '0');
 

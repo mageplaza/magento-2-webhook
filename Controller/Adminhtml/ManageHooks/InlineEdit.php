@@ -21,12 +21,16 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Webhook\Model\Hook;
 use Mageplaza\Webhook\Model\HookFactory;
+use RuntimeException;
 
 /**
  * Class InlineEdit
@@ -37,14 +41,14 @@ class InlineEdit extends Action
     /**
      * JSON Factory
      *
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     public $jsonFactory;
 
     /**
      * Post Factory
      *
-     * @var \Mageplaza\Webhook\Model\HookFactory
+     * @var HookFactory
      */
     public $hookFactory;
 
@@ -67,16 +71,16 @@ class InlineEdit extends Action
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
         $error = false;
         $messages = [];
         $hookItems = $this->getRequest()->getParam('items', []);
-        if (!($this->getRequest()->getParam('isAjax') && !empty($hookItems))) {
+        if (!empty($hookItems) && !$this->getRequest()->getParam('isAjax')) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
                 'error'    => true,
@@ -85,7 +89,7 @@ class InlineEdit extends Action
 
         $key = array_keys($hookItems);
         $hookId = !empty($key) ? (int) $key[0] : '';
-        /** @var \Mageplaza\Webhook\Model\Hook $hook */
+        /** @var Hook $hook */
         $hook = $this->hookFactory->create()->load($hookId);
         try {
             $hookData = $hookItems[$hookId];
@@ -94,10 +98,10 @@ class InlineEdit extends Action
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithHookId($hook, $e->getMessage());
             $error = true;
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithHookId($hook, $e->getMessage());
             $error = true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $messages[] = $this->getErrorWithHookId(
                 $hook,
                 __('Something went wrong while saving the Post.')
@@ -114,7 +118,7 @@ class InlineEdit extends Action
     /**
      * Add Hook id to error message
      *
-     * @param \Mageplaza\Webhook\Model\Hook $hook
+     * @param Hook $hook
      * @param string $errorText
      *
      * @return string

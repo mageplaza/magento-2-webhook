@@ -21,6 +21,7 @@
 
 namespace Mageplaza\Webhook\Block\Adminhtml;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -48,7 +49,7 @@ class LiquidFilters
      * @param $subject
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function price($subject)
     {
@@ -77,13 +78,13 @@ class LiquidFilters
             default:
                 switch ($fieldSeparate) {
                     case ';':
-                        $result = str_replace(";", ",", $result);
+                        $result = str_replace(';', ',', $result);
                         break;
                     case ',':
-                        $result = str_replace(",", ";", $result);
+                        $result = str_replace(',', ';', $result);
                         break;
                     default:
-                        $result = str_replace("\t", " ", $result);
+                        $result = str_replace("\t", ' ', $result);
                 }
         }
 

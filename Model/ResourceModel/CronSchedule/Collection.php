@@ -22,6 +22,7 @@
 namespace Mageplaza\Webhook\Model\ResourceModel\CronSchedule;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Webhook\Model\ResourceModel\CronSchedule;
 
 /**
  * Class Collection
@@ -57,6 +58,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Webhook\Model\CronSchedule', 'Mageplaza\Webhook\Model\ResourceModel\CronSchedule');
+        $this->_init(\Mageplaza\Webhook\Model\CronSchedule::class, CronSchedule::class);
     }
 }

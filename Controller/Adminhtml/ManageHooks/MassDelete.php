@@ -21,9 +21,14 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\ManageHooks;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\Component\MassAction\Filter;
 use Mageplaza\Webhook\Model\ResourceModel\Hook\CollectionFactory;
 
@@ -36,7 +41,7 @@ class MassDelete extends Action
     /**
      * Mass Action Filter
      *
-     * @var \Magento\Ui\Component\MassAction\Filter
+     * @var Filter
      */
     public $filter;
 
@@ -64,8 +69,8 @@ class MassDelete extends Action
     }
 
     /**
-     * @return $this|\Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this|ResponseInterface|ResultInterface
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -75,11 +80,11 @@ class MassDelete extends Action
             $collection->walk('delete');
 
             $this->messageManager->addSuccessMessage(__('Posts has been deleted.'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addErrorMessage(__('Something wrong when delete Posts.'));
         }
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         return $resultRedirect->setPath('*/*/');

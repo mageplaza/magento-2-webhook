@@ -22,6 +22,7 @@
 namespace Mageplaza\Webhook\Observer;
 
 use Exception;
+use Magento\Framework\Event\Observer;
 use Magento\Store\Model\Store;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\Config\Source\Schedule;
@@ -38,11 +39,11 @@ class CustomerLogin extends AfterSave
     protected $hookType = HookType::CUSTOMER_LOGIN;
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $item = $observer->getCustomer();
         if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
@@ -56,7 +57,7 @@ class CustomerLogin extends AfterSave
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
-                $data     = [
+                $data = [
                     'hook_type' => $this->hookType,
                     'event_id'  => $item->getId(),
                     'status'    => '0'

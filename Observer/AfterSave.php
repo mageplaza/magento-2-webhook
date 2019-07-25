@@ -22,14 +22,15 @@
 namespace Mageplaza\Webhook\Observer;
 
 use Exception;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\Webhook\Model\Config\Source\Schedule;
-use Mageplaza\Webhook\Model\HookFactory;
-use Mageplaza\Webhook\Model\CronScheduleFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Mageplaza\Webhook\Helper\Data;
+use Mageplaza\Webhook\Model\Config\Source\Schedule;
+use Mageplaza\Webhook\Model\CronScheduleFactory;
+use Mageplaza\Webhook\Model\HookFactory;
 
 /**
  * Class AfterSave
@@ -88,22 +89,23 @@ abstract class AfterSave implements ObserverInterface
         StoreManagerInterface $storeManager,
         Data $helper
     ) {
-        $this->hookFactory     = $hookFactory;
-        $this->helper          = $helper;
+        $this->hookFactory = $hookFactory;
+        $this->helper = $helper;
         $this->scheduleFactory = $cronScheduleFactory;
-        $this->messageManager  = $messageManager;
-        $this->storeManager    = $storeManager;
+        $this->messageManager = $messageManager;
+        $this->storeManager = $storeManager;
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $item = $observer->getDataObject();
-        if ($this->helper->getCronSchedule() !== Schedule::DISABLE && $this->helper->getCronSchedule() !== null) {
+        $schedule = $this->helper->getCronSchedule();
+        if ($schedule !== Schedule::DISABLE && $schedule !== null) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
@@ -114,7 +116,7 @@ abstract class AfterSave implements ObserverInterface
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
-                $data     = [
+                $data = [
                     'hook_type' => $this->hookType,
                     'event_id'  => $item->getId(),
                     'status'    => '0'
@@ -135,7 +137,7 @@ abstract class AfterSave implements ObserverInterface
     /**
      * @param $observer
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function updateObserver($observer)
     {
@@ -151,7 +153,7 @@ abstract class AfterSave implements ObserverInterface
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
-                $data     = [
+                $data = [
                     'hook_type' => $this->hookTypeUpdate,
                     'event_id'  => $item->getId(),
                     'status'    => '0'

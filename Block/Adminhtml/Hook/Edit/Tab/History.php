@@ -21,13 +21,15 @@
 
 namespace Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab;
 
+use Exception;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Helper\Data;
 use Magento\Framework\Registry;
-use Mageplaza\Webhook\Model\ResourceModel\History\CollectionFactory;
 use Mageplaza\Webhook\Model\Config\Source\Status;
+use Mageplaza\Webhook\Model\Hook;
+use Mageplaza\Webhook\Model\ResourceModel\History\CollectionFactory;
 
 /**
  * Class History
@@ -68,11 +70,11 @@ class History extends Extended implements TabInterface
         Status $status,
         array $data = []
     ) {
-        parent::__construct($context, $backendHelper, $data);
-
-        $this->_status                  = $status;
-        $this->coreRegistry             = $coreRegistry;
+        $this->_status = $status;
+        $this->coreRegistry = $coreRegistry;
         $this->historyCollectionFactory = $historyCollectionFactory;
+
+        parent::__construct($context, $backendHelper, $data);
     }
 
     /**
@@ -94,7 +96,7 @@ class History extends Extended implements TabInterface
      */
     protected function _prepareCollection()
     {
-        $hook       = $this->getHook();
+        $hook = $this->getHook();
         $collection = $this->historyCollectionFactory->create();
         $collection = $collection->addFieldToFilter('hook_id', $hook->getId());
         $this->setCollection($collection);
@@ -104,7 +106,7 @@ class History extends Extended implements TabInterface
 
     /**
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
     protected function _prepareColumns()
     {
@@ -156,7 +158,7 @@ class History extends Extended implements TabInterface
     }
 
     /**
-     * @return \Mageplaza\Webhook\Model\Hook
+     * @return Hook
      */
     public function getHook()
     {

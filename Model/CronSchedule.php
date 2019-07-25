@@ -58,7 +58,7 @@ class CronSchedule extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Webhook\Model\ResourceModel\CronSchedule');
+        $this->_init(ResourceModel\CronSchedule::class);
     }
 
     /**

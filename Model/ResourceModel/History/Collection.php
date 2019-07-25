@@ -22,6 +22,7 @@
 namespace Mageplaza\Webhook\Model\ResourceModel\History;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Mageplaza\Webhook\Model\ResourceModel\History;
 
 /**
  * Class Collection
@@ -57,6 +58,6 @@ class Collection extends AbstractCollection
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Webhook\Model\History', 'Mageplaza\Webhook\Model\ResourceModel\History');
+        $this->_init(\Mageplaza\Webhook\Model\History::class, History::class);
     }
 }

@@ -50,5 +50,4 @@ class Schedule extends AbstractSource
             self::CRON_MINUTE  => __('Every Minute')
         ];
     }
-
 }

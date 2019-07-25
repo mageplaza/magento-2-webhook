@@ -58,7 +58,7 @@ class Hook extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Webhook\Model\ResourceModel\Hook');
+        $this->_init(ResourceModel\Hook::class);
     }
 
     /**

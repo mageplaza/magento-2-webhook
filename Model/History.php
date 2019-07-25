@@ -57,6 +57,6 @@ class History extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Mageplaza\Webhook\Model\ResourceModel\History');
+        $this->_init(ResourceModel\History::class);
     }
 }

@@ -22,14 +22,21 @@
 namespace Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Element\Dependence;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Config\Model\Config\Structure\Element\Dependency\FieldFactory;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
+use Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Body;
+use Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Headers;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
 use Mageplaza\Webhook\Model\Config\Source\ContentType;
 use Mageplaza\Webhook\Model\Config\Source\Method;
+use Mageplaza\Webhook\Model\Hook;
 
 /**
  * Class Actions
@@ -79,24 +86,24 @@ class Actions extends Generic implements TabInterface
         Authentication $authentication,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $formFactory, $data);
-
         $this->fieldFactory = $fieldFactory;
         $this->method = $method;
         $this->contentType = $contentType;
         $this->authentication = $authentication;
+
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * @return Generic
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
-        /** @var \Mageplaza\Webhook\Model\Hook $rule */
+        /** @var Hook $rule */
         $hook = $this->_coreRegistry->registry('mageplaza_webhook_hook');
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
 
         $form->setHtmlIdPrefix('hook_');
@@ -173,9 +180,9 @@ class Actions extends Generic implements TabInterface
             'label' => __('Opaque'),
             'title' => __('Opaque'),
         ]);
-        /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
+        /** @var RendererInterface $rendererBlock */
         $rendererBlock = $this->getLayout()
-            ->createBlock('Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Headers');
+            ->createBlock(Headers::class);
         $fieldset->addField('headers', 'text', [
             'name'  => 'headers',
             'label' => __('Header'),
@@ -188,22 +195,23 @@ class Actions extends Generic implements TabInterface
             'values' => $this->contentType->toOptionArray(),
 
         ]);
-        /** @var \Magento\Framework\Data\Form\Element\Renderer\RendererInterface $rendererBlock */
-        $rendererBlock = $this->getLayout()->createBlock('Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer\Body');
+        /** @var RendererInterface $rendererBlock */
+        $rendererBlock = $this->getLayout()->createBlock(Body::class);
         $fieldset->addField('body', 'textarea', [
             'name'  => 'body',
             'label' => __('Body'),
             'title' => __('Body'),
-            'note'  => __('Supports <a href="https://shopify.github.io/liquid/" target="_blank">Liquid template</a>')
+            'note'  => __('Supports <a href="%1" target="_blank">Liquid template</a>', 'https://shopify.github.io/liquid/')
         ])->setRenderer($rendererBlock);
 
-        $refField = $this->fieldFactory->create(['fieldData'   => ['value' => 'basic,digest', 'separator' => ','],
-                                                 'fieldPrefix' => ''
+        $refField = $this->fieldFactory->create([
+            'fieldData'   => ['value' => 'basic,digest', 'separator' => ','],
+            'fieldPrefix' => ''
         ]);
 
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Form\Element\Dependence')
+            $this->getLayout()->createBlock(Dependence::class)
                 ->addFieldMap($authentication->getHtmlId(), $authentication->getName())
                 ->addFieldMap($username->getHtmlId(), $username->getName())
                 ->addFieldMap($realm->getHtmlId(), $realm->getName())

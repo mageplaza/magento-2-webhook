@@ -24,6 +24,7 @@ namespace Mageplaza\Webhook\Block\Adminhtml\Hook;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Mageplaza\Webhook\Model\Hook;
 
 /**
  * Class Edit
@@ -55,9 +56,9 @@ class Edit extends Container
         Context $context,
         array $data = []
     ) {
-        parent::__construct($context, $data);
-
         $this->coreRegistry = $coreRegistry;
+
+        parent::__construct($context, $data);
     }
 
     /**
@@ -93,7 +94,7 @@ class Edit extends Container
      */
     public function getFormActionUrl()
     {
-        /** @var \Mageplaza\Webhook\Model\Hook $hook */
+        /** @var Hook $hook */
         $hook = $this->coreRegistry->registry('mageplaza_webhook_hook');
         if ($id = $hook->getId()) {
             return $this->getUrl('*/*/save', ['hook_id' => $id]);

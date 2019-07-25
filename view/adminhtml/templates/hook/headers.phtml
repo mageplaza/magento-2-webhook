@@ -46,26 +46,26 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 ?>
 
 <?php if (!$element->getNoDisplay()): ?>
-    <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
-        <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
+    <div<?= $fieldAttributes ?>>
+        <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
         <div class="admin__field-control control">
-            <div class="design_theme_ua_regexp" id="grid<?php /* @escapeNotVerified */ echo $_htmlId; ?>">
+            <div class="design_theme_ua_regexp" id="grid<?= $_htmlId ?>">
                 <div class="admin__control-table-wrapper" id="hook_headers">
                     <table class="admin__control-table">
                         <thead>
                         <tr>
                             <?php foreach ($block->getColumns() as $columnName => $column): ?>
-                                <th><?php /* @escapeNotVerified */ echo $column['label']; ?></th>
+                                <th><?= $column['label'] ?></th>
                             <?php endforeach;?>
-                            <th class="col-actions" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>">Action</th>
+                            <th class="col-actions" colspan="<?= $_colspan ?>">Action</th>
                         </tr>
                         </thead>
-                        <tbody id="addRow<?php /* @escapeNotVerified */ echo $_htmlId; ?>"></tbody>
+                        <tbody id="addRow<?= $_htmlId ?>"></tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="<?php echo count($block->getColumns())+$_colspan; ?>" class="col-actions-add">
-                                <button id="addToEndBtn<?php /* @escapeNotVerified */ echo $_htmlId; ?>" class="action-add" title="<?php /* @escapeNotVerified */ echo __('Add'); ?>" type="button">
-                                    <span><?php /* @escapeNotVerified */ echo $block->getAddButtonLabel(); ?></span>
+                            <td colspan="<?= count($block->getColumns())+$_colspan ?>" class="col-actions-add">
+                                <button id="addToEndBtn<?= $_htmlId ?>" class="action-add" title="<?= __('Add') ?>" type="button">
+                                    <span><?= $block->getAddButtonLabel() ?></span>
                                 </button>
                             </td>
                         </tr>
@@ -73,7 +73,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 
                     </table>
                 </div>
-                <input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName(); ?>[__empty]" value="" />
+                <input type="hidden" name="<?= $block->getElement()->getName() ?>[__empty]" value="" />
 
                 <script>
                     require([
@@ -81,22 +81,22 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                         'prototype'
                     ], function (mageTemplate) {
                         // create row creator
-                        window.arrayRow<?php /* @escapeNotVerified */ echo $_htmlId ?> = {
+                        window.arrayRow<?= $_htmlId ?> = {
 
                             // define row prototypeJS template
                             template: mageTemplate(
                                 '<tr id="<%- _id %>">'
                                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
                                 + '<td>'
-                                + '<?php /* @escapeNotVerified */ echo $block->renderCellTemplate($columnName)?>'
+                                + '<?= $block->renderCellTemplate($columnName)?>'
                                 + '<\/td>'
                                 <?php endforeach; ?>
 
                                 <?php if ($block->isAddAfter()): ?>
-                                + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span><?php /* @escapeNotVerified */ echo __('Add after'); ?><\/span><\/button><\/td>'
+                                + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span><?= __('Add after'); ?><\/span><\/button><\/td>'
                                 <?php endif; ?>
 
-                                + '<td class="col-actions"><button onclick="arrayRow<?php /* @escapeNotVerified */ echo $_htmlId ?>.del(\'<%- _id %>\')" class="action-delete" type="button"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?><\/span><\/button><\/td>'
+                                + '<td class="col-actions"><button onclick="arrayRow<?= $_htmlId ?>.del(\'<%- _id %>\')" class="action-delete" type="button"><span><?= __('Delete') ?><\/span><\/button><\/td>'
                                 +'<\/tr>'
                             ),
 
@@ -111,7 +111,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                                     var d = new Date();
                                     templateValues = {
                                     <?php foreach ($block->getColumns() as $columnName => $column): ?>
-                                    <?php /* @escapeNotVerified */ echo $columnName ?>: '',
+                                    <?= $columnName ?>: '',
                                         'option_extra_attrs': {},
                                     <?php endforeach; ?>
                                     _id: '_' + d.getTime() + '_' + d.getMilliseconds()
@@ -122,7 +122,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                                 if (insertAfterId) {
                                     Element.insert($(insertAfterId), {after: this.template(templateValues)});
                                 } else {
-                                    Element.insert($('addRow<?php /* @escapeNotVerified */ echo $_htmlId ?>'), {bottom: this.template(templateValues)});
+                                    Element.insert($('addRow<?= $_htmlId ?>'), {bottom: this.template(templateValues)});
                                 }
 
                                 // Fill controls with data
@@ -147,23 +147,21 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                         }
 
                         // bind add action to "Add" button in last row
-                        Event.observe('addToEndBtn<?php /* @escapeNotVerified */ echo $_htmlId ?>', 'click', arrayRow<?php /* @escapeNotVerified */ echo $_htmlId ?>.add.bind(arrayRow<?php /* @escapeNotVerified */ echo $_htmlId ?>, false, false));
+                        Event.observe('addToEndBtn<?= $_htmlId ?>', 'click', arrayRow<?= $_htmlId ?>.add.bind(arrayRow<?= $_htmlId ?>, false, false));
 
                         // add existing rows
-                        <?php
-                        foreach ($block->getArrayRows() as $_rowId => $_row) {
-                            /* @escapeNotVerified */ echo "arrayRow{$_htmlId}.add(" . $_row->toJson() . ");\n";
-                        }
-                        ?>
+                        <?php foreach ($block->getArrayRows() as $_rowId => $_row) : ?>
+                            <?= "arrayRow{$_htmlId}.add(" . $_row->toJson() . ");\n" ?>
+                        <?php endforeach; ?>
 
                         // Toggle the grid availability, if element is disabled (depending on scope)
                         <?php if ($block->getElement()->getDisabled()):?>
-                        toggleValueElements({checked: true}, $('grid<?php /* @escapeNotVerified */ echo $_htmlId; ?>').parentNode);
+                        toggleValueElements({checked: true}, $('grid<?= $_htmlId ?>').parentNode);
                         <?php endif;?>
                     });
                 </script>
             </div>
-            <?php /* @escapeNotVerified */ echo $note ?>
+            <?= $note ?>
         </div>
     </div>
 <?php endif; ?>

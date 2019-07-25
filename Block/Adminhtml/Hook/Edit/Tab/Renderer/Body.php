@@ -27,8 +27,9 @@ use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttr;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
-use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Model\OrderFactory;
@@ -44,7 +45,7 @@ use Mageplaza\Webhook\Model\HookFactory;
  * Class Body
  * @package Mageplaza\Webhook\Block\Adminhtml\Hook\Edit\Tab\Renderer
  */
-class Body extends Element implements RendererInterface
+class Body extends Element
 {
     /**
      * @var string $_template
@@ -106,6 +107,9 @@ class Body extends Element implements RendererInterface
      */
     protected $quoteResource;
 
+    /**
+     * @var Subscriber
+     */
     protected $subscriber;
 
     /**
@@ -123,6 +127,7 @@ class Body extends Element implements RendererInterface
      * @param CategoryFactory $categoryFactory
      * @param LiquidFilters $liquidFilters
      * @param HookFactory $hookFactory
+     * @param Subscriber $subscriber
      * @param array $data
      */
     public function __construct(
@@ -141,8 +146,6 @@ class Body extends Element implements RendererInterface
         Subscriber $subscriber,
         array $data = []
     ) {
-        parent::__construct($context, $data);
-
         $this->liquidFilters = $liquidFilters;
         $this->orderFactory = $orderFactory;
         $this->invoiceResource = $invoiceResource;
@@ -155,19 +158,20 @@ class Body extends Element implements RendererInterface
         $this->categoryFactory = $categoryFactory;
         $this->quoteResource = $quoteResource;
         $this->subscriber = $subscriber;
+
+        parent::__construct($context, $data);
     }
 
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      *
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         $this->_element = $element;
-        $html = $this->toHtml();
 
-        return $html;
+        return $this->toHtml();
     }
 
     /**
@@ -191,7 +195,7 @@ class Body extends Element implements RendererInterface
 
     /**
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getHookAttrCollection()
     {
@@ -246,7 +250,6 @@ class Body extends Element implements RendererInterface
             case HookType::SUBSCRIBER:
                 $collectionData = $this->subscriber->getConnection()
                     ->describeTable($this->subscriber->getMainTable());
-                ;
                 $attrCollection = $this->getAttrCollectionFromDb($collectionData);
                 break;
             default:

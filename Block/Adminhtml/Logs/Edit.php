@@ -32,11 +32,6 @@ use Magento\Framework\Registry;
 class Edit extends Container
 {
     /**
-     * @var string
-     */
-    protected $_objectId = 'id';
-
-    /**
      * Core registry
      *
      * @var Registry
@@ -55,9 +50,9 @@ class Edit extends Container
         Context $context,
         array $data = []
     ) {
-        parent::__construct($context, $data);
-
         $this->coreRegistry = $coreRegistry;
+
+        parent::__construct($context, $data);
     }
 
     /**

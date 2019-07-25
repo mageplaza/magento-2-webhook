@@ -74,7 +74,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
                                  role="tabpanel" aria-expanded="true" aria-hidden="false">
                                 <a id="insert-variable" style="float: right;margin-top: -53px;margin-right: -20px;"
                                    class="btn"><?= __('Insert Variables') ?></a>
-                                <?= ($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
+                                <?= $addOn ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
                                 <?= $block->getHintHtml() ?>
                                 <?= $note ?>
                             </div>

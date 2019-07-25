@@ -23,6 +23,7 @@ namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 
 /**
@@ -34,29 +35,29 @@ class Index extends Action
     /**
      * Page result factory
      *
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     public $resultPageFactory;
 
     /**
      * Index constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory
     ) {
-        parent::__construct($context);
-
         $this->resultPageFactory = $resultPageFactory;
+
+        parent::__construct($context);
     }
 
     /**
      * execute the action
      *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Framework\View\Result\Page
+     * @return \Magento\Backend\Model\View\Result\Page|Page
      */
     public function execute()
     {

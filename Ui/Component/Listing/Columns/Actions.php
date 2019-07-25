@@ -53,9 +53,9 @@ class Actions extends Column
         array $components = [],
         array $data = []
     ) {
-        parent::__construct($context, $uiComponentFactory, $components, $data);
-
         $this->urlBuilder = $urlBuilder;
+
+        parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
     /**
