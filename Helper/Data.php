@@ -341,9 +341,9 @@ class Data extends CoreHelper
     ) {
         $uri = parse_url($url)[2];
         $method = $method ?: 'GET';
-        $A1 = md5("{$username}:{$realm}:{$password}");
-        $A2 = md5("{$method}:{$uri}");
-        $response = md5("{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
+        $A1 = hash('md5', "{$username}:{$realm}:{$password}");
+        $A2 = hash('md5', "{$method}:{$uri}");
+        $response = hash('md5', "{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
         $digestHeader = "Digest username=\"{$username}\", realm=\"{$realm}\", nonce=\"{$nonce}\", uri=\"{$uri}\", cnonce=\"{$clientNonce}\", nc={$nonceCount}, qop=\"{$qop}\", response=\"{$response}\", opaque=\"{$opaque}\", algorithm=\"{$algorithm}\"";
 
         return $digestHeader;
