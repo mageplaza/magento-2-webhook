@@ -241,7 +241,7 @@ composer require liquid/liquid
 
 ## License
 
-From June 23th 2019, this extension is licensed under the [MIT License](https://github.com/mageplaza/magento-2-webhook/blob/master/LICENSE)
+From June 23th 2019, this extension is licensed under the [MIT License](https://github.com/mageplaza/magento-2-webhook/blob/master/LICENSE), feel free to fork and develop this module.
 
 -----
 
@@ -264,4 +264,4 @@ From June 23th 2019, this extension is licensed under the [MIT License](https://
 - [Magento 2 login as customers](https://github.com/mageplaza/magento-2-login-as-customer)
 - [Magento 2 Same Order Number](https://github.com/mageplaza/magento-2-same-order-number)
 - [Magento 2 Layered Navigation](https://github.com/mageplaza/magento-2-ajax-layered-navigation)
-- [Magento 2 security suitr](https://github.com/mageplaza/magento-2-security)
+- [Magento 2 security suite](https://github.com/mageplaza/magento-2-security)
