@@ -64,7 +64,7 @@ class MassStatus extends Action
         Filter $filter,
         CollectionFactory $collectionFactory
     ) {
-        $this->filter = $filter;
+        $this->filter            = $filter;
         $this->collectionFactory = $collectionFactory;
 
         parent::__construct($context);
@@ -76,8 +76,8 @@ class MassStatus extends Action
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $status = (int) $this->getRequest()->getParam('status');
+        $collection  = $this->filter->getCollection($this->collectionFactory->create());
+        $status      = (int) $this->getRequest()->getParam('status');
         $hookUpdated = 0;
         foreach ($collection as $hook) {
             try {

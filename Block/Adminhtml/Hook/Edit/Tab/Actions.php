@@ -86,9 +86,9 @@ class Actions extends Generic implements TabInterface
         Authentication $authentication,
         array $data = []
     ) {
-        $this->fieldFactory = $fieldFactory;
-        $this->method = $method;
-        $this->contentType = $contentType;
+        $this->fieldFactory   = $fieldFactory;
+        $this->method         = $method;
+        $this->contentType    = $contentType;
         $this->authentication = $authentication;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -135,47 +135,47 @@ class Actions extends Generic implements TabInterface
             'values' => $this->authentication->toOptionArray(),
 
         ]);
-        $username = $fieldset->addField('username', 'text', [
+        $username       = $fieldset->addField('username', 'text', [
             'name'  => 'username',
             'label' => __('Username'),
             'title' => __('Username'),
         ]);
-        $realm = $fieldset->addField('realm', 'text', [
+        $realm          = $fieldset->addField('realm', 'text', [
             'name'  => 'realm',
             'label' => __('Realm'),
             'title' => __('Realm'),
         ]);
-        $password = $fieldset->addField('password', 'password', [
+        $password       = $fieldset->addField('password', 'password', [
             'name'  => 'password',
             'label' => __('Password'),
             'title' => __('Password'),
         ]);
-        $nonce = $fieldset->addField('nonce', 'text', [
+        $nonce          = $fieldset->addField('nonce', 'text', [
             'name'  => 'nonce',
             'label' => __('Nonce'),
             'title' => __('Nonce'),
         ]);
-        $algorithm = $fieldset->addField('algorithm', 'text', [
+        $algorithm      = $fieldset->addField('algorithm', 'text', [
             'name'  => 'algorithm',
             'label' => __('Algorithm'),
             'title' => __('Algorithm'),
         ]);
-        $qop = $fieldset->addField('qop', 'text', [
+        $qop            = $fieldset->addField('qop', 'text', [
             'name'  => 'qop',
             'label' => __('qop'),
             'title' => __('qop'),
         ]);
-        $nonceCount = $fieldset->addField('nonce_count', 'text', [
+        $nonceCount     = $fieldset->addField('nonce_count', 'text', [
             'name'  => 'nonce_count',
             'label' => __('Nonce Count'),
             'title' => __('Nonce Count'),
         ]);
-        $clientNonce = $fieldset->addField('client_nonce', 'text', [
+        $clientNonce    = $fieldset->addField('client_nonce', 'text', [
             'name'  => 'client_nonce',
             'label' => __('Client Nonce'),
             'title' => __('Client Nonce'),
         ]);
-        $opaque = $fieldset->addField('opaque', 'text', [
+        $opaque         = $fieldset->addField('opaque', 'text', [
             'name'  => 'opaque',
             'label' => __('Opaque'),
             'title' => __('Opaque'),
@@ -201,7 +201,10 @@ class Actions extends Generic implements TabInterface
             'name'  => 'body',
             'label' => __('Body'),
             'title' => __('Body'),
-            'note'  => __('Supports <a href="%1" target="_blank">Liquid template</a>', 'https://shopify.github.io/liquid/')
+            'note'  => __(
+                'Supports <a href="%1" target="_blank">Liquid template</a>',
+                'https://shopify.github.io/liquid/'
+            )
         ])->setRenderer($rendererBlock);
 
         $refField = $this->fieldFactory->create([
@@ -286,7 +289,7 @@ class Actions extends Generic implements TabInterface
      */
     public function getFormHtml()
     {
-        $formHtml = parent::getFormHtml();
+        $formHtml  = parent::getFormHtml();
         $childHtml = $this->getChildHtml();
 
         return $formHtml . $childHtml;

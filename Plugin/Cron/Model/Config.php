@@ -53,7 +53,7 @@ class Config
         Data $helper,
         CollectionFactory $collectionFactory
     ) {
-        $this->helper = $helper;
+        $this->helper            = $helper;
         $this->collectionFactory = $collectionFactory;
     }
 
@@ -82,8 +82,8 @@ class Config
      */
     private function addApplyWebhookCron(&$result)
     {
-        $schedule = $this->helper->getCronSchedule();
-        $startTime = $this->helper->getCronSchedule('start_time');
+        $schedule   = $this->helper->getCronSchedule();
+        $startTime  = $this->helper->getCronSchedule('start_time');
         $collection = $this->collectionFactory->create()
             ->addFieldToFilter('status', '0');
 

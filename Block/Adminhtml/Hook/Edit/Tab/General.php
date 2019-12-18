@@ -69,7 +69,7 @@ class General extends Generic implements TabInterface
         array $data = []
     ) {
         $this->enabledisable = $enableDisable;
-        $this->systemStore = $systemStore;
+        $this->systemStore   = $systemStore;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
