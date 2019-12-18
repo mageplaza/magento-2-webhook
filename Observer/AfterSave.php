@@ -142,7 +142,8 @@ abstract class AfterSave implements ObserverInterface
     protected function updateObserver($observer)
     {
         $item = $observer->getDataObject();
-        if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
+        $schedule = $this->helper->getCronSchedule();
+        if ($schedule !== Schedule::DISABLE && $schedule !== null) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
