@@ -70,8 +70,8 @@ class History extends Extended implements TabInterface
         Status $status,
         array $data = []
     ) {
-        $this->_status = $status;
-        $this->coreRegistry = $coreRegistry;
+        $this->_status                  = $status;
+        $this->coreRegistry             = $coreRegistry;
         $this->historyCollectionFactory = $historyCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
@@ -96,7 +96,7 @@ class History extends Extended implements TabInterface
      */
     protected function _prepareCollection()
     {
-        $hook = $this->getHook();
+        $hook       = $this->getHook();
         $collection = $this->historyCollectionFactory->create();
         $collection = $collection->addFieldToFilter('hook_id', $hook->getId());
         $this->setCollection($collection);

@@ -86,7 +86,7 @@ class ManageHooks extends Container
             $splitButtonOptions[$hookType['value']] = [
                 'label'   => $hookType['label'],
                 'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', [
-                    'type' => $hookType['value']
+                        'type' => $hookType['value']
                     ]) . "')",
                 'default' => $hookType['value'] === 'new_order',
             ];

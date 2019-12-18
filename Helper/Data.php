@@ -27,6 +27,7 @@ use Magento\Backend\Model\UrlInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
@@ -113,13 +114,13 @@ class Data extends CoreHelper
         HistoryFactory $historyFactory,
         CustomerRepositoryInterface $customer
     ) {
-        $this->liquidFilters = $liquidFilters;
-        $this->curlFactory = $curlFactory;
-        $this->hookFactory = $hookFactory;
-        $this->historyFactory = $historyFactory;
+        $this->liquidFilters    = $liquidFilters;
+        $this->curlFactory      = $curlFactory;
+        $this->hookFactory      = $hookFactory;
+        $this->historyFactory   = $historyFactory;
         $this->transportBuilder = $transportBuilder;
-        $this->backendUrl = $backendUrl;
-        $this->customer = $customer;
+        $this->backendUrl       = $backendUrl;
+        $this->customer         = $customer;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -145,11 +146,11 @@ class Data extends CoreHelper
                 ['finset' => $this->storeManager->getStore()->getId()]
             ])
             ->setOrder('priority', 'ASC');
-        $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
+        $isSendMail     = $this->getConfigGeneral('alert_enabled');
+        $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             $history = $this->historyFactory->create();
-            $data = [
+            $data    = [
                 'hook_id'     => $hook->getId(),
                 'hook_name'   => $hook->getName(),
                 'store_ids'   => $hook->getStoreIds(),
@@ -196,11 +197,11 @@ class Data extends CoreHelper
      */
     public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
-        $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
+        $url            = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
         $authentication = $hook->getAuthentication();
-        $method = $hook->getMethod();
-        $username = $hook->getUsername();
-        $password = $hook->getPassword();
+        $method         = $hook->getMethod();
+        $username       = $hook->getUsername();
+        $password       = $hook->getPassword();
         if ($authentication === Authentication::BASIC) {
             $authentication = $this->getBasicAuthHeader($username, $password);
         } elseif ($authentication === Authentication::DIGEST) {
@@ -219,8 +220,8 @@ class Data extends CoreHelper
             );
         }
 
-        $body = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
-        $headers = $hook->getHeaders();
+        $body        = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
+        $headers     = $hook->getHeaders();
         $contentType = $hook->getContentType();
 
         return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
@@ -235,7 +236,7 @@ class Data extends CoreHelper
     public function generateLiquidTemplate($item, $templateHtml)
     {
         try {
-            $template = new Template;
+            $template       = new Template;
             $filtersMethods = $this->liquidFilters->getFiltersMethods();
 
             $template->registerFilter($this->liquidFilters);
@@ -272,8 +273,8 @@ class Data extends CoreHelper
         $headersConfig = [];
 
         foreach ($headers as $header) {
-            $key = $header['name'];
-            $value = $header['value'];
+            $key             = $header['name'];
+            $value           = $header['value'];
             $headersConfig[] = trim($key) . ': ' . trim($value);
         }
 
@@ -291,7 +292,7 @@ class Data extends CoreHelper
         $result = ['success' => false];
 
         try {
-            $resultCurl = $curl->read();
+            $resultCurl         = $curl->read();
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
                 $result['status'] = Zend_Http_Response::extractCode($resultCurl);
@@ -339,11 +340,11 @@ class Data extends CoreHelper
         $clientNonce,
         $opaque
     ) {
-        $uri = parse_url($url)[2];
-        $method = $method ?: 'GET';
-        $A1 = hash('md5', "{$username}:{$realm}:{$password}");
-        $A2 = hash('md5', "{$method}:{$uri}");
-        $response = hash('md5', "{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
+        $uri          = parse_url($url)[2];
+        $method       = $method ?: 'GET';
+        $A1           = hash('md5', "{$username}:{$realm}:{$password}");
+        $A2           = hash('md5', "{$method}:{$uri}");
+        $response     = hash('md5', "{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
         $digestHeader = "Digest username=\"{$username}\", realm=\"{$realm}\", nonce=\"{$nonce}\", uri=\"{$uri}\", cnonce=\"{$clientNonce}\", nc={$nonceCount}, qop=\"{$qop}\", response=\"{$response}\", opaque=\"{$opaque}\", algorithm=\"{$algorithm}\"";
 
         return $digestHeader;
@@ -379,12 +380,12 @@ class Data extends CoreHelper
             ->setOrder('priority', 'ASC');
 
         $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
+        $sendTo     = explode(',', $this->getConfigGeneral('send_to'));
 
         foreach ($hookCollection as $hook) {
             try {
                 $history = $this->historyFactory->create();
-                $data = [
+                $data    = [
                     'hook_id'     => $hook->getId(),
                     'hook_name'   => $hook->getName(),
                     'store_ids'   => $hook->getStoreIds(),
@@ -438,7 +439,7 @@ class Data extends CoreHelper
      * @param $storeId
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function sendMail($sendTo, $mes, $emailTemplate, $storeId)
     {
@@ -483,7 +484,7 @@ class Data extends CoreHelper
      */
     public function getCronExpr($schedule, $startTime)
     {
-        $ArTime = explode(',', $startTime);
+        $ArTime        = explode(',', $startTime);
         $cronExprArray = [
             (int) $ArTime[1], // Minute
             (int) $ArTime[0], // Hour

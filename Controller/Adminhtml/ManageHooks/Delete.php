@@ -40,7 +40,7 @@ class Delete extends AbstractManageHooks
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-        $hook = $this->initHook();
+        $hook           = $this->initHook();
         if ($hook->getId()) {
             try {
                 /** @var Hook $hook */

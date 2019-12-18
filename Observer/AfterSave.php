@@ -89,11 +89,11 @@ abstract class AfterSave implements ObserverInterface
         StoreManagerInterface $storeManager,
         Data $helper
     ) {
-        $this->hookFactory = $hookFactory;
-        $this->helper = $helper;
+        $this->hookFactory     = $hookFactory;
+        $this->helper          = $helper;
         $this->scheduleFactory = $cronScheduleFactory;
-        $this->messageManager = $messageManager;
-        $this->storeManager = $storeManager;
+        $this->messageManager  = $messageManager;
+        $this->storeManager    = $storeManager;
     }
 
     /**
@@ -103,7 +103,7 @@ abstract class AfterSave implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $item = $observer->getDataObject();
+        $item     = $observer->getDataObject();
         $schedule = $this->helper->getCronSchedule();
         if ($schedule !== Schedule::DISABLE && $schedule !== null) {
             $hookCollection = $this->hookFactory->create()->getCollection()
@@ -116,7 +116,7 @@ abstract class AfterSave implements ObserverInterface
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
-                $data = [
+                $data     = [
                     'hook_type' => $this->hookType,
                     'event_id'  => $item->getId(),
                     'status'    => '0'
@@ -141,8 +141,9 @@ abstract class AfterSave implements ObserverInterface
      */
     protected function updateObserver($observer)
     {
-        $item = $observer->getDataObject();
-        if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
+        $item     = $observer->getDataObject();
+        $schedule = $this->helper->getCronSchedule();
+        if ($schedule !== Schedule::DISABLE && $schedule !== null) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
@@ -153,7 +154,7 @@ abstract class AfterSave implements ObserverInterface
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
-                $data = [
+                $data     = [
                     'hook_type' => $this->hookTypeUpdate,
                     'event_id'  => $item->getId(),
                     'status'    => '0'

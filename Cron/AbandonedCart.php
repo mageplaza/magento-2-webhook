@@ -63,9 +63,9 @@ class AbandonedCart
         QuoteFactory $quoteFactory,
         Data $helper
     ) {
-        $this->logger = $logger;
+        $this->logger       = $logger;
         $this->quoteFactory = $quoteFactory;
-        $this->helper = $helper;
+        $this->helper       = $helper;
     }
 
     /**
@@ -78,9 +78,9 @@ class AbandonedCart
         }
 
         $abandonedTime = (int) $this->helper->getConfigGeneral('abandoned_time');
-        $update = (new DateTime())->sub(new DateInterval("PT{$abandonedTime}H"));
-        $updateTo = clone $update;
-        $updateFrom = $update->sub(new DateInterval("PT1H"));
+        $update        = (new DateTime())->sub(new DateInterval("PT{$abandonedTime}H"));
+        $updateTo      = clone $update;
+        $updateFrom    = $update->sub(new DateInterval("PT1H"));
 
         /** @var Collection $quoteCollection */
         $quoteCollection = $this->quoteFactory->create()->getCollection()

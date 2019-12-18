@@ -187,12 +187,35 @@ class LiquidFilters
         ];
 
         $customFilter = [
-            'count'   => ['label' => __('Count'), 'params' => []],
-            'price'   => ['label' => __('Price'), 'params' => []],
-            'ifEmpty' => ['label' => __('If Empty'), 'params' => [['label' => __('Default'), 'defVal' => '']]],
+            'count'         => ['label' => __('Count'), 'params' => []],
+            'price'         => ['label' => __('Price'), 'params' => []],
+            'ifEmpty'       => ['label' => __('If Empty'), 'params' => [['label' => __('Default'), 'defVal' => '']]],
+            'phone_correct' => ['label' => __('Correct phone number'), 'params' => []],
         ];
 
         return array_merge($filters, $customFilter);
+    }
+
+    /**
+     * @param $phoneNum
+     *
+     * @return string|string[]|null
+     */
+    public function phone_correct($phoneNum)
+    {
+        if (strncmp($phoneNum, '0031', 4) === 0) {
+            return $phoneNum;
+        }
+
+        if (strncmp($phoneNum, '+31', 3) === 0) {
+            return preg_replace('/\+31/', '0031', $phoneNum, 1);
+        }
+
+        if (strncmp($phoneNum, '0', 1) === 0) {
+            return preg_replace('/0/', '0031', $phoneNum, 1);
+        }
+
+        return $phoneNum;
     }
 
     /**
