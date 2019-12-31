@@ -28,6 +28,9 @@
                 <abandoned_time>10</abandoned_time>
                 <keep_log>10</keep_log>
             </general>
+            <cron>
+                <schedule>0</schedule>
+            </cron>
         </mp_webhook>
     </default>
 </config>

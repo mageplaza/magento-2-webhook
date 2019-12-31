@@ -87,11 +87,18 @@ class ClearLogs
             foreach ($hookCollection as $hook) {
                 $historyCollection = $this->historyFactory->create()->getCollection()
                     ->addFieldToFilter('hook_id', $hook->getId());
-                if ($historyCollection->getSize() > $limit) {
-                    $count = $historyCollection->getSize() - $limit;
-                    $historyCollection->getConnection()->query(
-                        "DELETE FROM {$historyCollection->getMainTable()} WHERE `hook_id`='{$hook->getId()}' LIMIT {$count} ORDER BY `id` DESC"
-                    );
+                if ($historyCollection->count() > $limit) {
+                    $count = $historyCollection->count() - $limit;
+                    $historyCollection->setOrder('id');
+
+                    foreach ($historyCollection->getItems() as $history) {
+                        if ($count > 0) {
+                            $count--;
+                        } else {
+                            break;
+                        }
+                        $history->delete();
+                    }
                 }
             }
         } catch (Exception $e) {
