@@ -7,7 +7,7 @@
   },
   "type": "magento2-module",
   "version": "1.1.1",
-  "license": "proprietary",
+  "license": "MIT",
   "authors": [
     {
       "name": "Mageplaza",
