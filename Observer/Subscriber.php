@@ -46,7 +46,7 @@ class Subscriber extends AfterSave
     public function execute(Observer $observer)
     {
         $item = $observer->getEvent()->getSubscriber();
-        if ($this->helper->getCronSchedule() !== Schedule::DISABLE) {
+        if ($this->helper->getCronSchedule() !== Schedule::DISABLE && $this->helper->getCronSchedule() !== null) {
             $hookCollection = $this->hookFactory->create()->getCollection()
                 ->addFieldToFilter('hook_type', $this->hookType)
                 ->addFieldToFilter('status', 1)
