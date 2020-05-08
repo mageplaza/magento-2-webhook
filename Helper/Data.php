@@ -484,6 +484,10 @@ class Data extends CoreHelper
      */
     public function getCronExpr($schedule, $startTime)
     {
+        if ($schedule === Schedule::CRON_MINUTE) {
+            return '* * * * *';
+        }
+        
         $ArTime        = explode(',', $startTime);
         $cronExprArray = [
             (int) $ArTime[1], // Minute
@@ -492,9 +496,6 @@ class Data extends CoreHelper
             '*', // Month of the Year
             $schedule === Schedule::CRON_WEEKLY ? 0 : '*', // Day of the Week
         ];
-        if ($schedule === Schedule::CRON_MINUTE) {
-            return '* * * * *';
-        }
 
         return implode(' ', $cronExprArray);
     }
