@@ -48,7 +48,7 @@ class Subscriber extends AfterSave
      */
     public function execute(Observer $observer)
     {
-        $item = $observer->getEvent()->getSubscriber();
+        $item             = $observer->getEvent()->getSubscriber();
         $subscriberStatus = $item->getSubscriberStatus();
 
         if ($subscriberStatus === SubscriberMagento::STATUS_UNSUBSCRIBED) {
