@@ -27,9 +27,12 @@
                 <enabled>1</enabled>
                 <abandoned_time>10</abandoned_time>
                 <keep_log>10</keep_log>
+                <alert_enabled>0</alert_enabled>
+                <email_template>mp_webhook_general_email_template</email_template>
             </general>
             <cron>
                 <schedule>0</schedule>
+                <start_time>00,00,00</start_time>
             </cron>
         </mp_webhook>
     </default>
