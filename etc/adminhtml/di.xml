@@ -24,7 +24,7 @@
     <type name="Magento\Ui\Model\Export\MetadataProvider">
         <arguments>
             <argument name="data" xsi:type="array">
-                <item name="mageplaza_webhook_logs_listing" xsi:type="array">
+                <item name="mageplaza_webhook_managehooks_listing" xsi:type="array">
                     <item name="created_at" xsi:type="string">created_at</item>
                     <item name="updated_at" xsi:type="string">updated_at</item>
                 </item>
