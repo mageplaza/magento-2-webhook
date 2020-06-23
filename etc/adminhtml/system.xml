@@ -51,7 +51,7 @@
                 </field>
                 <field id="send_to" translate="label comment" type="text" sortOrder="10" showInDefault="1">
                     <label>Send To</label>
-                    <validate>required-entry validate-email</validate>
+                    <backend_model>Mageplaza\Webhook\Model\Config\Backend\Email</backend_model>
                     <comment>Separated by comma (,)</comment>
                 </field>
                 <field id="email_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
