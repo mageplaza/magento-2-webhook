@@ -92,12 +92,11 @@ class ClearLogs
                     $historyCollection->setOrder('id');
 
                     foreach ($historyCollection->getItems() as $history) {
-                        if ($count > 0) {
-                            $count--;
-                        } else {
+                        if ($count <= 0) {
                             break;
                         }
                         $history->delete();
+                        $count--;
                     }
                 }
             }
