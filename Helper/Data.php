@@ -131,8 +131,9 @@ class Data extends CoreHelper
      * @return int
      * @throws NoSuchEntityException
      */
-    public function getItemStore($item) {
-        return $item->getData('store_id')?:$this->storeManager->getStore()->getId();
+    public function getItemStore($item)
+    {
+        return $item->getData('store_id') ?: $this->storeManager->getStore()->getId();
     }
 
     /**
