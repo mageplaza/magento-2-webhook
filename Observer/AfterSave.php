@@ -111,7 +111,7 @@ abstract class AfterSave implements ObserverInterface
                 ->addFieldToFilter('status', 1)
                 ->addFieldToFilter('store_ids', [
                     ['finset' => Store::DEFAULT_STORE_ID],
-                    ['finset' => $this->storeManager->getStore()->getId()]
+                    ['finset' => $this->helper->getItemStore($item)]
                 ])
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
@@ -149,7 +149,7 @@ abstract class AfterSave implements ObserverInterface
                 ->addFieldToFilter('status', 1)
                 ->addFieldToFilter('store_ids', [
                     ['finset' => Store::DEFAULT_STORE_ID],
-                    ['finset' => $this->storeManager->getStore()->getId()]
+                    ['finset' => $this->helper->getItemStore($item)]
                 ])
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {

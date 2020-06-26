@@ -29,41 +29,44 @@
             <resource>Mageplaza_Webhook::configuration</resource>
             <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
-                <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[<a href="https://www.mageplaza.com/kb/webhook/" target="_blank">How to integrate with others</a>]]></comment>
                 </field>
-                <field id="abandoned_time" translate="label comment" type="text" sortOrder="2" showInDefault="1">
+                <field id="abandoned_time" translate="label comment" type="text" sortOrder="2" showInDefault="1" canRestore="1">
                     <label>Abandoned Cart After</label>
+                    <validate>validate-digits</validate>
                     <comment>How to deteminte as Abandonded Cart. Enter number of hour(s). Recommend: 1, 6, 10, 12, 24. Default: 10</comment>
                 </field>
-                <field id="keep_log" translate="label comment" type="text" sortOrder="10" showInDefault="1">
+                <field id="keep_log" translate="label comment" type="text" sortOrder="10" showInDefault="1" canRestore="1">
                     <label>Keep logs</label>
+                    <validate>validate-digits</validate>
                     <comment>The number of logs will be kept in each hook. If it reaches this number, the old logs will be removed. If empty or zero, no limitation. Default: 10</comment>
                 </field>
-                <field id="alert_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1">
+                <field id="alert_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" canRestore="1">
                     <label>Alert on Error</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment><![CDATA[Send alert email to your email addresses if any error. To avoid going to spambox, you should install <a href="https://www.mageplaza.com/magento-2-smtp/" target="_blank">SMTP</a>]]></comment>
                 </field>
                 <field id="send_to" translate="label comment" type="text" sortOrder="10" showInDefault="1">
                     <label>Send To</label>
+                    <backend_model>Mageplaza\Webhook\Model\Config\Backend\Email</backend_model>
                     <comment>Separated by comma (,)</comment>
                 </field>
-                <field id="email_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Email Template</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
             </group>
             <group id="cron" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Schedule For Cron</label>
-                <field id="schedule" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="schedule" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1" >
                     <label>Schedule For Cron</label>
                     <source_model>Mageplaza\Webhook\Model\Config\Source\Schedule</source_model>
                     <comment><![CDATA[Applied for Processing Type as Cron]]></comment>
                 </field>
-                <field id="start_time" translate="label" type="time" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="start_time" translate="label" type="time" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Start Time</label>
                     <depends>
                         <field id="schedule" separator=",">day,week,month</field>

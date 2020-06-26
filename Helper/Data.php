@@ -127,6 +127,16 @@ class Data extends CoreHelper
 
     /**
      * @param $item
+     *
+     * @return int
+     * @throws NoSuchEntityException
+     */
+    public function getItemStore($item) {
+        return $item->getData('store_id')?:$this->storeManager->getStore()->getId();
+    }
+
+    /**
+     * @param $item
      * @param $hookType
      *
      * @throws NoSuchEntityException
@@ -143,7 +153,7 @@ class Data extends CoreHelper
             ->addFieldToFilter('status', 1)
             ->addFieldToFilter('store_ids', [
                 ['finset' => Store::DEFAULT_STORE_ID],
-                ['finset' => $this->storeManager->getStore()->getId()]
+                ['finset' => $this->getItemStore($item)]
             ])
             ->setOrder('priority', 'ASC');
         $isSendMail     = $this->getConfigGeneral('alert_enabled');
