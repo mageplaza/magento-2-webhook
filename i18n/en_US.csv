@@ -114,6 +114,7 @@ Hook,Hook
 "The hook has been saved.","The hook has been saved."
 "Something went wrong while sending %1 hook","Something went wrong while sending %1 hook"
 "Cannot connect to server. Please try again later.","Cannot connect to server. Please try again later."
+"Invalid email format.","Invalid email format."
 "--Please Select--","--Please Select--"
 Basic,Basic
 Digest,Digest
