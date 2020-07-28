@@ -2,6 +2,7 @@
 
 [Mageplaza Webhook](https://www.mageplaza.com/magento-2-webhook/) for Magento 2 supports online store to send an API request via a webhook to a configurable destination (URL) when specific trigger events take place. Webhook a very useful and necessary tool which allows stores to update instant and real-time notifications. 
 
+**IMPORTANT NOTE:** This version of Mageplaza Webhook extension on Github is free as a contribution to the Magento community from Mageplaza. This package does not include the technical support. Should you need technical support for this extension, you will have to buy a license from Mageplaza. [Click here to buy](https://www.mageplaza.com/magento-2-webhook/).
 
 ## 1. Webhook Documentation
 
