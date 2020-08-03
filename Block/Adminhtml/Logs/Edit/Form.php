@@ -113,6 +113,12 @@ class Form extends Generic
             'readonly' => true
         ]);
 
+        $fieldset->addField('body', 'textarea', [
+            'name'     => 'body',
+            'label'    => __('Request Body'),
+            'title'    => __('Request Body')
+        ]);
+
         $form->addValues($log->getData());
         $this->setForm($form);
 
