@@ -21,12 +21,12 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
-use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Registry;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
-use Mageplaza\Webhook\Helper\Data;
-use Mageplaza\Webhook\Model\HistoryFactory;
+use Mageplaza\Webhook\Model\History;
 
 /**
  * Class Save
@@ -35,36 +35,13 @@ use Mageplaza\Webhook\Model\HistoryFactory;
 class Save extends AbstractManageLogs
 {
     /**
-     * @var Data
-     */
-    protected $helperData;
-
-    /**
-     * Save constructor.
-     * @param HistoryFactory $historyFactory
-     * @param Registry $coreRegistry
-     * @param Context $context
-     * @param Data $helperData
-     */
-    public function __construct(
-        HistoryFactory $historyFactory,
-        Registry $coreRegistry,
-        Context $context,
-        Data $helperData
-    ){
-        parent::__construct($historyFactory, $coreRegistry, $context);
-
-        $this->helperData = $helperData;
-    }
-
-    /**
-     * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|Redirect|ResultInterface
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
-
         $data = $this->getRequest()->getPost('log');
+        /** @var History $log */
         $log = $this->initLog();
 
         $log->setBody($data['body']);
