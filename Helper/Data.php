@@ -133,7 +133,11 @@ class Data extends CoreHelper
      */
     public function getItemStore($item)
     {
-        return $item->getData('store_id') ?: $this->storeManager->getStore()->getId();
+        if (method_exists($item,'getData')) {
+            return $item->getData('store_id') ? : $this->storeManager->getStore()->getId();
+        }
+
+        return $this->storeManager->getStore()->getId();
     }
 
     /**
