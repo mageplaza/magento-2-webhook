@@ -29,7 +29,7 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class HookType implements ArrayInterface
 {
-    const NEW_ORDER         = 'new_order';
+    const ORDER             = 'order';
     const NEW_ORDER_COMMENT = 'new_order_comment';
     const NEW_INVOICE       = 'new_invoice';
     const NEW_SHIPMENT      = 'new_shipment';
@@ -74,7 +74,7 @@ class HookType implements ArrayInterface
     public function toArray()
     {
         return [
-            self::NEW_ORDER         => 'New Order',
+            self::ORDER             => 'Order',
             self::NEW_ORDER_COMMENT => 'New Order Comment',
             self::NEW_INVOICE       => 'New Invoice',
             self::NEW_SHIPMENT      => 'New Shipment',

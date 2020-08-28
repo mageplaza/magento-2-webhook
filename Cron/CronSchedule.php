@@ -153,7 +153,7 @@ class CronSchedule
             $eventID  = $cronTab->getEventId();
 
             switch ($hookType) {
-                case HookType::NEW_ORDER:
+                case HookType::ORDER:
                     $item = $this->orderFactory->create()->load($eventID);
                     break;
                 case HookType::NEW_ORDER_COMMENT:

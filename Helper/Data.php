@@ -24,6 +24,7 @@ namespace Mageplaza\Webhook\Helper;
 use Exception;
 use Liquid\Template;
 use Magento\Backend\Model\UrlInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Helper\Context;
@@ -38,6 +39,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
 use Mageplaza\Webhook\Block\Adminhtml\LiquidFilters;
 use Mageplaza\Webhook\Model\Config\Source\Authentication;
+use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\Config\Source\Schedule;
 use Mageplaza\Webhook\Model\Config\Source\Status;
 use Mageplaza\Webhook\Model\HistoryFactory;
@@ -143,7 +145,7 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
-     *
+     * @throws LocalizedException
      * @throws NoSuchEntityException
      */
     public function send($item, $hookType)
@@ -164,6 +166,13 @@ class Data extends CoreHelper
         $isSendMail     = $this->getConfigGeneral('alert_enabled');
         $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
+            if ($hook->getHookType() === HookType::ORDER) {
+                $statusItem = $item->getStatus();
+                $orderStatus = explode(',', $hook->getOrderStatus());
+                if (!in_array($statusItem, $orderStatus)) {
+                    continue;
+                }
+            }
             $history = $this->historyFactory->create();
             $data    = [
                 'hook_id'     => $hook->getId(),
@@ -256,6 +265,10 @@ class Data extends CoreHelper
 
             $template->registerFilter($this->liquidFilters);
             $template->parse($templateHtml, $filtersMethods);
+
+            if ($item instanceof Product) {
+                $item->setStockItem(NULL);
+            }
 
             return $template->render([
                 'item' => $item,
@@ -379,7 +392,7 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
-     *
+     * @throws LocalizedException
      * @throws NoSuchEntityException
      */
     public function sendObserver($item, $hookType)

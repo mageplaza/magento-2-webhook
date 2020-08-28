@@ -25,7 +25,7 @@
         <observer name="mp_wh_save_order_before" instance="Mageplaza\Webhook\Observer\BeforeSave"/>
     </event>
     <event name="sales_order_save_after">
-        <observer name="mp_wh_new_order" instance="Mageplaza\Webhook\Observer\AfterOrder"/>
+        <observer name="mp_wh_order" instance="Mageplaza\Webhook\Observer\AfterOrder"/>
     </event>
     <event name="sales_order_status_history_save_after">
         <observer name="mp_wh_before_order" instance="Mageplaza\Webhook\Observer\AfterOrderComment"/>

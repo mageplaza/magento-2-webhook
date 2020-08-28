@@ -30,6 +30,7 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Sales\Model\Config\Source\Order\Status as OrderStatus;
 use Magento\Store\Model\System\Store;
 use Mageplaza\Webhook\Model\Config\Source\HookType;
 use Mageplaza\Webhook\Model\Hook;
@@ -51,6 +52,11 @@ class General extends Generic implements TabInterface
     protected $systemStore;
 
     /**
+     * @var Status
+     */
+    protected $orderStatus;
+
+    /**
      * General constructor.
      *
      * @param Context $context
@@ -58,6 +64,7 @@ class General extends Generic implements TabInterface
      * @param FormFactory $formFactory
      * @param Enabledisable $enableDisable
      * @param Store $systemStore
+     * @param OrderStatus $orderStatus
      * @param array $data
      */
     public function __construct(
@@ -66,10 +73,12 @@ class General extends Generic implements TabInterface
         FormFactory $formFactory,
         Enabledisable $enableDisable,
         Store $systemStore,
+        OrderStatus $orderStatus,
         array $data = []
     ) {
         $this->enabledisable = $enableDisable;
         $this->systemStore   = $systemStore;
+        $this->orderStatus   = $orderStatus;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -100,7 +109,7 @@ class General extends Generic implements TabInterface
         ]);
         $fieldset->addField('hook_type', 'hidden', [
             'name'  => 'hook_type',
-            'value' => $this->_request->getParam('type') ?: HookType::NEW_ORDER
+            'value' => $this->_request->getParam('type') ?: HookType::ORDER
         ]);
         $fieldset->addField('status', 'select', [
             'name'   => 'status',
@@ -108,6 +117,15 @@ class General extends Generic implements TabInterface
             'title'  => __('Status'),
             'values' => $this->enabledisable->toOptionArray()
         ]);
+
+        if ($this->_request->getParam('type') === HookType::ORDER || $hook->getHookType() === HookType::ORDER) {
+            $fieldset->addField('order_status', 'multiselect', [
+                'name' => 'order_status',
+                'label' => __('Order Status'),
+                'title' => __('Order Status'),
+                'values' => $this->orderStatus->toOptionArray()
+            ]);
+        }
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             /** @var RendererInterface $rendererBlock */
