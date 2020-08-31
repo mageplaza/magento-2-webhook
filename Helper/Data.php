@@ -169,7 +169,7 @@ class Data extends CoreHelper
             if ($hook->getHookType() === HookType::ORDER) {
                 $statusItem = $item->getStatus();
                 $orderStatus = explode(',', $hook->getOrderStatus());
-                if (!in_array($statusItem, $orderStatus)) {
+                if (!in_array($statusItem, $orderStatus, true)) {
                     continue;
                 }
             }
