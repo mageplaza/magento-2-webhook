@@ -66,7 +66,7 @@
                     <source_model>Mageplaza\Webhook\Model\Config\Source\Schedule</source_model>
                     <comment><![CDATA[Applied for Processing Type as Cron]]></comment>
                 </field>
-                <field id="start_time" translate="label" type="time" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="start_time" translate="label" type="time" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Start Time</label>
                     <depends>
                         <field id="schedule" separator=",">day,week,month</field>
