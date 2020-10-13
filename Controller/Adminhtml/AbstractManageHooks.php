@@ -60,7 +60,7 @@ abstract class AbstractManageHooks extends Action
         Registry $coreRegistry,
         Context $context
     ) {
-        $this->hookFactory  = $hookFactory;
+        $this->hookFactory = $hookFactory;
         $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);

@@ -61,12 +61,12 @@ class ManageHooks extends Container
     protected function _prepareLayout()
     {
         $addButtonProps = [
-            'id'           => 'add_new_hook',
-            'label'        => __('Add New'),
-            'class'        => 'add',
+            'id' => 'add_new_hook',
+            'label' => __('Add New'),
+            'class' => 'add',
             'button_class' => '',
-            'class_name'   => SplitButton::class,
-            'options'      => $this->_getAddProductButtonOptions(),
+            'class_name' => SplitButton::class,
+            'options' => $this->_getAddProductButtonOptions(),
         ];
         $this->buttonList->add('add_new', $addButtonProps);
 
@@ -84,7 +84,7 @@ class ManageHooks extends Container
 
         foreach ($this->hookType->toOptionArray() as $hookType) {
             $splitButtonOptions[$hookType['value']] = [
-                'label'   => $hookType['label'],
+                'label' => $hookType['label'],
                 'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', [
                         'type' => $hookType['value']
                     ]) . "')",

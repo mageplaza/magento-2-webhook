@@ -86,9 +86,9 @@ class Actions extends Generic implements TabInterface
         Authentication $authentication,
         array $data = []
     ) {
-        $this->fieldFactory   = $fieldFactory;
-        $this->method         = $method;
-        $this->contentType    = $contentType;
+        $this->fieldFactory = $fieldFactory;
+        $this->method = $method;
+        $this->contentType = $contentType;
         $this->authentication = $authentication;
 
         parent::__construct($context, $registry, $formFactory, $data);
@@ -111,72 +111,72 @@ class Actions extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('actions_fieldset', [
             'legend' => __('Actions'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
         $fieldset->addField('payload_url', 'text', [
-            'name'               => 'payload_url',
-            'label'              => __('Payload URL'),
-            'title'              => __('Payload URL'),
-            'required'           => true,
-            'note'               => __('You can insert a variable'),
+            'name' => 'payload_url',
+            'label' => __('Payload URL'),
+            'title' => __('Payload URL'),
+            'required' => true,
+            'note' => __('You can insert a variable'),
             'after_element_html' => '<a id="insert-variable-upload" class="btn">' . __('Insert Variable') . '</a>',
         ]);
         $fieldset->addField('method', 'select', [
-            'name'   => 'method',
-            'label'  => __('Method'),
-            'title'  => __('Method'),
+            'name' => 'method',
+            'label' => __('Method'),
+            'title' => __('Method'),
             'values' => $this->method->toOptionArray(),
         ]);
 
         $authentication = $fieldset->addField('authentication', 'select', [
-            'name'   => 'authentication',
-            'label'  => __('Authentication'),
-            'title'  => __('Authentication'),
+            'name' => 'authentication',
+            'label' => __('Authentication'),
+            'title' => __('Authentication'),
             'values' => $this->authentication->toOptionArray(),
 
         ]);
-        $username       = $fieldset->addField('username', 'text', [
-            'name'  => 'username',
+        $username = $fieldset->addField('username', 'text', [
+            'name' => 'username',
             'label' => __('Username'),
             'title' => __('Username'),
         ]);
-        $realm          = $fieldset->addField('realm', 'text', [
-            'name'  => 'realm',
+        $realm = $fieldset->addField('realm', 'text', [
+            'name' => 'realm',
             'label' => __('Realm'),
             'title' => __('Realm'),
         ]);
-        $password       = $fieldset->addField('password', 'password', [
-            'name'  => 'password',
+        $password = $fieldset->addField('password', 'password', [
+            'name' => 'password',
             'label' => __('Password'),
             'title' => __('Password'),
         ]);
-        $nonce          = $fieldset->addField('nonce', 'text', [
-            'name'  => 'nonce',
+        $nonce = $fieldset->addField('nonce', 'text', [
+            'name' => 'nonce',
             'label' => __('Nonce'),
             'title' => __('Nonce'),
         ]);
-        $algorithm      = $fieldset->addField('algorithm', 'text', [
-            'name'  => 'algorithm',
+        $algorithm = $fieldset->addField('algorithm', 'text', [
+            'name' => 'algorithm',
             'label' => __('Algorithm'),
             'title' => __('Algorithm'),
         ]);
-        $qop            = $fieldset->addField('qop', 'text', [
-            'name'  => 'qop',
+        $qop = $fieldset->addField('qop', 'text', [
+            'name' => 'qop',
             'label' => __('qop'),
             'title' => __('qop'),
         ]);
-        $nonceCount     = $fieldset->addField('nonce_count', 'text', [
-            'name'  => 'nonce_count',
+        $nonceCount = $fieldset->addField('nonce_count', 'text', [
+            'name' => 'nonce_count',
             'label' => __('Nonce Count'),
             'title' => __('Nonce Count'),
         ]);
-        $clientNonce    = $fieldset->addField('client_nonce', 'text', [
-            'name'  => 'client_nonce',
+        $clientNonce = $fieldset->addField('client_nonce', 'text', [
+            'name' => 'client_nonce',
             'label' => __('Client Nonce'),
             'title' => __('Client Nonce'),
         ]);
-        $opaque         = $fieldset->addField('opaque', 'text', [
-            'name'  => 'opaque',
+        $opaque = $fieldset->addField('opaque', 'text', [
+            'name' => 'opaque',
             'label' => __('Opaque'),
             'title' => __('Opaque'),
         ]);
@@ -184,31 +184,31 @@ class Actions extends Generic implements TabInterface
         $rendererBlock = $this->getLayout()
             ->createBlock(Headers::class);
         $fieldset->addField('headers', 'text', [
-            'name'  => 'headers',
+            'name' => 'headers',
             'label' => __('Header'),
             'title' => __('Header'),
         ])->setRenderer($rendererBlock);
         $fieldset->addField('content_type', 'select', [
-            'name'   => 'content_type',
-            'label'  => __('Content Type'),
-            'title'  => __('Content Type'),
+            'name' => 'content_type',
+            'label' => __('Content Type'),
+            'title' => __('Content Type'),
             'values' => $this->contentType->toOptionArray(),
 
         ]);
         /** @var RendererInterface $rendererBlock */
         $rendererBlock = $this->getLayout()->createBlock(Body::class);
         $fieldset->addField('body', 'textarea', [
-            'name'  => 'body',
+            'name' => 'body',
             'label' => __('Body'),
             'title' => __('Body'),
-            'note'  => __(
+            'note' => __(
                 'Supports <a href="%1" target="_blank">Liquid template</a>',
                 'https://shopify.github.io/liquid/'
             )
         ])->setRenderer($rendererBlock);
 
         $refField = $this->fieldFactory->create([
-            'fieldData'   => ['value' => 'basic,digest', 'separator' => ','],
+            'fieldData' => ['value' => 'basic,digest', 'separator' => ','],
             'fieldPrefix' => ''
         ]);
 
@@ -289,7 +289,7 @@ class Actions extends Generic implements TabInterface
      */
     public function getFormHtml()
     {
-        $formHtml  = parent::getFormHtml();
+        $formHtml = parent::getFormHtml();
         $childHtml = $this->getChildHtml();
 
         return $formHtml . $childHtml;

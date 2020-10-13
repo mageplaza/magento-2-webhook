@@ -29,15 +29,15 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Method implements ArrayInterface
 {
-    const GET     = 'GET';
-    const HEAD    = 'HEAD';
-    const POST    = 'POST';
-    const PUT     = 'PUT';
-    const DELETE  = 'DELETE';
+    const GET = 'GET';
+    const HEAD = 'HEAD';
+    const POST = 'POST';
+    const PUT = 'PUT';
+    const DELETE = 'DELETE';
     const CONNECT = 'CONNECT';
     const OPTIONS = 'OPTIONS';
-    const TRACE   = 'TRACE';
-    const PATCH   = 'PATCH';
+    const TRACE = 'TRACE';
+    const PATCH = 'PATCH';
 
     /**
      * Options getter
@@ -65,16 +65,16 @@ class Method implements ArrayInterface
     public function toArray()
     {
         return [
-            ''            => __('--Please Select--'),
-            self::GET     => 'GET',
-            self::HEAD    => 'HEAD',
-            self::POST    => 'POST',
-            self::PUT     => 'PUT',
-            self::DELETE  => 'DELETE',
+            '' => __('--Please Select--'),
+            self::GET => 'GET',
+            self::HEAD => 'HEAD',
+            self::POST => 'POST',
+            self::PUT => 'PUT',
+            self::DELETE => 'DELETE',
             self::CONNECT => 'CONNECT',
             self::OPTIONS => 'OPTIONS',
-            self::TRACE   => 'TRACE',
-            self::PATCH   => 'PATCH',
+            self::TRACE => 'TRACE',
+            self::PATCH => 'PATCH',
         ];
     }
 }

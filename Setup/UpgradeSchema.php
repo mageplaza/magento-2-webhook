@@ -49,7 +49,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ->addColumn('id', Table::TYPE_INTEGER, null, [
                         'identity' => true,
                         'nullable' => false,
-                        'primary'  => true,
+                        'primary' => true,
                         'unsigned' => true,
                     ], 'Schedule ID')
                     ->addColumn('hook_type', Table::TYPE_TEXT, 255, [], 'Hook Type')
@@ -74,10 +74,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
-        if(version_compare($context->getVersion(), '1.0.2', '<')) {
-            $tableName = $installer->getTable( 'mageplaza_webhook_hook' );
+        if (version_compare($context->getVersion(), '1.0.2', '<')) {
+            $tableName = $installer->getTable('mageplaza_webhook_hook');
             $installer->getConnection()
-                ->addColumn($tableName,'order_status',
+                ->addColumn(
+                    $tableName,
+                    'order_status',
                     [
                         'type' => Table::TYPE_TEXT,
                         'length' => 255,

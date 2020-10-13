@@ -128,16 +128,16 @@ class CronSchedule
         Data $data
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->hookFactory       = $hookFactory;
-        $this->orderFactory      = $orderFactory;
-        $this->orderHistory      = $historyFactory;
-        $this->invoice           = $invoiceFactory;
-        $this->customer          = $customerFactory;
-        $this->product           = $productFactory;
-        $this->category          = $categoryFactory;
-        $this->subscribe         = $subscriberFactory;
-        $this->logger            = $logger;
-        $this->helper            = $data;
+        $this->hookFactory = $hookFactory;
+        $this->orderFactory = $orderFactory;
+        $this->orderHistory = $historyFactory;
+        $this->invoice = $invoiceFactory;
+        $this->customer = $customerFactory;
+        $this->product = $productFactory;
+        $this->category = $categoryFactory;
+        $this->subscribe = $subscriberFactory;
+        $this->logger = $logger;
+        $this->helper = $data;
     }
 
     /**
@@ -150,7 +150,7 @@ class CronSchedule
             ->addFieldToFilter('status', '0');
         foreach ($collection->getItems() as $cronTab) {
             $hookType = $cronTab->getHookType();
-            $eventID  = $cronTab->getEventId();
+            $eventID = $cronTab->getEventId();
 
             switch ($hookType) {
                 case HookType::ORDER:
@@ -164,11 +164,11 @@ class CronSchedule
                     break;
                 case HookType::NEW_SHIPMENT:
                     $shipment = $this->helper->getObjectClass(Shipment::class);
-                    $item     = $shipment->load($eventID);
+                    $item = $shipment->load($eventID);
                     break;
                 case HookType::NEW_CREDITMEMO:
                     $creditmemo = $this->helper->getObjectClass(Creditmemo::class);
-                    $item       = $creditmemo->load($eventID);
+                    $item = $creditmemo->load($eventID);
                     break;
                 case HookType::NEW_CUSTOMER:
                 case HookType::UPDATE_CUSTOMER:

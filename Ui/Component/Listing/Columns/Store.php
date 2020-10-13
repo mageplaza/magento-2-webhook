@@ -80,8 +80,8 @@ class Store extends Column
         $storeKey = 'store_ids'
     ) {
         $this->systemStore = $systemStore;
-        $this->escaper     = $escaper;
-        $this->storeKey    = $storeKey;
+        $this->escaper = $escaper;
+        $this->storeKey = $storeKey;
 
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -113,7 +113,7 @@ class Store extends Column
      */
     protected function prepareItem(array $item)
     {
-        $content    = '';
+        $content = '';
         $origStores = explode(',', $item[$this->storeKey]);
         if (!is_array($origStores)) {
             $origStores = [$origStores];

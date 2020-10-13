@@ -61,7 +61,7 @@ abstract class AbstractManageLogs extends Action
         Context $context
     ) {
         $this->historyFactory = $historyFactory;
-        $this->coreRegistry   = $coreRegistry;
+        $this->coreRegistry = $coreRegistry;
 
         parent::__construct($context);
     }

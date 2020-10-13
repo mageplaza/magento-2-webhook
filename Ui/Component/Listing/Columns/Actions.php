@@ -83,8 +83,8 @@ class Actions extends Column
                         $parameters['hook_id'] = $item[$action['params']['hook_id']];
                     }
                     $item[$this->getData('name')][$key] = [
-                        'href'   => $this->urlBuilder->getUrl($action['path'], $parameters),
-                        'label'  => $action['label'],
+                        'href' => $this->urlBuilder->getUrl($action['path'], $parameters),
+                        'label' => $action['label'],
                         'hidden' => false,
                     ];
                 }

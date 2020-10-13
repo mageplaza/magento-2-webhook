@@ -29,7 +29,7 @@ use Mageplaza\Webhook\Model\Config\AbstractSource;
  */
 class Authentication extends AbstractSource
 {
-    const BASIC  = 'basic';
+    const BASIC = 'basic';
     const DIGEST = 'digest';
 
     /**
@@ -40,8 +40,8 @@ class Authentication extends AbstractSource
     public function toArray()
     {
         return [
-            ''           => __('--Please Select--'),
-            self::BASIC  => __('Basic'),
+            '' => __('--Please Select--'),
+            self::BASIC => __('Basic'),
             self::DIGEST => __('Digest'),
         ];
     }

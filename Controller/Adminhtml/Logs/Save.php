@@ -21,12 +21,14 @@
 
 namespace Mageplaza\Webhook\Controller\Adminhtml\Logs;
 
+use Exception;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageLogs;
 use Mageplaza\Webhook\Model\History;
+use RuntimeException;
 
 /**
  * Class Save
@@ -53,9 +55,9 @@ class Save extends AbstractManageLogs
             $this->_getSession()->setData('mageplaza_webhook_log', false);
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while saving the Log.'));
         }
 

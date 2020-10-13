@@ -77,8 +77,8 @@ class General extends Generic implements TabInterface
         array $data = []
     ) {
         $this->enabledisable = $enableDisable;
-        $this->systemStore   = $systemStore;
-        $this->orderStatus   = $orderStatus;
+        $this->systemStore = $systemStore;
+        $this->orderStatus = $orderStatus;
 
         parent::__construct($context, $registry, $formFactory, $data);
     }
@@ -98,23 +98,23 @@ class General extends Generic implements TabInterface
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('General Information'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
 
         $fieldset->addField('name', 'text', [
-            'name'     => 'name',
-            'label'    => __('Name'),
-            'title'    => __('Name'),
+            'name' => 'name',
+            'label' => __('Name'),
+            'title' => __('Name'),
             'required' => true
         ]);
         $fieldset->addField('hook_type', 'hidden', [
-            'name'  => 'hook_type',
+            'name' => 'hook_type',
             'value' => $this->_request->getParam('type') ?: HookType::ORDER
         ]);
         $fieldset->addField('status', 'select', [
-            'name'   => 'status',
-            'label'  => __('Status'),
-            'title'  => __('Status'),
+            'name' => 'status',
+            'label' => __('Status'),
+            'title' => __('Status'),
             'values' => $this->enabledisable->toOptionArray()
         ]);
 
@@ -131,24 +131,24 @@ class General extends Generic implements TabInterface
             /** @var RendererInterface $rendererBlock */
             $rendererBlock = $this->getLayout()->createBlock(Element::class);
             $fieldset->addField('store_ids', 'multiselect', [
-                'name'     => 'store_ids',
-                'label'    => __('Store Views'),
-                'title'    => __('Store Views'),
+                'name' => 'store_ids',
+                'label' => __('Store Views'),
+                'title' => __('Store Views'),
                 'required' => true,
-                'values'   => $this->systemStore->getStoreValuesForForm(false, true)
+                'values' => $this->systemStore->getStoreValuesForForm(false, true)
             ])->setRenderer($rendererBlock);
         } else {
             $fieldset->addField('store_ids', 'hidden', [
-                'name'  => 'store_ids',
+                'name' => 'store_ids',
                 'value' => $this->_storeManager->getStore()->getId()
             ]);
         }
 
         $fieldset->addField('priority', 'text', [
-            'name'  => 'priority',
+            'name' => 'priority',
             'label' => __('Priority'),
             'title' => __('Priority'),
-            'note'  => __('0 is highest')
+            'note' => __('0 is highest')
         ]);
 
         $form->addValues($hook->getData());

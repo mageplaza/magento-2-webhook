@@ -73,7 +73,7 @@ class Edit extends Container
 
         if ($log->getId()) {
             $this->buttonList->add('replay', [
-                'label'   => __('Replay'),
+                'label' => __('Replay'),
                 'onclick' => sprintf("location.href = '%s';", $this->getReplayUrl($log)),
             ], -90);
         }

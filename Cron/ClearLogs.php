@@ -67,10 +67,10 @@ class ClearLogs
         LoggerInterface $logger,
         Data $helper
     ) {
-        $this->hookFactory    = $hookFactory;
+        $this->hookFactory = $hookFactory;
         $this->historyFactory = $historyFactory;
-        $this->logger         = $logger;
-        $this->helper         = $helper;
+        $this->logger = $logger;
+        $this->helper = $helper;
     }
 
     /**
@@ -78,7 +78,7 @@ class ClearLogs
      */
     public function execute()
     {
-        $limit = (int) $this->helper->getConfigGeneral('keep_log');
+        $limit = (int)$this->helper->getConfigGeneral('keep_log');
         if ($limit <= 0 || !$this->helper->isEnabled()) {
             return;
         }

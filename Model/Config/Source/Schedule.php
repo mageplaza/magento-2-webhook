@@ -29,11 +29,11 @@ use Mageplaza\Webhook\Model\Config\AbstractSource;
  */
 class Schedule extends AbstractSource
 {
-    const DISABLE      = '0';
-    const CRON_DAILY   = 'day';
-    const CRON_WEEKLY  = 'week';
+    const DISABLE = '0';
+    const CRON_DAILY = 'day';
+    const CRON_WEEKLY = 'week';
     const CRON_MONTHLY = 'month';
-    const CRON_MINUTE  = 'minute';
+    const CRON_MINUTE = 'minute';
 
     /**
      * Get options in "key-value" format
@@ -43,11 +43,11 @@ class Schedule extends AbstractSource
     public function toArray()
     {
         return [
-            self::DISABLE      => __('Disable'),
-            self::CRON_DAILY   => __('Daily'),
-            self::CRON_WEEKLY  => __('Weekly'),
+            self::DISABLE => __('Disable'),
+            self::CRON_DAILY => __('Daily'),
+            self::CRON_WEEKLY => __('Weekly'),
             self::CRON_MONTHLY => __('Monthly'),
-            self::CRON_MINUTE  => __('Every Minute')
+            self::CRON_MINUTE => __('Every Minute')
         ];
     }
 }

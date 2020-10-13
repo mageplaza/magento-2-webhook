@@ -69,9 +69,9 @@ class Form extends Generic
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create([
             'data' => [
-                'id'      => 'edit_form',
-                'action'  => $this->getData('action'),
-                'method'  => 'post',
+                'id' => 'edit_form',
+                'action' => $this->getData('action'),
+                'method' => 'post',
                 'enctype' => 'multipart/form-data'
             ]
         ]);
@@ -79,44 +79,44 @@ class Form extends Generic
         /** @var History $log */
         $log = $this->_coreRegistry->registry('mageplaza_webhook_log');
 
-        $log->setStatus((int) $log->getStatus() === Status::SUCCESS ? __('Success') : __('Error'));
+        $log->setStatus((int)$log->getStatus() === Status::SUCCESS ? __('Success') : __('Error'));
 
         $form->setHtmlIdPrefix('log_');
         $form->setFieldNameSuffix('log');
 
         $fieldset = $form->addFieldset('base_fieldset', [
             'legend' => __('General Information'),
-            'class'  => 'fieldset-wide'
+            'class' => 'fieldset-wide'
         ]);
 
         $fieldset->addField('id', 'label', [
-            'name'  => 'id',
+            'name' => 'id',
             'label' => __('Log ID'),
             'title' => __('Log ID'),
         ]);
         $fieldset->addField('hook_type', 'label', [
-            'name'   => 'hook_type',
-            'label'  => __('Entity'),
-            'title'  => __('Entity'),
+            'name' => 'hook_type',
+            'label' => __('Entity'),
+            'title' => __('Entity'),
             'values' => $this->hookType->toOptionArray()
         ]);
         $fieldset->addField('status', 'label', [
-            'name'  => 'status',
+            'name' => 'status',
             'label' => __('Status'),
             'title' => __('Status'),
         ]);
 
         $fieldset->addField('response', 'textarea', [
-            'name'     => 'response',
-            'label'    => __('Response'),
-            'title'    => __('Response'),
+            'name' => 'response',
+            'label' => __('Response'),
+            'title' => __('Response'),
             'readonly' => true
         ]);
 
         $fieldset->addField('body', 'textarea', [
-            'name'     => 'body',
-            'label'    => __('Request Body'),
-            'title'    => __('Request Body')
+            'name' => 'body',
+            'label' => __('Request Body'),
+            'title' => __('Request Body')
         ]);
 
         $form->addValues($log->getData());

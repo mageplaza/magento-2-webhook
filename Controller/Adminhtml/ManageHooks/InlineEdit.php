@@ -77,18 +77,18 @@ class InlineEdit extends Action
     {
         /** @var Json $resultJson */
         $resultJson = $this->jsonFactory->create();
-        $error      = false;
-        $messages   = [];
-        $hookItems  = $this->getRequest()->getParam('items', []);
+        $error = false;
+        $messages = [];
+        $hookItems = $this->getRequest()->getParam('items', []);
         if (!empty($hookItems) && !$this->getRequest()->getParam('isAjax')) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error'    => true,
+                'error' => true,
             ]);
         }
 
-        $key    = array_keys($hookItems);
-        $hookId = !empty($key) ? (int) $key[0] : '';
+        $key = array_keys($hookItems);
+        $hookId = !empty($key) ? (int)$key[0] : '';
         /** @var Hook $hook */
         $hook = $this->hookFactory->create()->load($hookId);
         try {
@@ -97,21 +97,21 @@ class InlineEdit extends Action
             $hook->save();
         } catch (LocalizedException $e) {
             $messages[] = $this->getErrorWithHookId($hook, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (RuntimeException $e) {
             $messages[] = $this->getErrorWithHookId($hook, $e->getMessage());
-            $error      = true;
+            $error = true;
         } catch (Exception $e) {
             $messages[] = $this->getErrorWithHookId(
                 $hook,
                 __('Something went wrong while saving the Post.')
             );
-            $error      = true;
+            $error = true;
         }
 
         return $resultJson->setData([
             'messages' => $messages,
-            'error'    => $error
+            'error' => $error
         ]);
     }
 

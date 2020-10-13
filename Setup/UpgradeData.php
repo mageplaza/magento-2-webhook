@@ -21,9 +21,9 @@
 
 namespace Mageplaza\Webhook\Setup;
 
-use Magento\Framework\Setup\UpgradeDataInterface;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 use Mageplaza\Webhook\Model\CronScheduleFactory;
 use Mageplaza\Webhook\Model\HistoryFactory;
 use Mageplaza\Webhook\Model\HookFactory;
@@ -56,11 +56,10 @@ class UpgradeData implements UpgradeDataInterface
         HookFactory $hookFactory,
         CronScheduleFactory $cronScheduleFactory,
         HistoryFactory $historyFactory
-    )
-    {
-        $this->hookFactory         = $hookFactory;
+    ) {
+        $this->hookFactory = $hookFactory;
         $this->cronScheduleFactory = $cronScheduleFactory;
-        $this->historyFactory      = $historyFactory;
+        $this->historyFactory = $historyFactory;
     }
 
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
@@ -68,10 +67,10 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '1.0.2', '<')) {
             /**
              * Update hook type of mageplaza_webhook_hook table
-            */
+             */
             $hookCollections = $this->hookFactory->create()->getCollection()
-                ->addFieldToFilter('hook_type', array('eq' => 'new_order'));
-            foreach($hookCollections as $hook) {
+                ->addFieldToFilter('hook_type', ['eq' => 'new_order']);
+            foreach ($hookCollections as $hook) {
                 $hook->setHookType('order');
             }
 
@@ -81,8 +80,8 @@ class UpgradeData implements UpgradeDataInterface
              * Update hook type of mageplaza_webhook_cron_schedule table
              */
             $cronScheduleCollections = $this->cronScheduleFactory->create()->getCollection()
-                ->addFieldToFilter('hook_type', array('eq' => 'new_order'));
-            foreach($cronScheduleCollections as $cronSchedule) {
+                ->addFieldToFilter('hook_type', ['eq' => 'new_order']);
+            foreach ($cronScheduleCollections as $cronSchedule) {
                 $cronSchedule->setHookType('order');
             }
 
@@ -92,8 +91,8 @@ class UpgradeData implements UpgradeDataInterface
              * Update hook type of mageplaza_webhook_history table
              */
             $historyCollections = $this->historyFactory->create()->getCollection()
-                ->addFieldToFilter('hook_type', array('eq' => 'new_order'));
-            foreach($historyCollections as $history) {
+                ->addFieldToFilter('hook_type', ['eq' => 'new_order']);
+            foreach ($historyCollections as $history) {
                 $history->setHookType('order');
             }
 

@@ -48,7 +48,7 @@ class Subscriber extends AfterSave
      */
     public function execute(Observer $observer)
     {
-        $item             = $observer->getEvent()->getSubscriber();
+        $item = $observer->getEvent()->getSubscriber();
         $subscriberStatus = $item->getSubscriberStatus();
 
         if ($subscriberStatus === SubscriberMagento::STATUS_UNSUBSCRIBED) {
@@ -66,10 +66,10 @@ class Subscriber extends AfterSave
                 ->setOrder('priority', 'ASC');
             if ($hookCollection->getSize() > 0) {
                 $schedule = $this->scheduleFactory->create();
-                $data     = [
+                $data = [
                     'hook_type' => $this->hookType,
-                    'event_id'  => $item->getId(),
-                    'status'    => '0'
+                    'event_id' => $item->getId(),
+                    'status' => '0'
                 ];
 
                 try {

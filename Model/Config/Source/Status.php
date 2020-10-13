@@ -30,7 +30,7 @@ use Mageplaza\Webhook\Model\Config\AbstractSource;
 class Status extends AbstractSource
 {
     const SUCCESS = 1;
-    const ERROR   = 0;
+    const ERROR = 0;
 
     /**
      * Get options in "key-value" format
@@ -41,7 +41,7 @@ class Status extends AbstractSource
     {
         return [
             self::SUCCESS => 'Success',
-            self::ERROR   => 'Error',
+            self::ERROR => 'Error',
         ];
     }
 }

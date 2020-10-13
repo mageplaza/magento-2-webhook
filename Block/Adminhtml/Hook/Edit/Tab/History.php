@@ -70,8 +70,8 @@ class History extends Extended implements TabInterface
         Status $status,
         array $data = []
     ) {
-        $this->_status                  = $status;
-        $this->coreRegistry             = $coreRegistry;
+        $this->_status = $status;
+        $this->coreRegistry = $coreRegistry;
         $this->historyCollectionFactory = $historyCollectionFactory;
 
         parent::__construct($context, $backendHelper, $data);
@@ -96,7 +96,7 @@ class History extends Extended implements TabInterface
      */
     protected function _prepareCollection()
     {
-        $hook       = $this->getHook();
+        $hook = $this->getHook();
         $collection = $this->historyCollectionFactory->create();
         $collection = $collection->addFieldToFilter('hook_id', $hook->getId());
         $this->setCollection($collection);
@@ -111,37 +111,37 @@ class History extends Extended implements TabInterface
     protected function _prepareColumns()
     {
         $this->addColumn('id', [
-            'header'           => __('ID'),
-            'sortable'         => true,
-            'index'            => 'id',
-            'type'             => 'number',
+            'header' => __('ID'),
+            'sortable' => true,
+            'index' => 'id',
+            'type' => 'number',
             'header_css_class' => 'col-id',
             'column_css_class' => 'col-id'
         ]);
         $this->addColumn('hook_name', [
             'header' => __('Hook Name'),
-            'name'   => 'hook_name',
-            'index'  => 'hook_name'
+            'name' => 'hook_name',
+            'index' => 'hook_name'
         ]);
         $this->addColumn('status', [
-            'header'           => __('Status'),
-            'name'             => 'status',
-            'index'            => 'status',
-            'type'             => 'options',
-            'sortable'         => false,
-            'options'          => $this->_status->toArray(),
+            'header' => __('Status'),
+            'name' => 'status',
+            'index' => 'status',
+            'type' => 'options',
+            'sortable' => false,
+            'options' => $this->_status->toArray(),
             'header_css_class' => 'col-status',
             'column_css_class' => 'col-status'
         ]);
         $this->addColumn('hook_type', [
             'header' => __('Entity'),
-            'name'   => 'hook_type',
-            'index'  => 'hook_type'
+            'name' => 'hook_type',
+            'index' => 'hook_type'
         ]);
         $this->addColumn('message', [
             'header' => __('Message'),
-            'name'   => 'message',
-            'index'  => 'message'
+            'name' => 'message',
+            'index' => 'message'
         ]);
 
         return $this;
