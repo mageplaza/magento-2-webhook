@@ -135,8 +135,8 @@ class Data extends CoreHelper
      */
     public function getItemStore($item)
     {
-        if (method_exists($item,'getData')) {
-            return $item->getData('store_id') ? : $this->storeManager->getStore()->getId();
+        if (method_exists($item, 'getData')) {
+            return $item->getData('store_id') ?: $this->storeManager->getStore()->getId();
         }
 
         return $this->storeManager->getStore()->getId();
@@ -145,6 +145,7 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
+     *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
@@ -167,7 +168,7 @@ class Data extends CoreHelper
         $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             if ($hook->getHookType() === HookType::ORDER) {
-                $statusItem = $item->getStatus();
+                $statusItem  = $item->getStatus();
                 $orderStatus = explode(',', $hook->getOrderStatus());
                 if (!in_array($statusItem, $orderStatus, true)) {
                     continue;
@@ -267,7 +268,7 @@ class Data extends CoreHelper
             $template->parse($templateHtml, $filtersMethods);
 
             if ($item instanceof Product) {
-                $item->setStockItem(NULL);
+                $item->setStockItem(null);
             }
 
             return $template->render([
@@ -392,6 +393,7 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
+     *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */

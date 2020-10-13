@@ -120,9 +120,9 @@ class General extends Generic implements TabInterface
 
         if ($this->_request->getParam('type') === HookType::ORDER || $hook->getHookType() === HookType::ORDER) {
             $fieldset->addField('order_status', 'multiselect', [
-                'name' => 'order_status',
-                'label' => __('Order Status'),
-                'title' => __('Order Status'),
+                'name'   => 'order_status',
+                'label'  => __('Order Status'),
+                'title'  => __('Order Status'),
                 'values' => $this->orderStatus->toOptionArray()
             ]);
         }
