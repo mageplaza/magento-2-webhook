@@ -74,6 +74,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
+        if(version_compare($context->getVersion(), '1.0.2', '<')) {
+            $tableName = $installer->getTable( 'mageplaza_webhook_hook' );
+            $installer->getConnection()
+                ->addColumn($tableName,'order_status',
+                    [
+                        'type' => Table::TYPE_TEXT,
+                        'length' => 255,
+                        'comment' => 'Order Status',
+                        'after' => 'status'
+                    ]
+                );
+        }
+
         $installer->endSetup();
     }
 }

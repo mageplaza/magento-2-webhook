@@ -78,6 +78,10 @@ class Save extends AbstractManageHooks
             $data['headers'] = Data::jsonEncode($data['headers']);
         }
 
+        if (isset($data['order_status']) && $data['order_status']) {
+            $data['order_status'] = implode(',', $data['order_status']);
+        }
+
         if (isset($data['store_ids']) && $data['store_ids']) {
             $data['store_ids'] = implode(',', $data['store_ids']);
         }

@@ -88,7 +88,7 @@ class ManageHooks extends Container
                 'onclick' => "setLocation('" . $this->getUrl('mpwebhook/managehooks/new', [
                         'type' => $hookType['value']
                     ]) . "')",
-                'default' => $hookType['value'] === 'new_order',
+                'default' => $hookType['value'] === 'order',
             ];
         }
 
