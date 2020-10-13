@@ -21,6 +21,7 @@ Body,Body
 "General Information","General Information"
 Name,Name
 Status,Status
+"Order Status","Order Status"
 "Store Views","Store Views"
 Priority,Priority
 "0 is highest","0 is highest"
@@ -85,10 +86,12 @@ Words,Words
 Price,Price
 "If Empty","If Empty"
 "Correct phone number","Correct phone number"
+Replay,Replay
 Success,Success
 Error,Error
 "Log ID","Log ID"
 Response,Response
+"Request Body","Request Body"
 "Add New","Add New"
 "This hook no longer exists.","This hook no longer exists."
 "This log no longer exists.","This log no longer exists."
@@ -99,6 +102,8 @@ Log,Log
 "Hook Logs","Hook Logs"
 "The log has been replay successful.","The log has been replay successful."
 "The Log to replay was not found.","The Log to replay was not found."
+"The log has been saved.","The log has been saved."
+"Something went wrong while saving the Log.","Something went wrong while saving the Log."
 "The Hook has been deleted.","The Hook has been deleted."
 "The Hook to delete was not found.","The Hook to delete was not found."
 Hook,Hook
@@ -155,7 +160,6 @@ Enable,Enable
 "Applied for Processing Type as Cron","Applied for Processing Type as Cron"
 "Start Time","Start Time"
 View,View
-Replay,Replay
 "Delete Hooks","Delete Hooks"
 "Are you sure you wan't to delete selected Hooks?","Are you sure you wan't to delete selected Hooks?"
 "Change status","Change status"

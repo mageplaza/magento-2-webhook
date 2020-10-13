@@ -83,6 +83,7 @@ class Edit extends Container
      * Get replay action URL
      *
      * @param $log
+     *
      * @return string
      */
     protected function getReplayUrl($log)

@@ -114,9 +114,9 @@ class Form extends Generic
         ]);
 
         $fieldset->addField('body', 'textarea', [
-            'name'     => 'body',
-            'label'    => __('Request Body'),
-            'title'    => __('Request Body')
+            'name'  => 'body',
+            'label' => __('Request Body'),
+            'title' => __('Request Body')
         ]);
 
         $form->addValues($log->getData());
