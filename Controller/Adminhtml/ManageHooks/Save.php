@@ -83,7 +83,7 @@ class Save extends AbstractManageHooks
         }
 
         if (isset($data['store_ids']) && $data['store_ids']) {
-            $data['store_ids'] = implode(',', $data['store_ids']);
+            $data['store_ids'] = is_array($data['store_ids'])?implode(',', $data['store_ids']):$data['store_ids'];
         }
 
         $hook->addData($data);
