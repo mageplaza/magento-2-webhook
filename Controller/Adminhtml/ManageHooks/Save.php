@@ -32,6 +32,7 @@ use Mageplaza\Webhook\Controller\Adminhtml\AbstractManageHooks;
 use Mageplaza\Webhook\Helper\Data;
 use Mageplaza\Webhook\Model\HookFactory;
 use RuntimeException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save
@@ -45,20 +46,28 @@ class Save extends AbstractManageHooks
     protected $helperData;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * Save constructor.
      *
      * @param HookFactory $hookFactory
      * @param Registry $coreRegistry
      * @param Context $context
      * @param Data $helperData
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         HookFactory $hookFactory,
         Registry $coreRegistry,
         Context $context,
-        Data $helperData
+        Data $helperData,
+        StoreManagerInterface $storeManager
     ) {
-        $this->helperData = $helperData;
+        $this->helperData    = $helperData;
+        $this->_storeManager = $storeManager;
 
         parent::__construct($hookFactory, $coreRegistry, $context);
     }
@@ -82,7 +91,7 @@ class Save extends AbstractManageHooks
             $data['order_status'] = implode(',', $data['order_status']);
         }
 
-        if (isset($data['store_ids']) && $data['store_ids']) {
+        if (isset($data['store_ids']) && $data['store_ids'] && !$this->_storeManager->isSingleStoreMode()) {
             $data['store_ids'] = implode(',', $data['store_ids']);
         }
 
