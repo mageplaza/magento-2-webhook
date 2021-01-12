@@ -325,7 +325,7 @@ class Data extends CoreHelper
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
                 $result['status'] = Zend_Http_Response::extractCode($resultCurl);
-                if (isset($result['status']) && in_array($result['status'], [200, 201])) {
+                if (isset($result['status']) && $this->isSuccess($result['status'])) {
                     $result['success'] = true;
                 } else {
                     $result['message'] = __('Cannot connect to server. Please try again later.');
@@ -553,5 +553,15 @@ class Data extends CoreHelper
     public function getObjectClass($classPath)
     {
         return $this->objectManager->create($classPath);
+    }
+
+    /**
+     * @param $code
+     *
+     * @return bool
+     */
+    public function isSuccess($code)
+    {
+        return (200 <= $code && 300 > $code);
     }
 }
