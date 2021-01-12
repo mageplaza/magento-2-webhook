@@ -116,13 +116,13 @@ class Data extends CoreHelper
         HistoryFactory $historyFactory,
         CustomerRepositoryInterface $customer
     ) {
-        $this->liquidFilters = $liquidFilters;
-        $this->curlFactory = $curlFactory;
-        $this->hookFactory = $hookFactory;
-        $this->historyFactory = $historyFactory;
+        $this->liquidFilters    = $liquidFilters;
+        $this->curlFactory      = $curlFactory;
+        $this->hookFactory      = $hookFactory;
+        $this->historyFactory   = $historyFactory;
         $this->transportBuilder = $transportBuilder;
-        $this->backendUrl = $backendUrl;
-        $this->customer = $customer;
+        $this->backendUrl       = $backendUrl;
+        $this->customer         = $customer;
 
         parent::__construct($context, $objectManager, $storeManager);
     }
@@ -145,6 +145,7 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
+     *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
@@ -163,25 +164,25 @@ class Data extends CoreHelper
                 ['finset' => $this->getItemStore($item)]
             ])
             ->setOrder('priority', 'ASC');
-        $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
+        $isSendMail     = $this->getConfigGeneral('alert_enabled');
+        $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
         foreach ($hookCollection as $hook) {
             if ($hook->getHookType() === HookType::ORDER) {
-                $statusItem = $item->getStatus();
+                $statusItem  = $item->getStatus();
                 $orderStatus = explode(',', $hook->getOrderStatus());
                 if (!in_array($statusItem, $orderStatus, true)) {
                     continue;
                 }
             }
             $history = $this->historyFactory->create();
-            $data = [
-                'hook_id' => $hook->getId(),
-                'hook_name' => $hook->getName(),
-                'store_ids' => $hook->getStoreIds(),
-                'hook_type' => $hook->getHookType(),
-                'priority' => $hook->getPriority(),
+            $data    = [
+                'hook_id'     => $hook->getId(),
+                'hook_name'   => $hook->getName(),
+                'store_ids'   => $hook->getStoreIds(),
+                'hook_type'   => $hook->getHookType(),
+                'priority'    => $hook->getPriority(),
                 'payload_url' => $this->generateLiquidTemplate($item, $hook->getPayloadUrl()),
-                'body' => $this->generateLiquidTemplate($item, $hook->getBody())
+                'body'        => $this->generateLiquidTemplate($item, $hook->getBody())
             ];
             $history->addData($data);
             try {
@@ -221,11 +222,11 @@ class Data extends CoreHelper
      */
     public function sendHttpRequestFromHook($hook, $item = false, $log = false)
     {
-        $url = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
+        $url            = $log ? $log->getPayloadUrl() : $this->generateLiquidTemplate($item, $hook->getPayloadUrl());
         $authentication = $hook->getAuthentication();
-        $method = $hook->getMethod();
-        $username = $hook->getUsername();
-        $password = $hook->getPassword();
+        $method         = $hook->getMethod();
+        $username       = $hook->getUsername();
+        $password       = $hook->getPassword();
         if ($authentication === Authentication::BASIC) {
             $authentication = $this->getBasicAuthHeader($username, $password);
         } elseif ($authentication === Authentication::DIGEST) {
@@ -244,8 +245,8 @@ class Data extends CoreHelper
             );
         }
 
-        $body = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
-        $headers = $hook->getHeaders();
+        $body        = $log ? $log->getBody() : $this->generateLiquidTemplate($item, $hook->getBody());
+        $headers     = $hook->getHeaders();
         $contentType = $hook->getContentType();
 
         return $this->sendHttpRequest($headers, $authentication, $contentType, $url, $body, $method);
@@ -260,7 +261,7 @@ class Data extends CoreHelper
     public function generateLiquidTemplate($item, $templateHtml)
     {
         try {
-            $template = new Template;
+            $template       = new Template;
             $filtersMethods = $this->liquidFilters->getFiltersMethods();
 
             $template->registerFilter($this->liquidFilters);
@@ -301,8 +302,8 @@ class Data extends CoreHelper
         $headersConfig = [];
 
         foreach ($headers as $header) {
-            $key = $header['name'];
-            $value = $header['value'];
+            $key             = $header['name'];
+            $value           = $header['value'];
             $headersConfig[] = trim($key) . ': ' . trim($value);
         }
 
@@ -320,7 +321,7 @@ class Data extends CoreHelper
         $result = ['success' => false];
 
         try {
-            $resultCurl = $curl->read();
+            $resultCurl         = $curl->read();
             $result['response'] = $resultCurl;
             if (!empty($resultCurl)) {
                 $result['status'] = Zend_Http_Response::extractCode($resultCurl);
@@ -368,11 +369,11 @@ class Data extends CoreHelper
         $clientNonce,
         $opaque
     ) {
-        $uri = parse_url($url)[2];
-        $method = $method ?: 'GET';
-        $A1 = hash('md5', "{$username}:{$realm}:{$password}");
-        $A2 = hash('md5', "{$method}:{$uri}");
-        $response = hash('md5', "{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
+        $uri          = parse_url($url)[2];
+        $method       = $method ?: 'GET';
+        $A1           = hash('md5', "{$username}:{$realm}:{$password}");
+        $A2           = hash('md5', "{$method}:{$uri}");
+        $response     = hash('md5', "{$A1}:{$nonce}:{$nonceCount}:{$clientNonce}:{$qop}:${A2}");
         $digestHeader = "Digest username=\"{$username}\", realm=\"{$realm}\", nonce=\"{$nonce}\", uri=\"{$uri}\", cnonce=\"{$clientNonce}\", nc={$nonceCount}, qop=\"{$qop}\", response=\"{$response}\", opaque=\"{$opaque}\", algorithm=\"{$algorithm}\"";
 
         return $digestHeader;
@@ -392,6 +393,7 @@ class Data extends CoreHelper
     /**
      * @param $item
      * @param $hookType
+     *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
@@ -408,19 +410,19 @@ class Data extends CoreHelper
             ->setOrder('priority', 'ASC');
 
         $isSendMail = $this->getConfigGeneral('alert_enabled');
-        $sendTo = explode(',', $this->getConfigGeneral('send_to'));
+        $sendTo     = explode(',', $this->getConfigGeneral('send_to'));
 
         foreach ($hookCollection as $hook) {
             try {
                 $history = $this->historyFactory->create();
-                $data = [
-                    'hook_id' => $hook->getId(),
-                    'hook_name' => $hook->getName(),
-                    'store_ids' => $hook->getStoreIds(),
-                    'hook_type' => $hook->getHookType(),
-                    'priority' => $hook->getPriority(),
+                $data    = [
+                    'hook_id'     => $hook->getId(),
+                    'hook_name'   => $hook->getName(),
+                    'store_ids'   => $hook->getStoreIds(),
+                    'hook_type'   => $hook->getHookType(),
+                    'priority'    => $hook->getPriority(),
                     'payload_url' => $this->generateLiquidTemplate($item, $hook->getPayloadUrl()),
-                    'body' => $this->generateLiquidTemplate($item, $hook->getBody())
+                    'body'        => $this->generateLiquidTemplate($item, $hook->getBody())
                 ];
                 $history->addData($data);
                 try {
@@ -475,12 +477,12 @@ class Data extends CoreHelper
             $this->transportBuilder
                 ->setTemplateIdentifier($emailTemplate)
                 ->setTemplateOptions([
-                    'area' => Area::AREA_FRONTEND,
+                    'area'  => Area::AREA_FRONTEND,
                     'store' => $storeId,
                 ])
                 ->setTemplateVars([
                     'viewLogUrl' => $this->backendUrl->getUrl('mpwebhook/logs/'),
-                    'mes' => $mes
+                    'mes'        => $mes
                 ])
                 ->setFrom('general')
                 ->addTo($sendTo);
@@ -512,10 +514,10 @@ class Data extends CoreHelper
      */
     public function getCronExpr($schedule, $startTime)
     {
-        $ArTime = explode(',', $startTime);
+        $ArTime        = explode(',', $startTime);
         $cronExprArray = [
-            (int)$ArTime[1], // Minute
-            (int)$ArTime[0], // Hour
+            (int) $ArTime[1], // Minute
+            (int) $ArTime[0], // Hour
             $schedule === Schedule::CRON_MONTHLY ? 1 : '*', // Day of the Month
             '*', // Month of the Year
             $schedule === Schedule::CRON_WEEKLY ? 0 : '*', // Day of the Week
@@ -562,5 +564,4 @@ class Data extends CoreHelper
     {
         return (200 <= $code && 300 > $code);
     }
-
 }
