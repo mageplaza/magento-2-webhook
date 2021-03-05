@@ -36,16 +36,16 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
 $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonEncode($block->getModifier()) : '{}';
 ?>
 
-<?php if (!$element->getNoDisplay()): ?>
-    <?php if ($element->getType() == 'hidden'): ?>
+<?php if (!$element->getNoDisplay()) : ?>
+    <?php if ($element->getType() == 'hidden') : ?>
         <?= $element->getElementHtml() ?>
-    <?php else: ?>
-        <div<?= $fieldAttributes ?>>
-            <?php if ($elementBeforeLabel): ?>
+    <?php else : ?>
+        <div<?= /** @noEscape */ $fieldAttributes ?>>
+            <?php if ($elementBeforeLabel) : ?>
                 <?= $element->getElementHtml() ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
-                <?= $note ?>
-            <?php else: ?>
+                <?= $block->escapeHtml($note) ?>
+            <?php else : ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
                 <div class="admin__field-control control">
                     <div id="grid_tab" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
@@ -56,7 +56,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
                                 aria-selected="true">
                                 <a href="#grid_tab_body_content" id="grid_tab_body" title="Body" class="ui-tabs-anchor"
                                    data-tab-type="" role="presentation" tabindex="-1">
-                                    <span><?= __('Body') ?></span>
+                                    <span><?= $block->escapeHtml(__('Body')) ?></span>
                                 </a>
                             </li>
                             <li class="ui-state-default ui-corner-top" role="tab" tabindex="-1"
@@ -64,7 +64,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
                                 aria-selected="false">
                                 <a href="#grid_tab_preview_content" id="grid_tab_preview" title="Preview"
                                    class="ui-tabs-anchor" data-tab-type="" role="presentation" tabindex="-1">
-                                    <span><?= __('Preview') ?></span>
+                                    <span><?= $block->escapeHtml(__('Preview')) ?></span>
                                 </a>
                             </li>
                         </ul>
@@ -73,15 +73,17 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
                                  aria-labelledby="grid_tab_body" class="ui-widget-content ui-corner-bottom"
                                  role="tabpanel" aria-expanded="true" aria-hidden="false">
                                 <a id="insert-variable" style="float: right;margin-top: -53px;margin-right: -20px;"
-                                   class="btn"><?= __('Insert Variables') ?></a>
-                                <?= $addOn ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
+                                   class="btn"><?= $block->escapeHtml(__('Insert Variables')) ?></a>
+                                <?= $addOn ? '<div class="addon">' . $element->getElementHtml()
+                                    . '</div>' : $element->getElementHtml(); ?>
                                 <?= $block->getHintHtml() ?>
-                                <?= $note ?>
+                                <?= $block->escapeHtml($note) ?>
                             </div>
                             <div id="grid_tab_preview_content" style="border-top: 1px solid #adadad;"
                                  aria-labelledby="grid_tab_body" class="ui-widget-content ui-corner-bottom"
                                  role="tabpanel" aria-expanded="true" aria-hidden="false">
-                                <textarea style="width: 100%" name="hook[preview]" title="preview" id="hook_preview"></textarea>
+                                <textarea style="width: 100%" name="hook[preview]" title="preview" id="hook_preview">
+                                </textarea>
                             </div>
                         </div>
                     </div>
@@ -103,22 +105,78 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
         <div class="entry-edit-head admin__collapsible-block">
             <span id="ox_variable_item-link" class="entry-edit-head-link"></span>
             <a id="ox_variable_item-head" href="#ox_variable_item-link"
-               onclick="Fieldset.toggleCollapse('ox_variable_item'); return false;"><?= __('Item Attribute') ?></a>
+               onclick="Fieldset.toggleCollapse('ox_variable_item'); return false;">
+                <?= $block->escapeHtml(__('Item Attribute')) ?>
+            </a>
         </div>
         <input id="ox_variable_item-state" value="1" type="hidden">
 
         <fieldset class="config admin__collapsible-block admin__scope-old" id="ox_variable_item">
-            <?php foreach ($attrCollection as $attr): ?>
+            <?php foreach ($attrCollection as $attr) : ?>
                 <?php /** @var \Magento\Eav\Model\Entity\Attribute $attr */ ?>
-                <div class="attr-code" id="<?= $attr->getName() ?>" code="<?= $attr->getName() ?>">
+                <div class="attr-code" id="<?= $block->escapeHtmlAttr($attr->getName()) ?>" code="<?= $block->escapeHtmlAttr($attr->getName()) ?>">
                     <div class="row">
-                        <label class="attr-code-label"><?= $attr->getTitle() . " ({$attr->getName()})"; ?></label>
-                        <button class="insert"><?= __('Add') ?></button>
-                        <button class="add-modifier"><?= __('Add Filter') ?></button>
-                        <label class="liquid-variable">{{ <?= 'item.' . $attr->getName() ?> }}</label>
+                        <label class="attr-code-label"><?= $block->escapeHtml($attr->getTitle() . " ({$attr->getName()})") ?></label>
+                        <button class="insert"><?= $block->escapeHtml(__('Add')) ?></button>
+                        <button class="add-modifier"><?= $block->escapeHtml(__('Add Filter')) ?></button>
+                        <label class="liquid-variable">{{ <?= 'item.' . $block->escapeHtml($attr->getName()) ?> }}</label>
                     </div>
                     <div class="row-modifier data-table">
-                        <div class="modifier-group" code="<?= $attr->getName() ?>"></div>
+                        <div class="modifier-group" code="<?= $block->escapeHtmlAttr($attr->getName()) ?>"></div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </fieldset>
+    </div>
+    <div class="section-config">
+        <div class="entry-edit-head admin__collapsible-block">
+            <span id="ox_variable_shipping_address-link" class="entry-edit-head-link"></span>
+            <a id="ox_variable_shipping_address-head" href="#ox_variable_shipping_address-link"
+               onclick="Fieldset.toggleCollapse('ox_variable_shipping_address'); return false;">
+                <?= $block->escapeHtml(__('Shipping Address Attribute')) ?>
+            </a>
+        </div>
+        <input id="ox_variable_shipping-state" value="1" type="hidden">
+
+        <fieldset class="config admin__collapsible-block admin__scope-old" id="ox_variable_shipping_address">
+            <?php foreach ($block->getShippingAddressAttrCollection() as $attr) : ?>
+                <?php /** @var \Magento\Eav\Model\Entity\Attribute $attr */ ?>
+                <div class="attr-code" id="<?= $block->escapeHtmlAttr($attr->getName()) ?>" code="<?= $block->escapeHtmlAttr($attr->getName()) ?>">
+                    <div class="row">
+                        <label class="attr-code-label"><?= $block->escapeHtml($attr->getTitle() . " ({$attr->getName()})") ?></label>
+                        <button class="insert"><?= $block->escapeHtml(__('Add')) ?></button>
+                        <button class="add-modifier"><?= $block->escapeHtml(__('Add Filter')) ?></button>
+                        <label class="liquid-variable">{{ <?= 'item.shippingAddress.' . $block->escapeHtml($attr->getName()) ?> }}</label>
+                    </div>
+                    <div class="row-modifier data-table">
+                        <div class="modifier-group" code="<?= $block->escapeHtmlAttr($attr->getName()) ?>"></div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </fieldset>
+    </div>
+    <div class="section-config">
+        <div class="entry-edit-head admin__collapsible-block">
+            <span id="ox_variable_billing_address-link" class="entry-edit-head-link"></span>
+            <a id="ox_variable_billing_address-head" href="#ox_variable_billing_address-link"
+               onclick="Fieldset.toggleCollapse('ox_variable_billing_address'); return false;">
+                <?= $block->escapeHtml(__('Billing Address Attribute')) ?>
+            </a>
+        </div>
+        <input id="ox_variable_billing-state" value="1" type="hidden">
+
+        <fieldset class="config admin__collapsible-block admin__scope-old" id="ox_variable_shipping_address">
+            <?php foreach ($block->getShippingAddressAttrCollection() as $attr) : ?>
+                <?php /** @var \Magento\Eav\Model\Entity\Attribute $attr */ ?>
+                <div class="attr-code" id="<?= $block->escapeHtmlAttr($attr->getName()) ?>" code="<?= $block->escapeHtmlAttr($attr->getName()) ?>">
+                    <div class="row">
+                        <label class="attr-code-label"><?= $block->escapeHtml($attr->getTitle() . " ({$attr->getName()})") ?></label>
+                        <button class="insert"><?= $block->escapeHtml(__('Add')) ?></button>
+                        <button class="add-modifier"><?= $block->escapeHtml(__('Add Filter')) ?></button>
+                        <label class="liquid-variable">{{ <?= 'item.billingAddress.' . $block->escapeHtml($attr->getName()) ?> }}</label>
+                    </div>
+                    <div class="row-modifier data-table">
+                        <div class="modifier-group" code="<?= $block->escapeHtmlAttr($attr->getName()) ?>"></div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -127,6 +185,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
     <script type="text/javascript">//<![CDATA[
         require(['prototype'], function () {
             Fieldset.applyCollapse('ox_variable_item');
+            Fieldset.applyCollapse('ox_variable_shipping_address');
         });
         //]]>
     </script>
@@ -135,7 +194,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
     {
         "*": {
             "Mageplaza_Webhook/js/hook/initActionsTab":{
-                "modifiersData": <?= $modifiersData ?>
+                "modifiersData": <?= /** @noEscape */ $modifiersData ?>
             }
         }
     }
