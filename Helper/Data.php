@@ -271,6 +271,14 @@ class Data extends CoreHelper
                 $item->setStockItem(null);
             }
 
+            if ($item->getShippingAddress()) {
+                $item->setData('shippingAddress', $item->getShippingAddress()->getData());
+            }
+
+            if ($item->getBillingAddress()) {
+                $item->setData('billingAddress', $item->getBillingAddress());
+            }
+
             return $template->render([
                 'item' => $item,
             ]);
