@@ -40,7 +40,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
     <?php if ($element->getType() == 'hidden') : ?>
         <?= $element->getElementHtml() ?>
     <?php else : ?>
-        <div<?= $block->escapeHtmlAttr($fieldAttributes) ?>>
+        <div<?= /** @noEscape */ $fieldAttributes ?>>
             <?php if ($elementBeforeLabel) : ?>
                 <?= $element->getElementHtml() ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
