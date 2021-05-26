@@ -33,6 +33,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Newsletter\Model\ResourceModel\Subscriber;
 use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Address;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
@@ -113,6 +114,11 @@ class Body extends Element
     protected $subscriber;
 
     /**
+     * @var Address
+     */
+    protected $addressResource;
+
+    /**
      * Body constructor.
      *
      * @param Context $context
@@ -128,6 +134,7 @@ class Body extends Element
      * @param LiquidFilters $liquidFilters
      * @param HookFactory $hookFactory
      * @param Subscriber $subscriber
+     * @param Address $addressResource
      * @param array $data
      */
     public function __construct(
@@ -144,6 +151,7 @@ class Body extends Element
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
         Subscriber $subscriber,
+        Address $addressResource,
         array $data = []
     ) {
         $this->liquidFilters       = $liquidFilters;
@@ -158,6 +166,7 @@ class Body extends Element
         $this->categoryFactory     = $categoryFactory;
         $this->quoteResource       = $quoteResource;
         $this->subscriber          = $subscriber;
+        $this->addressResource     = $addressResource;
 
         parent::__construct($context, $data);
     }
@@ -304,5 +313,18 @@ class Body extends Element
     public function getModifier()
     {
         return $this->liquidFilters->getFilters();
+    }
+
+    /**
+     * @return array
+     * @throws LocalizedException
+     */
+    public function getShippingAddressAttrCollection()
+    {
+        $collectionData = $this->addressResource->getConnection()
+            ->describeTable($this->addressResource->getMainTable());
+        $attrCollection = $this->getAttrCollectionFromDb($collectionData);
+
+        return $attrCollection;
     }
 }
