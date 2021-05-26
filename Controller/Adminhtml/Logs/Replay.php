@@ -103,8 +103,9 @@ class Replay extends AbstractManageLogs
                 $log->setStatus(Status::SUCCESS)->setMessage('');
                 $this->messageManager->addSuccess(__('The log has been replay successful.'));
             } else {
-                $this->messageManager->addError($result['message']);
-                $log->setStatus(Status::ERROR)->setMessage($result['message']);
+                $message = __('Cannot replay the log, Please try again later.');
+                $this->messageManager->addError($message);
+                $log->setStatus(Status::ERROR)->setMessage($message);
             }
             $log->save();
 
