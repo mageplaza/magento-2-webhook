@@ -37,7 +37,7 @@
                     <comment><![CDATA[Select <b>Yes</b> to enable this module.<br />
                     <a href="https://www.mageplaza.com/kb/webhook/" target="_blank">How to integrate with others</a> <br />
                         1. It helps to reduce abandonment cart with <a href="https://www.mageplaza.com/magento-2-one-step-checkout-extension/" target="_blank">One Step Checkout</a>. <br />
-                        2. <a href="https://pages.mageplaza.com/abandoned-cart-email-templates-for-magento/?utm_source=configuration&utm_campaign=m2-bannerslider" target="_blank">How to setup abandoned cart email series</a>]]></comment>
+                        2. Magento stores see upwards of 30% revenue 💰 with AVADA. <a href="https://go.avada.io/mageplaza">Learn more</a>]]></comment>
                 </field>
                 <field id="abandoned_time" translate="label comment" type="text" sortOrder="2" showInDefault="1" canRestore="1">
                     <label>Abandoned Cart After</label>
