@@ -35,12 +35,21 @@ A: Please enable the function “Alert on Error” and add the emails of recipie
 
 Run the following command in Magento 2 root folder:
 
+With Marketing Automation (recommend):
+```
+composer require mageplaza/module-webhook mageplaza/module-smtp
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
+
+Without Marketing Automation:
 ```
 composer require mageplaza/module-webhook
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
-
 ```
+
+
 ## 4. Magento 2 Webhook Highlight features
 
 ### Send API requests when specific events occur
