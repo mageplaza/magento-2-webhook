@@ -32,8 +32,6 @@
                 <field id="enabled" translate="label comment" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[]]></comment>
-
                     <comment><![CDATA[Select <b>Yes</b> to enable this module.<br />
                     <a href="https://www.mageplaza.com/kb/webhook/" target="_blank">How to integrate with others</a> <br />
                         1. It helps to reduce abandonment cart with <a href="https://www.mageplaza.com/magento-2-one-step-checkout-extension/" target="_blank">One Step Checkout</a>. <br />
