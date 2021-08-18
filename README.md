@@ -2,6 +2,7 @@
 
 [Mageplaza Webhook](https://www.mageplaza.com/magento-2-webhook/) for Magento 2 supports online store to send an API request via a webhook to a configurable destination (URL) when specific trigger events take place. Webhook a very useful and necessary tool which allows stores to update instant and real-time notifications. 
 
+**IMPORTANT NOTE:** This version of Mageplaza Webhook extension on Github is free as a contribution to the Magento community from Mageplaza. This package does not include the technical support. Should you need technical support for this extension, you will have to buy a license from Mageplaza. [Click here to buy](https://www.mageplaza.com/magento-2-webhook/).
 
 ## 1. Webhook Documentation
 
@@ -34,12 +35,21 @@ A: Please enable the function “Alert on Error” and add the emails of recipie
 
 Run the following command in Magento 2 root folder:
 
+With Marketing Automation (recommend):
+```
+composer require mageplaza/module-webhook mageplaza/module-smtp
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
+
+Without Marketing Automation:
 ```
 composer require mageplaza/module-webhook
 php bin/magento setup:upgrade
 php bin/magento setup:static-content:deploy
-
 ```
+
+
 ## 4. Magento 2 Webhook Highlight features
 
 ### Send API requests when specific events occur
@@ -257,11 +267,16 @@ From June 23th 2019, this extension is licensed under the [MIT License](https://
 
 
 ## Other free extension on Github
-- [Magento 2 SEO](https://github.com/mageplaza/magento-2-seo)
-- [Google Maps](https://github.com/mageplaza/magento-2-google-maps)
-- [Magento 2 Delete Orders](https://github.com/mageplaza/magento-2-delete-orders)
-- [Magento 2 GDPR Free](https://github.com/mageplaza/magento-2-gdpr)
-- [Magento 2 login as customers](https://github.com/mageplaza/magento-2-login-as-customer)
-- [Magento 2 Same Order Number](https://github.com/mageplaza/magento-2-same-order-number)
-- [Magento 2 Layered Navigation](https://github.com/mageplaza/magento-2-ajax-layered-navigation)
-- [Magento 2 security suite](https://github.com/mageplaza/magento-2-security)
+- [Magento 2 SEO extension on Github](https://github.com/mageplaza/magento-2-seo)
+- [Magento 2 Google Maps on Github](https://github.com/mageplaza/magento-2-google-maps)
+- [Magento 2 Delete Orders on Github](https://github.com/mageplaza/magento-2-delete-orders)
+- [Magento 2 GDPR Free on Github](https://github.com/mageplaza/magento-2-gdpr)
+- [Magento 2 login as customers on Github](https://github.com/mageplaza/magento-2-login-as-customer)
+- [Magento 2 Same Order Number on Github](https://github.com/mageplaza/magento-2-same-order-number)
+- [Magento 2 Ajax Layered Navigation on Github](https://github.com/mageplaza/magento-2-ajax-layered-navigation)
+- [Magento 2 Security extension on Github](https://github.com/mageplaza/magento-2-security)
+- [Magento 2 SEO extension](https://marketplace.magento.com/mageplaza-magento-2-seo-extension.html)
+- [Magento 2 Reward Points](https://marketplace.magento.com/mageplaza-module-reward-points.html)
+- [Magento 2 Layered Navigation extension](https://marketplace.magento.com/mageplaza-layered-navigation-m2.html)
+- [Magento 2 OneStepCheckout](https://marketplace.magento.com/mageplaza-magento-2-one-step-checkout-extension.html)
+- [Magento 2 Blog extension](https://marketplace.magento.com/mageplaza-magento-2-blog-extension.html)
