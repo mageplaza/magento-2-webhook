@@ -44,7 +44,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
             <?php if ($elementBeforeLabel) : ?>
                 <?= $element->getElementHtml() ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
-                <?= $block->escapeHtml($note) ?>
+                <?= $note ?>
             <?php else : ?>
                 <?= $element->getLabelHtml('', $element->getScopeLabel()) ?>
                 <div class="admin__field-control control">
@@ -77,7 +77,7 @@ $modifiersData   = $block->getModifier() ? \Mageplaza\Webhook\Helper\Data::jsonE
                                 <?= $addOn ? '<div class="addon">' . $element->getElementHtml()
                                     . '</div>' : $element->getElementHtml(); ?>
                                 <?= $block->getHintHtml() ?>
-                                <?= $block->escapeHtml($note) ?>
+                                <?= $note ?>
                             </div>
                             <div id="grid_tab_preview_content" style="border-top: 1px solid #adadad;"
                                  aria-labelledby="grid_tab_body" class="ui-widget-content ui-corner-bottom"
