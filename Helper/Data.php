@@ -34,6 +34,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Mageplaza\Core\Helper\AbstractData as CoreHelper;
@@ -269,6 +270,10 @@ class Data extends CoreHelper
 
             if ($item instanceof Product) {
                 $item->setStockItem(null);
+            }
+
+            if ($item instanceof Quote) {
+                $item->setData('items', $item->getAllVisibleItems());
             }
 
             if ($item->getShippingAddress()) {
