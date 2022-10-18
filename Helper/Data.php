@@ -166,7 +166,7 @@ class Data extends CoreHelper
             ])
             ->setOrder('priority', 'ASC');
         $isSendMail     = $this->getConfigGeneral('alert_enabled');
-        $sendTo         = explode(',', $this->getConfigGeneral('send_to'));
+        $sendTo         = explode(',', $this->getConfigGeneral('send_to') ?? '');
         foreach ($hookCollection as $hook) {
             if ($hook->getHookType() === HookType::ORDER) {
                 $statusItem  = $item->getStatus();
