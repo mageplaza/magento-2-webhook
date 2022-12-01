@@ -82,6 +82,11 @@ class Data extends CoreHelper
     protected $transportBuilder;
 
     /**
+     * @var Product
+     */
+    protected $_product;
+
+    /**
      * @var UrlInterface
      */
     protected $backendUrl;
@@ -99,6 +104,7 @@ class Data extends CoreHelper
      * @param StoreManagerInterface $storeManager
      * @param UrlInterface $backendUrl
      * @param TransportBuilder $transportBuilder
+     * @param Product $product
      * @param CurlFactory $curlFactory
      * @param LiquidFilters $liquidFilters
      * @param HookFactory $hookFactory
@@ -111,6 +117,7 @@ class Data extends CoreHelper
         StoreManagerInterface $storeManager,
         UrlInterface $backendUrl,
         TransportBuilder $transportBuilder,
+        Product $product,
         CurlFactory $curlFactory,
         LiquidFilters $liquidFilters,
         HookFactory $hookFactory,
@@ -122,6 +129,7 @@ class Data extends CoreHelper
         $this->hookFactory      = $hookFactory;
         $this->historyFactory   = $historyFactory;
         $this->transportBuilder = $transportBuilder;
+        $this->_product         = $product;
         $this->backendUrl       = $backendUrl;
         $this->customer         = $customer;
 
@@ -269,6 +277,15 @@ class Data extends CoreHelper
             $template->parse($templateHtml, $filtersMethods);
 
             if ($item instanceof Product) {
+                $product    = $this->_product->load($item->getId());
+                $attributes = $product->getAttributes();
+                foreach ($attributes as $attribute) {
+                    $attrCode = $attribute->getAttributeCode();
+                    $value    = $product->getResource()->getAttribute($attrCode)->getFrontend()->getValue($product);
+                    if ($value) {
+                        $item->setData($attrCode, $value);
+                    }
+                }
                 $item->setStockItem(null);
             }
 
